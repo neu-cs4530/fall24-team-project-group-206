@@ -7,39 +7,33 @@ import { NavLink } from 'react-router-dom';
  * It highlights the currently selected item based on the active page and
  * triggers corresponding functions when the menu items are clicked.
  */
-const SideBarNav = () => (
-  <div id='sideBarNav' className='sideBarNav'>
+const SideBarHome = () => (
+  <div id='sideBarHome' className='sideBarHome'>
     <NavLink
-      to='/profile'
-      id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Profile
-    </NavLink>
-    <NavLink
-      to='/home'
-      id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Home
-    </NavLink>
-    <NavLink
-      to='/questions'
+      to='/profile/account'
       id='menu_questions'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Questions
+      Account
     </NavLink>
     <NavLink
-      to='/tags'
+      to='/profile/tags'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       Tags
     </NavLink>
     <NavLink
-      to='/chat'
+      to='/profile/community'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Chat
+      Community
+    </NavLink>
+    <NavLink
+      to='/profile/status'
+      id='menu_tag'
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      Status
     </NavLink>
   </div>
 );
 
-export default SideBarNav;
+export default SideBarHome;

@@ -4,7 +4,8 @@
   justify-content: space-around;
   height: 10%;
   width: 100%;
-  background: #dddddd;
+  border-bottom: solid;
+  background: #ffffff;
 }
 
 .title {

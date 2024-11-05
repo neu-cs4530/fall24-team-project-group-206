@@ -10,6 +10,7 @@ import TagPage from './main/tagPage';
 import NewQuestionPage from './main/newQuestion';
 import NewAnswerPage from './main/newAnswer';
 import AnswerPage from './main/answerPage';
+import ProfilePage from './main/profile';
 
 const ProtectedRoute = ({
   user,
@@ -48,11 +49,17 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='/home' element={<QuestionPage />} />
+            <Route path='home' element={<QuestionPage />} /> {/* should become community */}
+            <Route path='profile' element={<ProfilePage />} />
             <Route path='tags' element={<TagPage />} />
+            <Route path='questions' element={<QuestionPage />} />
             <Route path='/question/:qid' element={<AnswerPage />} />
             <Route path='/new/question' element={<NewQuestionPage />} />
             <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
+            <Route path='profile/account' element={<ProfilePage />} />
+            <Route path='profile/tags' element={<ProfilePage />} />
+            <Route path='profile/community' element={<ProfilePage />} />
+            <Route path='profile/status' element={<ProfilePage />} />
           </Route>
         }
       </Routes>
