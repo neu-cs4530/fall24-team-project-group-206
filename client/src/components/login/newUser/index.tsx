@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 import useCreateUser from '../../../hooks/useCreateUser';
 
 /**
@@ -7,6 +8,10 @@ import useCreateUser from '../../../hooks/useCreateUser';
  * and create an account with the application.
  */
 const CreateUser = () => {
+  const navigate = useNavigate();
+  const handleUserTypeSelection = () => {
+    navigate('/');
+  };
   const {
     email,
     password,
@@ -19,8 +24,8 @@ const CreateUser = () => {
 
   return (
     <div className='container'>
-      <h2>Welcome to FakeStackOverflow!</h2>
-      <h4>Please enter your email and password.</h4>
+      <h2>Thanks for using our program!</h2>
+      <h4>Please enter your desired email and password.</h4>
       {isLoading && <p>Creating account...</p>}
       {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
       <form onSubmit={handleSubmit}>
@@ -45,6 +50,9 @@ const CreateUser = () => {
 
         <button type='submit' className='login-button'>
           Create Account
+        </button>
+        <button type='button' className='back-button' onClick={handleUserTypeSelection}>
+          Back
         </button>
       </form>
     </div>

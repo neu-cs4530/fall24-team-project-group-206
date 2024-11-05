@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 import useLogin from '../../../hooks/useLogin';
 
 /**
@@ -7,6 +8,11 @@ import useLogin from '../../../hooks/useLogin';
  * to the application's context through the useLoginContext hook.
  */
 const Login = () => {
+  const navigate = useNavigate();
+  const handleUserTypeSelection = () => {
+    navigate('/');
+  };
+
   const { email, password, errorMessage, handleEmailChange, handlePasswordChange, handleSubmit } =
     useLogin();
 
@@ -34,9 +40,11 @@ const Login = () => {
           className='input-text'
           id={'passwordInput'}
         />
-
         <button type='submit' className='login-button'>
           Submit
+        </button>
+        <button type='button' className='back-button' onClick={handleUserTypeSelection}>
+          Back
         </button>
       </form>
     </div>
