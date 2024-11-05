@@ -1,6 +1,10 @@
+/* eslint-disable no-console */
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import useLoginContext from './useLoginContext';
+import { auth } from '../firebaseConfig';
 
 /**
  * Custom hook to handle login input and submission.
@@ -10,7 +14,9 @@ import useLoginContext from './useLoginContext';
  * @returns handleSubmit - Function to handle login submission
  */
 const useLogin = () => {
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
@@ -19,8 +25,12 @@ const useLogin = () => {
    *
    * @param e - the event object.
    */
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
   };
 
   /**
@@ -28,13 +38,19 @@ const useLogin = () => {
    *
    * @param event - the form event object.
    */
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setUser({ username });
-    navigate('/home');
+    try {
+      console.log(auth);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      setUser({ username: user.email ?? '' });
+      navigate('/home');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  return { username, handleInputChange, handleSubmit };
+  return { email, password, handleEmailChange, handlePasswordChange, handleSubmit };
 };
 
 export default useLogin;
