@@ -1,46 +1,37 @@
 import React from 'react';
 import './index.css';
-import useLogin from '../../hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
 
 /**
- * Login Component contains a form that allows the user to input their username, which is then submitted
- * to the application's context through the useLoginContext hook.
+ * Initial page that leads users to a sign in page if they're already a user or a create account if
+ * they aren't.
  */
-const Login = () => {
-  const { email, password, errorMessage, handleEmailChange, handlePasswordChange, handleSubmit } =
-    useLogin();
+const UserSelection = () => {
+  const navigate = useNavigate();
+
+  const handleNewUserClick = () => {
+    navigate('/new');
+  };
+
+  const handleExistingUserClick = () => {
+    navigate('/existing');
+  };
 
   return (
     <div className='container'>
-      <h2>Welcome back!</h2>
-      <h4>Please enter your email and password.</h4>
-      {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
-      <form onSubmit={handleSubmit}>
-        <input
-          type='email'
-          value={email}
-          onChange={handleEmailChange}
-          placeholder='Enter your email'
-          required
-          className='input-text'
-          id={'emailInput'}
-        />
-        <input
-          type='password'
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder='Enter your password'
-          required
-          className='input-text'
-          id={'passwordInput'}
-        />
-
-        <button type='submit' className='login-button'>
-          Submit
+      <div>
+        <h2>Welcome to FakeStackOverflow!</h2>
+      </div>
+      <div className='button-group'>
+        <button type='button' className='user-button' onClick={handleNewUserClick}>
+          New User
         </button>
-      </form>
+        <button type='button' className='user-button' onClick={handleExistingUserClick}>
+          Existing User
+        </button>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default UserSelection;
