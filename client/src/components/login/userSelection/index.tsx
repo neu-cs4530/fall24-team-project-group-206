@@ -17,8 +17,10 @@ const UserSelection = () => {
 
   return (
     <div className='container'>
-      <h2>Welcome to FakeStackOverflow!</h2>
       <div>
+        <h2>Welcome to FakeStackOverflow!</h2>
+      </div>
+      <div className='button-group'>
         <button type='button' className='user-button' onClick={handleNewUserClick}>
           New User
         </button>

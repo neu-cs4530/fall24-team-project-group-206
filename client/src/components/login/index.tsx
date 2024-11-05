@@ -7,12 +7,14 @@ import useLogin from '../../hooks/useLogin';
  * to the application's context through the useLoginContext hook.
  */
 const Login = () => {
-  const { email, password, handleEmailChange, handlePasswordChange, handleSubmit } = useLogin();
+  const { email, password, errorMessage, handleEmailChange, handlePasswordChange, handleSubmit } =
+    useLogin();
 
   return (
     <div className='container'>
-      <h2>Welcome back</h2>
+      <h2>Welcome back!</h2>
       <h4>Please enter your email and password.</h4>
+      {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
       <form onSubmit={handleSubmit}>
         <input
           type='email'
@@ -32,6 +34,7 @@ const Login = () => {
           className='input-text'
           id={'passwordInput'}
         />
+
         <button type='submit' className='login-button'>
           Submit
         </button>

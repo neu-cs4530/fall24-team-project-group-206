@@ -16,6 +16,7 @@ import { auth } from '../firebaseConfig';
 const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { setUser } = useLoginContext();
   const navigate = useNavigate();
@@ -46,11 +47,11 @@ const useLogin = () => {
       setUser({ username: user.email ?? '' });
       navigate('/home');
     } catch (error) {
-      console.error(error);
+      setErrorMessage((error as Error).message);
     }
   };
 
-  return { email, password, handleEmailChange, handlePasswordChange, handleSubmit };
+  return { email, password, errorMessage, handleEmailChange, handlePasswordChange, handleSubmit };
 };
 
 export default useLogin;

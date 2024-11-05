@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #f5f5f5;
   }
   
   .container h2,
@@ -15,24 +15,29 @@
     width: 100%;
     margin: 10px 0;
   }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+  }
   
   .user-button {
     padding: 10px 50px;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #466694;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 20px;
     margin-bottom: 20px;
   }
   
   .user-button:hover {
-    background-color: #0056b3;
+    background-color: #324B73;
   }
   
   .user-button:active {
-    background-color: #003f7f;
+    background-color: #466694;
   }
   
