@@ -1,3 +1,4 @@
+import './index.css';
 /**
  * Interface representing the props for the ProfileHeader component.
  *
@@ -14,10 +15,8 @@ interface ProfileHeaderProps {
  * @param titleText - The title text to display in the header.
  */
 const ProfileHeader = ({ titleText }: ProfileHeaderProps) => (
-  <div>
-    <div className='space_between right_padding'>
-      <div className='bold_title'>{titleText}</div>
-    </div>
+  <div className='profile-header'>
+    <div className='bold_title underlined'>{titleText}</div>
   </div>
 );
 

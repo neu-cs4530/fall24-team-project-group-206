@@ -1,8 +1,8 @@
 .sideBarNav {
   display: flex;
   flex-direction: column;
-  width: 15%;
-  border-right: dashed;
+  width: 10%;
+  border-right: solid;
   padding: 4% 0 4% 0;
   align-items: center;
 }
@@ -17,10 +17,13 @@
   margin-top: 20px;
   border-radius: 5px;
   text-align: center;
+  text-decoration: none;
   line-height: 40px;
-  color: cornflowerblue;
+  color: black; /* Set default text color */
+  text-decoration: none; /* Remove underline from non-selected items */
 }
 
 .menu_selected {
-  background: #cccccc;
+  color: black; /* Ensure text color remains black */
+  text-decoration: underline; /* Only selected item gets underline */
 }

@@ -1,0 +1,42 @@
+.home-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: left;
+  background-color: #D9D9D9;
+  margin: 2%;
+  height: 80vh;
+}
+
+.sideBarHome {
+  display: flex;
+  flex-direction: column;
+  width: 10%;
+  border-right: solid;
+  padding: 4% 0 4% 0;
+  align-items: center;
+  }
+  
+  .menu_button:first-child {
+    margin-top: 0;
+  }
+  
+  .menu_button {
+    height: 40px;
+    width: 80%;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    line-height: 40px;
+    color: black;
+  }
+  
+  .menu_selected {
+    text-decoration: underline;
+  }
+  
+  .profile-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #D9D9D9;
+  }
