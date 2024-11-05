@@ -10,6 +10,7 @@ import TagPage from './main/tagPage';
 import NewQuestionPage from './main/newQuestion';
 import NewAnswerPage from './main/newAnswer';
 import AnswerPage from './main/answerPage';
+import UserSelection from './login/userSelection';
 
 const ProtectedRoute = ({
   user,
@@ -38,7 +39,10 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
     <LoginContext.Provider value={{ setUser }}>
       <Routes>
         {/* Public Route */}
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<UserSelection />} />
+
+        {/* Update for login with existing vs new */}
+        <Route path='/existing' element={<Login />} />
 
         {/* Protected Routes */}
         {

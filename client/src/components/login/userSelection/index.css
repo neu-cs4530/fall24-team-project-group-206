@@ -16,25 +16,8 @@
     margin: 10px 0;
   }
   
-  .input-text {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-    box-sizing: border-box;
-  }
-  
-  .input-text:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  .login-button {
-    padding: 10px 20px;
+  .user-button {
+    padding: 10px 50px;
     font-size: 16px;
     background-color: #007bff;
     color: white;
@@ -42,13 +25,14 @@
     border-radius: 5px;
     cursor: pointer;
     margin-left: 20px;
+    margin-bottom: 20px;
   }
   
-  .login-button:hover {
+  .user-button:hover {
     background-color: #0056b3;
   }
   
-  .login-button:active {
+  .user-button:active {
     background-color: #003f7f;
   }
   

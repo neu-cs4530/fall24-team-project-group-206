@@ -11,7 +11,7 @@ const Login = () => {
 
   return (
     <div className='container'>
-      <h2>Welcome to FakeStackOverflow!</h2>
+      <h2>Welcome back</h2>
       <h4>Please enter your email and password.</h4>
       <form onSubmit={handleSubmit}>
         <input
