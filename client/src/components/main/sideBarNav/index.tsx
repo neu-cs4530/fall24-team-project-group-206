@@ -1,6 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
+import { CgProfile } from 'react-icons/cg';
+import { IoMdHome } from 'react-icons/io';
+import { FaQuestion, FaTag } from 'react-icons/fa';
+import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 
 /**
  * The SideBarNav component has two menu items: "Questions" and "Tags".
@@ -13,31 +18,41 @@ const SideBarNav = () => (
       to='/profile'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Profile
+      <span className='icon'>
+        <CgProfile size={25} /> Profile
+      </span>
     </NavLink>
     <NavLink
       to='/home'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Home
+      <span className='icon'>
+        <IoMdHome size={25} /> Home
+      </span>
     </NavLink>
     <NavLink
       to='/questions'
       id='menu_questions'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Questions
+      <span className='icon'>
+        <FaQuestion size={20} /> Questions
+      </span>
     </NavLink>
     <NavLink
       to='/tags'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Tags
+      <span className='icon'>
+        <FaTag size={20} /> Tags
+      </span>
     </NavLink>
     <NavLink
       to='/chat'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Chat
+      <span className='icon'>
+        <IoChatboxEllipsesOutline size={25} /> Chat
+      </span>
     </NavLink>
   </div>
 );
