@@ -2,11 +2,10 @@
 import React from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
-
-// import { CgProfile } from 'react-icons/cg';
-// import { IoMdHome } from 'react-icons/io';
-// import { FaQuestion, FaTag } from 'react-icons/fa';
-// import { IoChatboxEllipsesOutline } from 'react-icons/io5';
+import { CgProfile } from 'react-icons/cg';
+import { IoMdHome } from 'react-icons/io';
+import { FaQuestion, FaTag } from 'react-icons/fa';
+import { IoChatboxEllipsesOutline } from 'react-icons/io5';
 
 /**
  * The SideBarNav component has two menu items: "Questions" and "Tags".
@@ -20,8 +19,7 @@ const SideBarNav = () => (
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        {/* <CgProfile size={25} />  */}
-        Profile
+        <CgProfile size={25} /> Profile
       </span>
     </NavLink>
     <NavLink
@@ -29,8 +27,7 @@ const SideBarNav = () => (
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        {/* <IoMdHome size={25} />  */}
-        Home
+        <IoMdHome size={25} /> Home
       </span>
     </NavLink>
     <NavLink
@@ -38,8 +35,7 @@ const SideBarNav = () => (
       id='menu_questions'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        {/* <FaQuestion size={20} />  */}
-        Questions
+        <FaQuestion size={20} /> Questions
       </span>
     </NavLink>
     <NavLink
@@ -47,8 +43,7 @@ const SideBarNav = () => (
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        {/* <FaTag size={20} />  */}
-        Tags
+        <FaTag size={20} /> Tags
       </span>
     </NavLink>
     <NavLink
@@ -56,8 +51,7 @@ const SideBarNav = () => (
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        {/* <IoChatboxEllipsesOutline size={25} />  */}
-        Chat
+        <IoChatboxEllipsesOutline size={25} /> Chat
       </span>
     </NavLink>
   </div>
