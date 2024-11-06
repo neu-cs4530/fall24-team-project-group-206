@@ -1,32 +1,29 @@
-import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import useLoginContext from './useLoginContext';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
+import useLoginContext from './useLoginContext';
 
 /**
- * Custom hook to handle login input and submission.
+ * Custom hook to handle user creation input and submission.
  *
  * @returns email - The current value of the email input.
  * @returns password - The current value of the password input.
  * @returns errorMessage - The current error message.
+ * @returns isLoading - The current loading state.
  * @returns handleEmailChange - Function to handle changes in the email input field.
  * @returns handlePasswordChange - Function to handle changes in the password input field.
- * @returns handleSubmit - Function to handle user login submission
+ * @returns handleSubmit - Function to handle user creation submission
  */
-const useLogin = () => {
+const useCreateUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
-  /**
-   * Function to handle the input change event.
-   *
-   * @param e - the event object.
-   */
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -35,23 +32,29 @@ const useLogin = () => {
     setPassword(e.target.value);
   };
 
-  /**
-   * Function to handle the form submission event.
-   *
-   * @param event - the form event object.
-   */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      setIsLoading(false);
       setUser({ username: user.email ?? '' });
       navigate('/home');
     } catch (error) {
       setErrorMessage((error as Error).message);
+      setIsLoading(false);
     }
   };
 
-  return { email, password, errorMessage, handleEmailChange, handlePasswordChange, handleSubmit };
+  return {
+    email,
+    password,
+    errorMessage,
+    isLoading,
+    handleEmailChange,
+    handlePasswordChange,
+    handleSubmit,
+  };
 };
 
-export default useLogin;
+export default useCreateUser;
