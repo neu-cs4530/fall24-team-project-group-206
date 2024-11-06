@@ -4,7 +4,7 @@
   width: 10%;
   border-right: solid;
   padding: 4% 0 4% 0;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .menu_button:first-child {
@@ -14,16 +14,27 @@
 .menu_button {
   height: 40px;
   width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   margin-top: 20px;
   border-radius: 5px;
-  text-align: center;
+  text-align: start;
   text-decoration: none;
   line-height: 40px;
-  color: black; /* Set default text color */
-  text-decoration: none; /* Remove underline from non-selected items */
+  color: black; 
+  text-decoration: none; 
 }
 
 .menu_selected {
-  color: black; /* Ensure text color remains black */
-  text-decoration: underline; /* Only selected item gets underline */
+  color: #895159; /* Ensure text color remains black */
+  text-decoration: underline 895159 2px;
+}
+
+.icon {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
 }
