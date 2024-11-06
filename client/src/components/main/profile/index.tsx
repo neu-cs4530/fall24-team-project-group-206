@@ -1,16 +1,42 @@
 import React from 'react';
 import './index.css';
+import { Outlet, useLocation } from 'react-router-dom';
 import SideBarHome from './sideBarHome';
+import ProfileHeader from './header';
 
 /**
- * Login Component contains a form that allows the user to input their username, which is then submitted
- * to the application's context through the useLoginContext hook.
+ * Profile Page contains the user's profile information including account info, tags, community,
+ * and status
  */
-const ProfilePage = () => (
-  <div className='home-container'>
-    <SideBarHome />
-    <h2>Welcome to FakeStackOverflow!</h2>
-  </div>
-);
+const ProfilePage = () => {
+  const location = useLocation();
+  let titleText = 'Profile';
+  switch (location.pathname) {
+    case '/profile/account':
+      titleText = 'Account Information';
+      break;
+    case '/profile/tags':
+      titleText = 'Your Tags';
+      break;
+    case '/profile/community':
+      titleText = 'Community';
+      break;
+    case '/profile/status':
+      titleText = 'Status';
+      break;
+    default:
+      break;
+  }
+
+  return (
+    <div className='home-container'>
+      <SideBarHome />
+      <div className='profile-content'>
+        <ProfileHeader titleText={titleText} />
+        <Outlet />
+      </div>
+    </div>
+  );
+};
 
 export default ProfilePage;

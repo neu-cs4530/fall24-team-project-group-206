@@ -36,3 +36,8 @@
     color: #895159;
   }
   
+  .profile-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #D9D9D9;
+  }

@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, it } from 'mocha';
 import { Q1_DESC, A1_TXT, A2_TXT } from '../../../server/data/posts_strings';
 
 describe("Cypress Tests to verify adding new answers", () => {
