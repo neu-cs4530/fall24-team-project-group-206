@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './layout';
-import Login from './login';
 import { FakeSOSocket, User } from '../types';
 import LoginContext from '../contexts/LoginContext';
 import UserContext from '../contexts/UserContext';
@@ -10,6 +9,9 @@ import TagPage from './main/tagPage';
 import NewQuestionPage from './main/newQuestion';
 import NewAnswerPage from './main/newAnswer';
 import AnswerPage from './main/answerPage';
+import CreateUser from './login/newUser';
+import Login from './login/existingUser';
+import UserSelection from './login';
 import ProfilePage from './main/profile';
 import AccountInfo from './main/profile/accountInfo';
 import TagsInfo from './main/profile/tags';
@@ -43,7 +45,11 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
     <LoginContext.Provider value={{ setUser }}>
       <Routes>
         {/* Public Route */}
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<UserSelection />} />
+
+        {/* Update for login with existing vs new */}
+        <Route path='/existing' element={<Login />} />
+        <Route path='/new' element={<CreateUser />} />
 
         {/* Protected Routes */}
         {
