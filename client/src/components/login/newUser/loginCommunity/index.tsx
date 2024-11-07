@@ -1,21 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './index.css';
+import useLogin from '../../../../hooks/useLogin';
 
 const PostLoginCommunity = () => {
   const navigate = useNavigate();
 
   const handleNextPage = () => {
-    navigate('/profile');
+    navigate('/home');
   };
 
   return (
-    <div>
-      <h2>Interactive Page</h2>
-      <div className='popup-overlay'>
-        <div className='popup-content'>
-          <h2>Choose your Community</h2>
-          <button onClick={handleNextPage}>Next</button>
-        </div>
+    <div className='community-container'>
+      <h2 className='recommendation-header'>
+        We recommend the following communities based on your interests:
+      </h2>
+      <ul className='communities'>
+        <li>Community 1</li>
+        <li>Community 2</li>
+        <li>Community 3</li>
+      </ul>
+      <p className='choose-more-text'>Not interested? Choose from below:</p>
+      <ul className='communities'>
+        <li>Alt Community 1</li>
+        <li>Alt Community 2</li>
+        <li>Alt Community 3</li>
+      </ul>
+      <div className='button-container'>
+        <button onClick={handleNextPage}>Next</button>
       </div>
     </div>
   );

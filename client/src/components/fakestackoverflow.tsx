@@ -18,6 +18,7 @@ import TagsInfo from './main/profile/tags';
 import CommunityInfo from './main/profile/community';
 import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
+import PostLoginCommunity from './login/newUser/loginCommunity';
 
 const ProtectedRoute = ({
   user,
@@ -47,12 +48,11 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
       <Routes>
         {/* Public Route */}
         <Route path='/' element={<UserSelection />} />
-
         {/* Update for login with existing vs new */}
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
         <Route path='new/tagSelection' element={<ChooseTagsPage />} />
-
+        <Route path='chooseCommunity' element={<PostLoginCommunity />} />
         {/* Protected Routes */}
         {
           <Route
