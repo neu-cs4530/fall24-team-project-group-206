@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import useTagNames from '../../../hooks/useTagNames';
+import useTagNames from '../../../../hooks/useTagNames';
 
 /**
  * StatusInfo component which displays the user's status.
@@ -8,13 +8,17 @@ import useTagNames from '../../../hooks/useTagNames';
 const ChooseTagsPage = () => {
   const tagNames = useTagNames();
   return (
-    <div className='status-info'>
+    <div>
+      <h1>what topics interest you? choose tags below:</h1>
       <ul>
-        console.log(tagNames);
+        <li>
+          <button>Task Names</button>
+        </li>
         {/* {tagNames.map(name => (
           <li key={name}> {name} </li>
         ))} */}
       </ul>
+      <button>next</button>
     </div>
   );
 };
