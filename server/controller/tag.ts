@@ -56,9 +56,24 @@ const tagController = () => {
     }
   };
 
+  /**
+   * MAKE TESTS***************
+   * @param req The Request object containing the tag name in the URL parameters.
+   * @param res The HTTP response object used to send back the result of the operation.
+   */
+  const getTagNames = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const tags = await TagModel.find({}, 'name'); // Retrieve only necessary fields
+      res.json(tags);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve tags' });
+    }
+  };
+
   // Add appropriate HTTP verbs and their endpoints to the router.
   router.get('/getTagsWithQuestionNumber', getTagsWithQuestionNumber);
   router.get('/getTagByName/:name', getTagByName); // New endpoint to get tag by name
+  router.get('/getTagNames', getTagNames); // so that we can show all tags in the frontend
 
   return router;
 };
