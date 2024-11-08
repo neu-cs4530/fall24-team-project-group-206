@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 
@@ -10,9 +11,10 @@ import './index.css';
  */
 const Header = () => {
   const { val, handleInputChange, handleKeyDown } = useHeader();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log('Logging out');
+    navigate('/');
   };
 
   return (
