@@ -18,7 +18,7 @@ import TagsInfo from './main/profile/tags';
 import CommunityInfo from './main/profile/community';
 import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
-import PostLoginCommunity from './login/newUser/loginCommunityPage';
+import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 
 const ProtectedRoute = ({
   user,

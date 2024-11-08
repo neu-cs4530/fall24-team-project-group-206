@@ -7,12 +7,12 @@ import useTagNames from '../../../../hooks/useTagNames';
  * StatusInfo component which displays the user's status.
  */
 const ChooseTagsPage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const tagNames = useTagNames();
 
-  const handleNextClick = () => {
-    navigate('/chooseCommunity');
-  };
+  // const handleNextClick = () => {
+  //   navigate('/chooseCommunity');
+  // };
   return (
     <div>
       <h1>what topics interest you? choose tags below:</h1>
