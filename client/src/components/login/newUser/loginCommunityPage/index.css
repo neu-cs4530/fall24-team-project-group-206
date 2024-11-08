@@ -6,9 +6,11 @@
   min-height: 100vh;
   text-align: center;
   padding: 20px;
+  position: relative;
 }
 
 .recommendation-header {
+  margin-top: -40px;
   font-size: 24px;
   margin-bottom: 20px;
 }
@@ -22,9 +24,9 @@
 }
 
 .communities li {
-  background-color: #d4a5a5;
+  background-color: #895159;
   color: white;
-  border-radius: 40px;
+  border-radius: 8px;
   padding: 1px;
   width: 150px;
   height: 55px;
@@ -36,8 +38,8 @@
 }
 
 .communities li:hover {
-  background-color: #f4ebe9; 
-  color: #8c6e6e; 
+  background-color: #eac9ce; 
+  color: #7e6060; 
   border-color: #d4a5a5;
 } 
 
@@ -48,20 +50,23 @@
 }
 
 .button-container {
-  margin-top: 20px;
+  position: absolute;
+  bottom: 70px;
+  right: 40px;
 }
 
-button {
+.next-button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
   background-color: #466694;
+  width: 150px;
+  height: 45px;
   color: white;
   border: none;
   border-radius: 5px;
-  margin-top: 50px;
 }
 
-button:hover {
+.next-button:hover {
   background-color: #466694;
 }

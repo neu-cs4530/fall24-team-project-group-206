@@ -16,9 +16,7 @@ const PostLoginCommunity = () => {
         We recommend the following communities based on your interests:
       </h2>
       <ul className='communities'>
-        <li>Community 1</li>
-        <li>Community 2</li>
-        <li>Community 3</li>
+        <li>Community</li>
       </ul>
       <p className='choose-more-text'>Not interested? Choose from below:</p>
       <ul className='communities'>
@@ -27,7 +25,9 @@ const PostLoginCommunity = () => {
         <li>Alt Community 3</li>
       </ul>
       <div className='button-container'>
-        <button onClick={handleNextPage}>Next</button>
+        <button className='next-button' onClick={handleNextPage}>
+          Next
+        </button>
       </div>
     </div>
   );
