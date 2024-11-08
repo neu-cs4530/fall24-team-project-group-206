@@ -1,7 +1,7 @@
 .sideBarNav {
   display: flex;
   flex-direction: column;
-  width: 10%;
+  width: 9%;
   border-right: solid;
   padding: 4% 0 4% 1%;
   align-items: flex-start;

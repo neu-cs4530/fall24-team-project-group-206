@@ -3,7 +3,8 @@
     flex-direction: column;
     background-color: #D9D9D9;
     margin: 2%;
-    height: 80vh;
+    height: 82vh;
+    width: calc(100% - 15px);
   }
   .home-page-title {
     font-size: 24px;
