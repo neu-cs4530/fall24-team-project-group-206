@@ -18,6 +18,7 @@ import TagsInfo from './main/profile/tags';
 import CommunityInfo from './main/profile/community';
 import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
+import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 
 const ProtectedRoute = ({
   user,
@@ -47,12 +48,11 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
       <Routes>
         {/* Public Route */}
         <Route path='/' element={<UserSelection />} />
-
         {/* Update for login with existing vs new */}
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
         <Route path='new/tagSelection' element={<ChooseTagsPage />} />
-
+        <Route path='chooseCommunity' element={<PostLoginCommunity />} />
         {/* Protected Routes */}
         {
           <Route
@@ -68,10 +68,6 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='/question/:qid' element={<AnswerPage />} />
             <Route path='/new/question' element={<NewQuestionPage />} />
             <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
-            {/* <Route path='profile/account' element={<AccountInfo />} />
-            <Route path='profile/tags' element={<ProfilePage />} />
-            <Route path='profile/community' element={<ProfilePage />} />
-            <Route path='profile/status' element={<ProfilePage />} /> */}
             <Route path='profile' element={<ProfilePage />}>
               <Route path='account' element={<AccountInfo />} />
               <Route path='tags' element={<TagsInfo />} />

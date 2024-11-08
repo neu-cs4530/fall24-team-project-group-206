@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { NavLink } from 'react-router-dom';
 import useTagNames from '../../../../hooks/useTagNames';
 
 /**
@@ -7,14 +8,20 @@ import useTagNames from '../../../../hooks/useTagNames';
  */
 const ChooseTagsPage = () => {
   const { tagNames } = useTagNames();
-  console.log(tagNames);
   return (
     <div className='container'>
       <div className='title'>
         <h2>what topics interest you? choose tags below:</h2>
       </div>
-      <div className='status-info'>
-        <ul>{tagNames && tagNames.map((tag, index) => <li key={index}>{tag.name}</li>)}</ul>
+      <div className='tag-list'>
+        <ul>
+          {tagNames &&
+            tagNames.map((tag, index) => (
+              <li className='tag-pill' key={index}>
+                {tag.name}
+              </li>
+            ))}
+        </ul>
       </div>
       {/* <ul className='tag-list'>
         {tagNames &&
@@ -24,7 +31,13 @@ const ChooseTagsPage = () => {
             </li>
           ))}
       </ul> */}
-      <button className='next-button'>next</button>
+      <div className='button-container'>
+        <button className='next-button'>
+          <NavLink className='button-text' to='/chooseCommunity'>
+            Next
+          </NavLink>
+        </button>
+      </div>
     </div>
   );
 };

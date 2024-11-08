@@ -1,34 +1,17 @@
 .container {
-    background-color: #f5f5f5;
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    height: 100vh; /* Take full viewport height */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     text-align: center;
+    padding: 20px;
+    position: relative;
   }
   .title {
+    margin-top: -40px;
     font-size: 24px;
-  }
-
-  .next-button {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #466694;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 20px;
-  }
-  
-  .next-button:hover {
-    background-color: #466694;
-    justify-content: right;
-    color: white;
+    margin-bottom: 20px;
   }
   
   .tag-list {
@@ -61,3 +44,34 @@
     color: #8c6e6e; 
     border-color: #d4a5a5;
   } 
+
+  .button-container {
+    position: absolute;
+    bottom: 70px;
+    right: 40px;
+  }
+
+  .next-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #466694;
+    width: 150px;
+    height: 45px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .next-button:hover {
+    background-color: #324B73;
+  }
+
+  .next-button:active {
+    background-color: #466694;
+  }
+
+  .button-text {
+    text-decoration: none;
+    color: white;
+  }

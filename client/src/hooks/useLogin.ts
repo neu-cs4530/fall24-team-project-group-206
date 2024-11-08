@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
