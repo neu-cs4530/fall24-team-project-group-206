@@ -1,0 +1,58 @@
+.members-sidebar {
+    background-color: #D9D9D9;
+    padding: 5px;
+    height: 370px;
+    width: 170px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 20px;
+    border: 1px solid #333;
+    padding-top: 0px;
+  }
+
+  .members-title {
+    text-align: center;
+    font-weight: bold;
+    padding: 7px;
+  }
+
+  .title-line {
+    width: 100%;
+    border: none;
+    border-top: 2px solid #333;
+    margin: 0px 0 0px;
+    margin-top: 5px
+  }
+
+  .members-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 0px;
+    padding-right: 10px;
+  }
+
+  .member-item {
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  .chat-button {
+    background-color: #d4a5a5;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 150px;
+    margin-left: 34px;
+    margin-top: 20px;
+  }
+
+  .chat-button:hover {
+    background-color: #f4ebe9;
+    color: #8c6e6e;
+  }
+      
