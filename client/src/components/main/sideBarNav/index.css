@@ -1,14 +1,14 @@
 .sideBarNav {
   display: flex;
   flex-direction: column;
-  width: 10%;
+  width: 9%;
   border-right: solid;
-  padding: 4% 0 4% 0;
+  padding: 4% 0 4% 1%;
   align-items: flex-start;
 }
 
 .menu_button:first-child {
-  margin-top: 0;
+  margin-top: 1;
 }
 
 .menu_button {

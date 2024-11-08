@@ -23,10 +23,11 @@
 }
 
 .title {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 30px !important;
+  font-weight: 1000;
   text-align: center;
   flex: 1;
+  padding-top: 60px;
 }
 
 #searchBar {
