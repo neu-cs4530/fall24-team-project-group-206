@@ -8,17 +8,22 @@ import useTagNames from '../../../../hooks/useTagNames';
 const ChooseTagsPage = () => {
   const tagNames = useTagNames();
   return (
-    <div>
-      <h1>what topics interest you? choose tags below:</h1>
-      <ul>
+    <div className='container'>
+      <div className='title'>
+        <h2>what topics interest you? choose tags below:</h2>
+      </div>
+      <ul className='tag-list'>
         <li>
-          <button>Task Names</button>
+          <button className='tag-pill'>Task Names</button>
         </li>
-        {/* {tagNames.map(name => (
+        <li>
+          <button className='tag-pill'>Task Names</button>
+        </li>
+      </ul>
+      {/* {tagNames.map(name => (
           <li key={name}> {name} </li>
         ))} */}
-      </ul>
-      <button>next</button>
+      <button className='next-button'>next</button>
     </div>
   );
 };

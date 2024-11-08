@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTagNames } from '../services/tagService';
+import { Tag } from '../types';
 
 /**
  * Custom hook to handle fetching tag details by tag name.
@@ -11,7 +12,6 @@ import { getTagNames } from '../services/tagService';
  */
 const useTagNames = () => {
   const [tagNames, setTagNames] = useState<string[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
