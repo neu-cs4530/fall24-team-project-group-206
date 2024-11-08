@@ -12,8 +12,8 @@ const CreateUser = () => {
   const handleUserTypeSelection = () => {
     navigate('/');
   };
-  const handleTagSelection = () => {
-    navigate('/tagselection');
+  const handleNewUser = () => {
+    navigate('/new/tagSelection');
   };
   const {
     email,
@@ -51,7 +51,7 @@ const CreateUser = () => {
           id={'passwordInput'}
         />
 
-        <button type='submit' className='login-button' onClick={handleTagSelection}>
+        <button type='submit' className='login-button' onClick={handleNewUser}>
           Create Account
         </button>
         <button type='button' className='back-button' onClick={handleUserTypeSelection}>
