@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
-import useLogin from '../../../../hooks/useLogin';
 
 const PostLoginCommunity = () => {
   const navigate = useNavigate();
