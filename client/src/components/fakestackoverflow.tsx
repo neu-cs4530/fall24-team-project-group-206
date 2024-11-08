@@ -51,7 +51,7 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         {/* Update for login with existing vs new */}
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
-        <Route path='/new/tagselection' element={<ChooseTagsPage />} />
+        <Route path='/tagselection' element={<ChooseTagsPage />} />
 
         {/* Protected Routes */}
         {

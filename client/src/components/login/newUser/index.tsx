@@ -13,7 +13,7 @@ const CreateUser = () => {
     navigate('/');
   };
   const handleTagSelection = () => {
-    navigate('/new/tagselection');
+    navigate('/tagselection');
   };
   const {
     email,
