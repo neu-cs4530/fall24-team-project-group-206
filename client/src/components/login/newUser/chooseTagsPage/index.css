@@ -1,77 +1,71 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 20px;
-    position: relative;
-  }
-  .title {
-    margin-top: -40px;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .tag-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-  .tag-pill {
-    background-color: #d4a5a5;
-    color: white;
-    border-radius: 40px;
-    padding: 1px;
-    width: 150px;
-    height: 55px;
-    text-align: center;
-    font-size: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .tag-pill:hover {
-    background-color: #f4ebe9; 
-    color: #8c6e6e; 
-    border-color: #d4a5a5;
-  } 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
 
-  .button-container {
-    position: absolute;
-    bottom: 70px;
-    right: 40px;
-  }
+.title {
+  padding-top: 80px;
+  font-size: 24px;
+}
 
-  .next-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #466694;
-    width: 150px;
-    height: 45px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .next-button:hover {
-    background-color: #324B73;
-  }
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  max-width: 500px; 
+  margin: 0;
+  padding: 0;
+}
 
-  .next-button:active {
-    background-color: #466694;
-  }
+.tag-pill {
+  background-color: #d4a5a5;
+  color: white;
+  border-radius: 40px;
+  padding: 10px 20px; /* Increased padding to make tags more uniform */
+  text-align: center;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  width: 100px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .button-text {
-    text-decoration: none;
-    color: white;
-  }
+.tag-pill:hover {
+  background-color: #f4ebe9;
+  color: #8c6e6e;
+} 
+
+.button-container {
+  margin-top: 30px; /* Adds space between the tags and button */
+}
+
+.next-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #466694;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block; /* Ensures button width is consistent */
+}
+
+.next-button:hover {
+  background-color: #324B73;
+}
+
+.button-text {
+  text-decoration: none;
+  color: white;
+}
