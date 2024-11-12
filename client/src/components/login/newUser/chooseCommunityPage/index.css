@@ -1,0 +1,77 @@
+.community-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+.recommendation-header {
+  margin-top: -40px;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.communities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.communities li {
+  background-color: #895159;
+  color: white;
+  border-radius: 8px;
+  padding: 1px;
+  width: 150px;
+  height: 55px;
+  text-align: center;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.communities li:hover {
+  background-color: #6f4046; 
+  color: white; 
+} 
+
+.communities li.selected {
+  background-color: #ffffff; 
+  color: #6f4046; 
+  border: 2px solid #6f4046;
+}
+
+.choose-more-text {
+  font-size: 18px;
+  margin-top: 50px;
+  font-weight: bold;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 70px;
+  right: 40px;
+}
+
+.next-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #466694;
+  width: 150px;
+  height: 45px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.next-button:hover {
+  background-color: #466694;
+}

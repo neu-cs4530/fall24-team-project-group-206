@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 257 40.36">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #babddf;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .cls-3 {
+        fill: #231f20;
+        font-size: 24px;
+        letter-spacing: .05em;
+      }
+
+      .cls-4 {
+        font-family: Helvetica-Bold, Helvetica;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        stroke: #466795;
+      }
+
+      .cls-5 {
+        font-family: Helvetica-Light, Helvetica;
+        font-weight: 300;
+      }
+    </style>
+  </defs>
+  <text class="cls-3" transform="translate(32.8 28.81)"><tspan class="cls-5" x="0" y="0">fakestack</tspan><tspan class="cls-4" x="113.52" y="0">overflow</tspan></text>
+  <g>
+    <polyline class="cls-2" points="1 16.29 1 28.76 27.27 28.76 27.27 16.1"/>
+    <line class="cls-1" x1="4.67" y1="24.1" x2="22.15" y2="24.1"/>
+    <line class="cls-1" x1="4.8" y1="17.99" x2="22.01" y2="20.85"/>
+    <line class="cls-1" x1="6.55" y1="12.06" x2="22.98" y2="17.7"/>
+    <line class="cls-1" x1="9.6" y1="6.22" x2="24.74" y2="14.46"/>
+    <line class="cls-1" x1="13.79" y1=".78" x2="27.18" y2="11.38"/>
+  </g>
+</svg>

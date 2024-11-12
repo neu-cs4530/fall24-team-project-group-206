@@ -30,4 +30,16 @@ const getTagByName = async (name: string): Promise<Tag> => {
   return res.data;
 };
 
-export { getTagsWithQuestionNumber, getTagByName };
+/**
+ * ADD TESTS??????
+ * @returns names of tags
+ */
+const getTagNames = async (): Promise<Tag[]> => {
+  const res = await api.get(`${TAG_API_URL}/getTagNames`);
+  if (res.status !== 200) {
+    throw new Error(`Error when fetching tag names`);
+  }
+  return res.data;
+};
+
+export { getTagsWithQuestionNumber, getTagByName, getTagNames };

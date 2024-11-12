@@ -10,7 +10,7 @@ import ProfileHeader from './header';
  */
 const ProfilePage = () => {
   const location = useLocation();
-  let titleText = 'Profile';
+  let titleText = '';
   switch (location.pathname) {
     case '/profile/account':
       titleText = 'Account Information';
@@ -29,11 +29,14 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className='home-container'>
-      <SideBarHome />
-      <div className='profile-content'>
-        <ProfileHeader titleText={titleText} />
-        <Outlet />
+    <div>
+      <h1 className='profile-title'>PROFILE</h1>
+      <div className='home-container'>
+        <SideBarHome />
+        <div className='profile-content'>
+          <ProfileHeader titleText={titleText} />
+          <Outlet />
+        </div>
       </div>
     </div>
   );

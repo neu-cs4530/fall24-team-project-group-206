@@ -1,7 +1,10 @@
 /* eslint-disable no-console */
 import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
+import logo from '../../logo.svg';
 
 /**
  * Header component that renders the main title and a search bar.
@@ -10,18 +13,20 @@ import './index.css';
  */
 const Header = () => {
   const { val, handleInputChange, handleKeyDown } = useHeader();
-
-  const handleLogout = () => {
-    console.log('Logging out');
-  };
+  const navigate = useNavigate();
 
   return (
     <div id='header' className='header'>
-      <button className='logout-button' onClick={handleLogout}>
-        Log Out
-      </button>
-      <div></div>
-      <div className='title'>Fake Stack Overflow</div>
+      {/* Render SVG logo */}
+      <NavLink
+        to='/home'
+        id='menu_tag'
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+        <span className='icon'>
+          <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+        </span>
+      </NavLink>
+
       <input
         id='searchBar'
         placeholder='Search ...'
@@ -30,47 +35,17 @@ const Header = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
+
+      <span className='icon-here'>
+        <NavLink
+          to='/profile/account'
+          id='menu_questions'
+          className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+          <FaUser size={35} />
+        </NavLink>
+      </span>
     </div>
   );
 };
 
 export default Header;
-
-// commented out code below changes the layout of the header: stack overflow text on the left,
-// search bar in the middle, and logout button on the right !!!
-
-// import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import useHeader from '../../hooks/useHeader';
-// import './index.css';
-
-// const Header = () => {
-//   const { val, handleInputChange, handleKeyDown } = useHeader();
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     localStorage.removeItem('userToken');
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div id='header' className='header'>
-//       <div className='title'>Fake Stack Overflow</div>
-//       <div className='search-container'>
-//         <input
-//           id='searchBar'
-//           placeholder='Search ...'
-//           type='text'
-//           value={val}
-//           onChange={handleInputChange}
-//           onKeyDown={handleKeyDown}
-//         />
-//       </div>
-//       <button className='logout-button' onClick={handleLogout}>
-//         Log Out
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default Header;

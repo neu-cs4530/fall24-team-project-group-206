@@ -7,6 +7,7 @@ import { initializeApp } from 'firebase/app';
 // https://firebase.google.com/docs/web/setup#available-libraries
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Auth, getAuth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -25,5 +26,6 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const auth: Auth = getAuth(app);
+const db: Firestore = getFirestore(app);
 // eslint-disable-next-line import/prefer-default-export
-export { auth };
+export { auth, db };
