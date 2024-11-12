@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { CgProfile } from 'react-icons/cg';
+import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import logo from './logo.svg';
@@ -20,7 +20,6 @@ const Header = () => {
       {/* Render SVG logo */}
       <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
 
-      {/* Search bar */}
       <input
         id='searchBar'
         placeholder='Search ...'
@@ -30,9 +29,8 @@ const Header = () => {
         onKeyDown={handleKeyDown}
       />
 
-      {/* Profile Icon */}
-      <span className='icon'>
-        <CgProfile size={50} />
+      <span className='icon-here'>
+        <FaUser size={35} />
       </span>
     </div>
   );

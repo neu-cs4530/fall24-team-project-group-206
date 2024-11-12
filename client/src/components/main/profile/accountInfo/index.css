@@ -17,8 +17,8 @@
     margin-bottom: 25px;
   }
   
-  .back-button {
-    align-self: center;
+  .go-back-button {
+    align-items: center;
     justify-content: center;
     padding: 10px 20px;
     font-size: 16px;
@@ -28,12 +28,13 @@
     border-radius: 5px;
     cursor: pointer;
     margin-left: 20px;
+    margin-top: 50px;
   }
   
-  .back-button:hover {
+  .go-back-button:hover {
     background-color: #9498B5;
   }
   
-  .back-button:active {
+  .go-back-button:active {
     background-color: #466694;
   }

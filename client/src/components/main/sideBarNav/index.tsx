@@ -19,7 +19,7 @@ const SideBarNav = () => (
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
-        <CgProfile size={25} /> PROF PL
+        <CgProfile size={25} /> PROFILE
       </span>
     </NavLink>
     <NavLink
