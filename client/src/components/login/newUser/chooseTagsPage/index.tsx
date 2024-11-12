@@ -40,7 +40,7 @@ const ChooseTagsPage = () => {
       </div>
       <div className='button-container'>
         <button className='next-button'>
-          <NavLink className='button-text' to='/chooseCommunity'>
+          <NavLink className='button-text' to='/new/tagselection/communityselection'>
             Next
           </NavLink>
         </button>
