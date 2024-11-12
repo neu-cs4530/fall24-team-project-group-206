@@ -30,7 +30,12 @@ const Header = () => {
       />
 
       <span className='icon-here'>
-        <FaUser size={35} />
+        <NavLink
+          to='/profile/account'
+          id='menu_questions'
+          className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+          <FaUser size={35} />
+        </NavLink>
       </span>
     </div>
   );

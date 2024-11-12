@@ -14,14 +14,14 @@ import { IoChatboxEllipsesOutline } from 'react-icons/io5';
  */
 const SideBarNav = () => (
   <div id='sideBarNav' className='sideBarNav'>
-    <NavLink
+    {/* <NavLink
       to='/profile'
       id='menu_tag'
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       <span className='icon'>
         <CgProfile size={25} /> PROFILE
       </span>
-    </NavLink>
+    </NavLink> */}
     <NavLink
       to='/home'
       id='menu_tag'
