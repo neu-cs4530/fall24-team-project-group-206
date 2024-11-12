@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
@@ -13,7 +13,6 @@ import logo from '../../logo.svg';
  */
 const Header = () => {
   const { val, handleInputChange, handleKeyDown } = useHeader();
-  const navigate = useNavigate();
 
   return (
     <div id='header' className='header'>
