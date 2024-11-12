@@ -23,7 +23,8 @@ const PostLoginCommunity = () => {
       <ul className='communities'>
         <li
           className={selectedCommunities.includes('Community') ? 'selected' : ''}
-          onClick={() => toggleCommunitySelection('Community')}>
+          onClick={() => toggleCommunitySelection('Community')}
+        >
           Community
         </li>
       </ul>
@@ -33,7 +34,8 @@ const PostLoginCommunity = () => {
           <li
             key={community}
             className={selectedCommunities.includes(community) ? 'selected' : ''}
-            onClick={() => toggleCommunitySelection(community)}>
+            onClick={() => toggleCommunitySelection(community)}
+          >
             {community}
           </li>
         ))}

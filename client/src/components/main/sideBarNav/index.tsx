@@ -17,7 +17,8 @@ const SideBarNav = () => (
     <NavLink
       to='/profile'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       <span className='icon'>
         <CgProfile size={25} /> PROFILE
       </span>
@@ -25,7 +26,8 @@ const SideBarNav = () => (
     <NavLink
       to='/home'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       <span className='icon'>
         <IoMdHome size={25} /> HOME
       </span>
@@ -33,7 +35,8 @@ const SideBarNav = () => (
     <NavLink
       to='/questions'
       id='menu_questions'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       <span className='icon'>
         <FaQuestion size={20} /> QUESTIONS
       </span>
@@ -41,7 +44,8 @@ const SideBarNav = () => (
     <NavLink
       to='/tags'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       <span className='icon'>
         <FaTag size={20} /> TAGS
       </span>
@@ -49,7 +53,8 @@ const SideBarNav = () => (
     <NavLink
       to='/chat'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       <span className='icon'>
         <IoChatboxEllipsesOutline size={25} /> CHAT
       </span>

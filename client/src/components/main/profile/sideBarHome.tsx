@@ -12,25 +12,29 @@ const SideBarHome = () => (
     <NavLink
       to='/profile/account'
       id='menu_questions'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       Account
     </NavLink>
     <NavLink
       to='/profile/tags'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       Tags
     </NavLink>
     <NavLink
       to='/profile/community'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       Community
     </NavLink>
     <NavLink
       to='/profile/status'
       id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+    >
       Status
     </NavLink>
   </div>

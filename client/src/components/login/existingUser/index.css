@@ -46,7 +46,7 @@
 }
 
 .login-button:hover {
-  background-color: #324B73;
+  background-color: #324b73;
 }
 
 .login-button:active {
@@ -62,7 +62,7 @@
 .back-button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #BABDE2;
+  background-color: #babde2;
   color: white;
   border: none;
   border-radius: 5px;
@@ -71,7 +71,7 @@
 }
 
 .back-button:hover {
-  background-color: #9498B5;
+  background-color: #9498b5;
 }
 
 .back-button:active {

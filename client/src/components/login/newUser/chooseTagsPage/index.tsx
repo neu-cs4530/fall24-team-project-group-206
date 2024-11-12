@@ -67,6 +67,14 @@ const ChooseTagsPage = () => {
             ))}
         </ul>
       </div>
+      {/* <ul className='tag-list'>
+        {tagNames &&
+          tagNames.map((tag, index) => (
+            <li key={index}>
+              <button className='tag-pill'>Here {tag.name}</button>
+            </li>
+          ))}
+      </ul> */}
       <div className='button-container'>
         <button
           className='next-button'

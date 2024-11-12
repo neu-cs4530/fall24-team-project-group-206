@@ -57,39 +57,33 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-.button-container {
-  display: flex;
-  justify-content: right;
-  width: 100%;
-  margin-bottom: 20px;
-}
+  .button-container {
+    position: absolute;
+    bottom: 70px;
+    right: 40px;
+  }
 
-.next-button {
-  padding: 12px 25px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #466694; 
-  width: 160px;
-  height: 45px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, transform 0.2s;
-}
+  .next-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #466694;
+    width: 150px;
+    height: 45px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .next-button:hover {
+    background-color: #324B73;
+  }
 
-.next-button:hover {
-  background-color: #324B73; 
-  transform: translateY(-2px);
-}
+  .next-button:active {
+    background-color: #466694;
+  }
 
-.next-button:active {
-  background-color: #466694;
-  transform: translateY(0);
-}
-
-.button-text {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
+  .button-text {
+    text-decoration: none;
+    color: white;
+  }
