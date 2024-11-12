@@ -18,7 +18,14 @@ const Header = () => {
   return (
     <div id='header' className='header'>
       {/* Render SVG logo */}
-      <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+      <NavLink
+        to='/home'
+        id='menu_tag'
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+        <span className='icon'>
+          <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+        </span>
+      </NavLink>
 
       <input
         id='searchBar'
