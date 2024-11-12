@@ -5,6 +5,7 @@ import { doc, setDoc } from 'firebase/firestore';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import useTagNames from '../../../../hooks/useTagNames';
 import { db, auth } from '../../../../firebaseConfig';
+import logo from '../../../../logo.svg';
 
 /**
  * Depicts tags that the user can choose from.
@@ -50,14 +51,18 @@ const ChooseTagsPage = () => {
 
   return (
     <div className='container'>
+      <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
       <div className='title'>
         <h2>what topics interest you? choose tags below:</h2>
       </div>
       <div className='tag-list'>
         <ul>
           {tagNames &&
-            tagNames.map((tag, index) => (
-              <li className='tag-pill' key={index}>
+            tagNames.map(tag => (
+              <li
+                className={`tag-pill ${selectedTags.includes(tag.name) ? 'selected' : ''}`}
+                key={tag.name}
+                onClick={() => handleTagClick(tag.name)}>
                 {tag.name}
               </li>
             ))}

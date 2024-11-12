@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
-import logo from './logo.svg';
+import logo from '../../logo.svg';
 
 /**
  * Header component that renders the main title and a search bar.
@@ -21,7 +21,14 @@ const Header = () => {
   return (
     <div id='header' className='header'>
       {/* Render SVG logo */}
-      <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+      <NavLink
+        to='/home'
+        id='menu_tag'
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+        <span className='icon'>
+          <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+        </span>
+      </NavLink>
 
       <input
         id='searchBar'
@@ -33,7 +40,12 @@ const Header = () => {
       />
 
       <span className='icon-here'>
-        <FaUser size={35} />
+        <NavLink
+          to='/profile/account'
+          id='menu_questions'
+          className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+          <FaUser size={35} />
+        </NavLink>
       </span>
     </div>
   );
