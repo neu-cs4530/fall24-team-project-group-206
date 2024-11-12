@@ -64,7 +64,6 @@ const tagController = () => {
   const getTagNames = async (req: Request, res: Response): Promise<void> => {
     try {
       const tags = await TagModel.find({}); // Retrieve only necessary fields
-      console.log(tags);
       res.json(tags);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve tags' });

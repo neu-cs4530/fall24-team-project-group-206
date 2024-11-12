@@ -17,3 +17,24 @@
     margin-bottom: 25px;
   }
   
+  .go-back-button {
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #BABDE2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-top: 50px;
+  }
+  
+  .go-back-button:hover {
+    background-color: #9498B5;
+  }
+  
+  .go-back-button:active {
+    background-color: #466694;
+  }

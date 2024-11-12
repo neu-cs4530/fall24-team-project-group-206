@@ -1,13 +1,18 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './index.css';
-import useLogin from '../../../../hooks/useLogin';
 
 const PostLoginCommunity = () => {
   const navigate = useNavigate();
 
-  const handleNextPage = () => {
-    navigate('/home');
+  const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]);
+  const toggleCommunitySelection = (community: string) => {
+    setSelectedCommunities(prevSelected => {
+      if (prevSelected.includes(community)) {
+        return prevSelected.filter(item => item !== community);
+      }
+      return [...prevSelected, community];
+    });
   };
 
   return (
@@ -16,17 +21,28 @@ const PostLoginCommunity = () => {
         We recommend the following communities based on your interests:
       </h2>
       <ul className='communities'>
-        <li>Community</li>
+        <li
+          className={selectedCommunities.includes('Community') ? 'selected' : ''}
+          onClick={() => toggleCommunitySelection('Community')}>
+          Community
+        </li>
       </ul>
       <p className='choose-more-text'>Not interested? Choose from below:</p>
       <ul className='communities'>
-        <li>Alt Community 1</li>
-        <li>Alt Community 2</li>
-        <li>Alt Community 3</li>
+        {['Alt Community 1', 'Alt Community 2', 'Alt Community 3'].map(community => (
+          <li
+            key={community}
+            className={selectedCommunities.includes(community) ? 'selected' : ''}
+            onClick={() => toggleCommunitySelection(community)}>
+            {community}
+          </li>
+        ))}
       </ul>
       <div className='button-container'>
-        <button className='next-button' onClick={handleNextPage}>
-          Next
+        <button className='next-button'>
+          <NavLink className='button-text' to='/home'>
+            Next
+          </NavLink>
         </button>
       </div>
     </div>

@@ -38,10 +38,15 @@
 }
 
 .communities li:hover {
-  background-color: #eac9ce; 
-  color: #7e6060; 
-  border-color: #d4a5a5;
+  background-color: #6f4046; 
+  color: white; 
 } 
+
+.communities li.selected {
+  background-color: #ffffff; 
+  color: #6f4046; 
+  border: 2px solid #6f4046;
+}
 
 .choose-more-text {
   font-size: 18px;
