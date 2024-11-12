@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
-import logo from './logo.svg';
+import logo from '../../logo.svg';
 
 /**
  * Header component that renders the main title and a search bar.

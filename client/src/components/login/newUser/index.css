@@ -77,3 +77,10 @@
   .back-button:active {
     background-color: #466694;
   }
+
+  .logo-login {
+    display: flex;
+    justify-content: left;
+    height: 40px;
+    width: auto;
+  }

@@ -1,8 +1,8 @@
 import React from 'react';
 import './index.css';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useCreateUser from '../../../hooks/useCreateUser';
-import ChooseTagsPage from './chooseTagsPage';
+import logo from '../../../logo.svg';
 
 /**
  * Create User Component contains a form that allows the user to input their username and password
@@ -27,6 +27,7 @@ const CreateUser = () => {
   return (
     <>
       <div className='container'>
+        <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
         <h2>Thanks for using our program!</h2>
         <h4>Please enter your desired email and password.</h4>
         {isLoading && <p>Creating account...</p>}

@@ -3,9 +3,9 @@ import './index.css';
 import { NavLink } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useAuthState } from 'react-firebase-hooks/auth';
 import useTagNames from '../../../../hooks/useTagNames';
 import { db, auth } from '../../../../firebaseConfig';
+import logo from '../../../../logo.svg';
 
 /**
  * Depicts tags that the user can choose from.
@@ -51,6 +51,7 @@ const ChooseTagsPage = () => {
 
   return (
     <div className='container'>
+      <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
       <div className='title'>
         <h2>What topics interest you? Choose tags below:</h2>
       </div>
