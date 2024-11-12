@@ -17,3 +17,23 @@
     margin-bottom: 25px;
   }
   
+  .back-button {
+    align-self: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #BABDE2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  
+  .back-button:hover {
+    background-color: #9498B5;
+  }
+  
+  .back-button:active {
+    background-color: #466694;
+  }

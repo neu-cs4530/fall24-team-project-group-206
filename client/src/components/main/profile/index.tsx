@@ -30,7 +30,7 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <h1 className='profile-title'>Profile</h1>
+      <h1 className='profile-title'>PROFILE</h1>
       <div className='home-container'>
         <SideBarHome />
         <div className='profile-content'>

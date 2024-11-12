@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { CgProfile } from 'react-icons/cg';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
+import logo from './logo.svg';
 
 /**
  * Header component that renders the main title and a search bar.
@@ -15,8 +17,10 @@ const Header = () => {
 
   return (
     <div id='header' className='header'>
-      <div></div>
-      <div className='title'>Fake Stack Overflow</div>
+      {/* Render SVG logo */}
+      <img src={logo} alt='Fake Stack Overflow Logo' className='logo' />
+
+      {/* Search bar */}
       <input
         id='searchBar'
         placeholder='Search ...'
@@ -25,6 +29,11 @@ const Header = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
+
+      {/* Profile Icon */}
+      <span className='icon'>
+        <CgProfile size={50} />
+      </span>
     </div>
   );
 };

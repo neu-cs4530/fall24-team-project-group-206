@@ -2,9 +2,10 @@
   display: flex;
   justify-content: flex-start;
   align-items: left;
-  margin: 2%;
+  margin: 3%;
   height: 70vh;
   width: calc(100% - 10px);
+  /* background-color: #F5F5F5; */
 }
 
 .sideBarHome {
@@ -37,10 +38,12 @@
   }
   
   .profile-content {
+    /* background-color: #F5F5F5; */
     flex-grow: 1;
     padding: 20px;
   }
 
   .profile-title {
-    padding: 20px;
+    /* background-color: #F5F5F5; */
+    margin: 3%;
   }
