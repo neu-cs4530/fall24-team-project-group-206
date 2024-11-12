@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const ChatPage = () => {
+  const { pathname } = useLocation();
+
   // This doesn't work
   const scrollUp = () => {
     window.scrollY += 100;
@@ -18,7 +20,12 @@ const ChatPage = () => {
     <div className='chat-container'>
       <div className='chat-header'>
         chatting now:{' '}
-        <input className='username' id='searchBar' placeholder='username' type='text' />
+        <input
+          className='username'
+          id='searchBar'
+          placeholder={pathname.includes('community') ? 'community' : 'email'}
+          type='text'
+        />
       </div>
       <div className='ruled-paper'>
         <span className='chat-text-user'>hi</span> <br /> <br />
