@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './index.css';
 
 const PostLoginCommunity = () => {
-  const navigate = useNavigate();
-
   const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]);
   const toggleCommunitySelection = (community: string) => {
     setSelectedCommunities(prevSelected => {

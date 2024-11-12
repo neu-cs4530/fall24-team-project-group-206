@@ -2,6 +2,7 @@ import React from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
 import useLogin from '../../../hooks/useLogin';
+import logo from '../../../logo.svg';
 
 /**
  * Login Component contains a form that allows the user to input their username, which is then submitted
@@ -18,6 +19,7 @@ const Login = () => {
 
   return (
     <div className='container'>
+      <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
       <h2>Welcome back!</h2>
       <h4>Please enter your email and password.</h4>
       {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
