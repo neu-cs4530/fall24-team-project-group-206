@@ -40,7 +40,8 @@ const useCreateUser = () => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
       setUser({ username: user.email ?? '' });
-      navigate('/home');
+      // navigate('/home');
+      navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);
       setIsLoading(false);

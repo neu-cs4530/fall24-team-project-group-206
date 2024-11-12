@@ -7,6 +7,7 @@
     text-align: center;
     padding: 20px;
     position: relative;
+    background-color: #f5f5f5;
   }
   .title {
     margin-top: -40px;
@@ -29,7 +30,8 @@
     background-color: #d4a5a5;
     color: white;
     border-radius: 40px;
-    padding: 1px;
+    padding: 1px 20px;
+    margin: 5px;
     width: 150px;
     height: 55px;
     text-align: center;
@@ -40,14 +42,18 @@
   }
   
   .tag-pill:hover {
-    background-color: #f4ebe9; 
-    color: #8c6e6e; 
-    border-color: #d4a5a5;
+    background-color: #a66e6e; 
   } 
+
+  .tag-pill.selected {
+    background-color: #ffffff; 
+    color: #d4a5a5; 
+    border: 2px solid #d4a5a5;
+}
 
   .button-container {
     position: absolute;
-    bottom: 70px;
+    bottom: 290px;
     right: 40px;
   }
 
