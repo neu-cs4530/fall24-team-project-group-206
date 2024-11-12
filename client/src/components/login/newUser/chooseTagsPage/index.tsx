@@ -3,7 +3,7 @@ import './index.css';
 import { NavLink } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useAuthState } from 'react-firebase-hooks/auth';
+// import { useAuthState } from 'react-firebase-hooks/auth';
 import useTagNames from '../../../../hooks/useTagNames';
 import { db, auth } from '../../../../firebaseConfig';
 
@@ -55,17 +55,15 @@ const ChooseTagsPage = () => {
         <h2>What topics interest you? Choose tags below:</h2>
       </div>
       <div className='tag-list'>
-        <ul>
-          {tagNames &&
-            tagNames.map(tag => (
-              <li
-                className={`tag-pill ${selectedTags.includes(tag.name) ? 'selected' : ''}`}
-                key={tag.name}
-                onClick={() => handleTagClick(tag.name)}>
-                {tag.name}
-              </li>
-            ))}
-        </ul>
+        {tagNames &&
+          tagNames.map(tag => (
+            <li
+              className={`tag-pill ${selectedTags.includes(tag.name) ? 'selected' : ''}`}
+              key={tag.name}
+              onClick={() => handleTagClick(tag.name)}>
+              {tag.name}
+            </li>
+          ))}
       </div>
       <div className='button-container'>
         <button
