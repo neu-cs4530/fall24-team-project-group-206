@@ -1,5 +1,6 @@
 import './index.css';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MembersSidebar from './membersSideBar';
 import Questions from './questions';
 
@@ -12,7 +13,9 @@ const CommunityHomePage = () => (
     <h2 className='home-page-title'>[Insert Community Name]</h2>
     <hr />
     <MembersSidebar />
-    <button className='chat-button'>Chat with Community</button>
+    <Link className='chat-button' to='/chat/community'>
+      Chat with Community
+    </Link>
     <Questions />
   </div>
 );
