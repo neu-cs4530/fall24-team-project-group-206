@@ -16,6 +16,10 @@ const AccountInfo = () => {
   return (
     <div>
       <div className='account-info'>
+        <h2>First Name:</h2>
+        <p>{user.first_name}</p>
+        <h2>Last Name:</h2>
+        <p>{user.last_name}</p>
         <h2>Username:</h2>
         <p>{user.username}</p>
       </div>
