@@ -20,7 +20,7 @@ const CommunityInfo = ({ userId }: { userId: string }) => {
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
-          const community = userData.selectedCommunities || 'No community selected';
+          const community = userData.communitySelected || 'No community selected';
           setUserCommunity(community);
         } else {
           console.log('User not found');
