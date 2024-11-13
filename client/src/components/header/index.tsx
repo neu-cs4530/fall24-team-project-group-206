@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
@@ -21,6 +21,7 @@ const Header = () => {
   return (
     <div id='header' className='header'>
       {/* Render SVG logo */}
+
       <NavLink
         to='/home'
         id='menu_tag'
@@ -42,9 +43,11 @@ const Header = () => {
       <span className='icon-here'>
         <NavLink
           to='/profile/account'
-          id='menu_questions'
+          id='menu_tag'
           className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-          <FaUser size={35} />
+          <span className='icon'>
+            <FaUser size={35} />
+          </span>
         </NavLink>
       </span>
     </div>
