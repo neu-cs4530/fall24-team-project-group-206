@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import useTagNames from '../../../../hooks/useTagNames';
 import { db, auth } from '../../../../firebaseConfig';
@@ -32,14 +32,7 @@ const ChooseTagsPage = () => {
         console.log(user.email);
         if (user.email) {
           const userRef = doc(db, 'users', user.email);
-          await setDoc(
-            userRef,
-            {
-              username: user.email,
-              tags,
-            },
-            { merge: true },
-          );
+          await updateDoc(userRef, { tags });
         } else {
           console.error('Error saving tags');
         }
