@@ -37,17 +37,22 @@ const TagsInfo = () => {
   }, [user]);
 
   return (
-    <div className='tags-info'>
+    <>
+      <div className='header'>
+        <h2>Chosen Tags</h2>
+      </div>
       {tags.length > 0 ? (
-        <ul>
+        <div className='tag-list'>
           {tags.map(tag => (
-            <li key={tag}>{tag}</li>
+            <div key={tag} className='tag-pill'>
+              {tag}
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No tags selected</p>
       )}
-    </div>
+    </>
   );
 };
 
