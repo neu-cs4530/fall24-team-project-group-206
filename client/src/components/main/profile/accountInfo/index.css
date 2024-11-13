@@ -1,40 +1,84 @@
 .account-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
   margin-top: 50px; 
   }
-  
-  .account-info h2 {
-    color: #333;
-    margin-bottom: 5px;
-  }
-  
-  .account-info p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 25px;
-  }
-  
-  .go-back-button {
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #BABDE2;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 20px;
-    margin-top: 50px;
-  }
-  
-  .go-back-button:hover {
-    background-color: #9498B5;
-  }
-  
-  .go-back-button:active {
-    background-color: #466694;
-  }
+
+.user-info {
+  display: flex;
+  align-items: flex-start;
+}
+
+.initials-box {
+  width: 100px;
+  height: 100px;
+  background-color: #466694;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  font-weight: bold;
+  font-style: oblique;
+  border-radius: 5px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.user-details h2 {
+  color: #000000;
+  font-size: 35px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user-details .creation-date {
+  font-size: 14px;
+  color: #888;
+  font-style: italic;
+  margin-top: 5px;
+  margin-bottom: 50px;
+}
+
+.username-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-details .username {
+  font-size: 16px;
+  font-style: bold;
+  color: #000000;
+}
+
+.user-details .username-info {
+  font-size: 16px;
+  color: #000000;
+}
+
+.go-back-button {
+  display: flex;
+  width: auto; 
+  align-self: center; 
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #BABDE2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.go-back-button:hover {
+  background-color: #9498B5;
+}
+
+.go-back-button:active {
+  background-color: #466694;
+}

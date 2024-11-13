@@ -21,8 +21,6 @@ const ProfilePage = () => {
     case '/profile/community':
       titleText = 'Community';
       break;
-    case '/profile/status':
-      titleText = 'Status';
       break;
     default:
       break;
@@ -34,7 +32,7 @@ const ProfilePage = () => {
       <div className='home-container'>
         <SideBarHome />
         <div className='profile-content'>
-          <ProfileHeader titleText={titleText} />
+          {/* <ProfileHeader className='title-text' titleText={titleText} /> */}
           <Outlet />
         </div>
       </div>

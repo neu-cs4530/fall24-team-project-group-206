@@ -16,7 +16,6 @@ import ProfilePage from './main/profile';
 import AccountInfo from './main/profile/accountInfo';
 import TagsInfo from './main/profile/tags';
 import CommunityInfo from './main/profile/community';
-import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import CommunityHomePage from './main/homePage/community';
 import PostLoginCommunity from './login/newUser/chooseCommunityPage';
@@ -71,7 +70,6 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
               <Route path='account' element={<AccountInfo />} />
               <Route path='tags' element={<TagsInfo />} />
               <Route path='community' element={<CommunityInfo />} />
-              <Route path='status' element={<StatusInfo />} />
             </Route>
           </Route>
         }

@@ -47,3 +47,9 @@
     /* background-color: #F5F5F5; */
     margin: 3%;
   }
+
+  .title-text {
+    /* background-color: #F5F5F5; */
+    flex-grow: 1;
+    padding: 20px;
+  }
