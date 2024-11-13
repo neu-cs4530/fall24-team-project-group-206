@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import { query, collection, orderBy, onSnapshot, addDoc } from 'firebase/firestore';
+import { query, collection, orderBy, onSnapshot, addDoc, where } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import Message from './Message';
 import useUserContext from '../../../hooks/useUserContext';
@@ -11,10 +11,9 @@ const ChatPage = () => {
   const { pathname } = useLocation();
   const { user } = useUserContext();
   const [currentMessage, setCurrentMessage] = useState<string>('');
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<{ message: string; username: string }[]>([]);
   const [send, setSend] = useState<string>('');
 
-  // ALSO NEEDS TO UPDATE THE MESSAGES SEEN
   const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
   };
@@ -42,18 +41,32 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    if (!user?.username) return;
+    if (!user?.username || !send) return;
 
-    const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
+    const q = query(
+      collection(db, 'messages'),
+      where('sendTo', 'in', [send, user.username]),
+      orderBy('timestamp', 'asc'),
+    );
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
-      const loadedMessages = querySnapshot.docs.map(doc => doc.data().message);
+      const loadedMessages = querySnapshot.docs
+        .map(doc => ({
+          message: doc.data().message,
+          username: doc.data().username,
+        }))
+        .filter(
+          msg =>
+            (msg.username === user.username && msg.sendTo === send) ||
+            (msg.username === send && msg.sendTo === user.username),
+        );
+
       setMessages(loadedMessages);
     });
 
     // eslint-disable-next-line consistent-return
     return unsubscribe; // Cleanup on component unmount
-  }, [user]);
+  }, [user, send]);
 
   const scrollUp = () => {
     window.scrollBy(0, -100);
@@ -78,7 +91,7 @@ const ChatPage = () => {
       <div className='ruled-paper'>
         {messages.map((m, index) => (
           <>
-            <Message key={index} message={m} username={user?.username} />
+            <Message key={index} message={m.message} username={m.username} />
             <br /> <br />
           </>
         ))}
