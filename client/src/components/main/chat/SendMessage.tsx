@@ -1,24 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from 'react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from 'firebaseConfig';
+import { auth, db } from '../../../firebaseConfig';
 
-const SendMessage = () => {
-  const [message, sentMessage] = useState('');
-
-  return (
-    <form className='send-message'>
-      <label htmlFor='messageInput' hidden>
-        Enter Message
-      </label>
-      <input
-        id='messageInput'
-        name='messageInput'
-        type='text'
-        className='form-input__input'
-        placeholder='type message...'
-      />
-      <button type='submit'>Send</button>
-    </form>
-  );
+const SendMessage = async (message: string, sendTo: string) => {
+  if (message.trim() === '') {
+    alert('Enter valid message');
+    return;
+  }
+  const user = auth.currentUser;
+  await addDoc(collection(db, 'messages'), {
+    text: message,
+    email: user,
+    sendTo,
+    createdAt: serverTimestamp(),
+  });
+  // scroll?.current.scrollIntoView({ behavior: "smooth" });
 };
 export default SendMessage;
