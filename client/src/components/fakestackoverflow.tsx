@@ -73,7 +73,6 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
               <Route path='account' element={<AccountInfo />} />
               <Route path='tags' element={<TagsInfo />} />
               <Route path='community' element={<CommunityInfo userId={user?.username || ''} />} />
-              <Route path='status' element={<StatusInfo />} />
             </Route>
           </Route>
         }
