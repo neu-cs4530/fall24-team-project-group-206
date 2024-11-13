@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './index.css';
 import { doc, getDoc } from 'firebase/firestore';
