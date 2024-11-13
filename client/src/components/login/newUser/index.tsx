@@ -17,10 +17,14 @@ const CreateUser = () => {
   const {
     email,
     password,
+    firstName,
+    lastName,
     errorMessage,
     isLoading,
     handleEmailChange,
     handlePasswordChange,
+    handleFirstNameChange,
+    handleLastNameChange,
     handleSubmit,
   } = useCreateUser();
 
@@ -29,10 +33,28 @@ const CreateUser = () => {
       <div className='container'>
         <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
         <h2>Thanks for using our program!</h2>
-        <h4>Please enter your desired email and password.</h4>
+        <h4>Please enter your name, desired email, and password.</h4>
         {isLoading && <p>Creating account...</p>}
         {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
         <form onSubmit={handleSubmit}>
+          <input
+            type='firstName'
+            value={firstName}
+            onChange={handleFirstNameChange}
+            placeholder='Enter your first name'
+            required
+            className='input-text'
+            id={'firstNameInput'}
+          />
+          <input
+            type='lastName'
+            value={lastName}
+            onChange={handleLastNameChange}
+            placeholder='Enter your last name'
+            required
+            className='input-text'
+            id={'lastNameInput'}
+          />
           <input
             type='email'
             value={email}

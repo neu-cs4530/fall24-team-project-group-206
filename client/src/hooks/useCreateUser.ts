@@ -2,7 +2,8 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebaseConfig';
 import useLoginContext from './useLoginContext';
 
 /**
@@ -18,6 +19,8 @@ import useLoginContext from './useLoginContext';
  */
 const useCreateUser = () => {
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +36,37 @@ const useCreateUser = () => {
     setPassword(e.target.value);
   };
 
+  const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
-      setUser({ username: user.email ?? '', status: 'low' });
-      // navigate('/home');
+
+      const userRef = doc(db, 'users', user.email ?? '');
+      await setDoc(
+        userRef,
+        {
+          username: user.email,
+          first_name: firstName,
+          last_name: lastName,
+        },
+        { merge: true },
+      );
+
+      setUser({
+        username: user.email ?? '',
+        status: 'low',
+      });
+
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);
@@ -50,9 +76,13 @@ const useCreateUser = () => {
 
   return {
     email,
+    firstName,
+    lastName,
     password,
     errorMessage,
     isLoading,
+    handleFirstNameChange,
+    handleLastNameChange,
     handleEmailChange,
     handlePasswordChange,
     handleSubmit,
