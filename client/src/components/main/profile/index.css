@@ -2,7 +2,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: left;
-  margin: 3%;
+  max-width: 3%;
   height: 70vh;
   width: calc(100% - 10px);
   /* background-color: #F5F5F5; */
@@ -11,7 +11,11 @@
 .sideBarHome {
   display: flex;
   flex-direction: column;
+  flex-basis: 200px;
+  max-width: 8vw;
+  min-width: 120px;
   width: 10%;
+  margin-left: 20px;
   border-right: 1px solid black;
   padding: 4% 0 4% 0;
   align-items: center;
