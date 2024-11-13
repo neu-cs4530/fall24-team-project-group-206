@@ -28,4 +28,5 @@ const app = initializeApp(firebaseConfig);
 const auth: Auth = getAuth(app);
 const db: Firestore = getFirestore(app);
 // eslint-disable-next-line import/prefer-default-export
-export { auth, db };
+// eslint-disable-next-line import/prefer-default-export
+export { auth, db, firebaseConfig };
