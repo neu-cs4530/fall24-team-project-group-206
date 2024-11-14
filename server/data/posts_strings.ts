@@ -52,6 +52,12 @@ export const T6_NAME = 'website';
 export const T6_DESC =
   'A website is a collection of interlinked web pages, typically identified with a common domain name, and published on at least one web server. Websites can serve various purposes, such as information sharing, entertainment, commerce, and social networking.';
 
+export const T7_NAME = 'css';
+export const T7_DESC =
+  'Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language like HTML. CSS is a cornerstone technology, alongside HTML and JavaScript.';
+export const T8_NAME = 'aws';
+export const T8_DESC =
+  'Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon. It offers a mix of infrastructure as a service (IaaS), platform as a service (PaaS), and packaged software as a service (SaaS) offerings.';
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =
@@ -76,3 +82,8 @@ export const C11_TEXT =
   'I found the discussion on SharedPreferences vs apply() very useful. Great explanation of the differences!';
 export const C12_TEXT =
   "I feel like there's so much more to Android Studio that I'm just scratching the surface of. Thanks for sharing your experience!";
+export const FRONT_END_TAGS = [T1_NAME, T6_NAME, T7_NAME];
+// export const BACK_END_TAGS = ['mongodb', 'node.js'];
+// export const ML_TAGS = ['neural-networks', 'deep-learning'];
+// export const AI_TAGS = ['neural-networks', 'reinforcement-learning', 'pytorch', 'nlp'];
+export const CLOUD_TAGS = [T8_NAME, T5_NAME]; // ADD AZURE, GCP
