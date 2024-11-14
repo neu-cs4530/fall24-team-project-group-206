@@ -10,8 +10,6 @@
   }
 
   .ruled-paper {
-    --ruling-line-color: black;           /* Color for horizontal ruling lines */
-    background-image: linear-gradient(var(--ruling-line-color) 0.1em, transparent 0.1em);
     background-size: 100% 3em;          /* Adjusts spacing between horizontal lines */
     background-color: #FFFCF5;
     flex-grow: 1;
@@ -52,14 +50,23 @@
   .chat-text-user {
     text-align: left;
     font-size: 24px;
-    padding: 10px
+    padding-bottom: 10px;
   }
 
   .chat-text-me {
-    text-align: right;
+    text-align: left;
     font-size: 24px;
-    padding: 10px;
+    padding: 3px 7px;
+  
+    background: #DFAEA1;
+    color: #fff !important;
+    border-radius: 20px 20px 3px 20px;
+  
+    display: inline-block;
     float: right;
+    max-width: 60%;
+    word-wrap: break-word;
+    margin: 5px 0;
   }
 
   .username {
@@ -78,8 +85,8 @@
   }
 
   .message {
-    flex-grow: 1;
-    margin-right: 10px;
+    display: block;
+    width: 100%;
   }
 
   .send {

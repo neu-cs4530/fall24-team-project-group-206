@@ -11,7 +11,9 @@ const ChatPage = () => {
   const { pathname } = useLocation();
   const { user } = useUserContext();
   const [currentMessage, setCurrentMessage] = useState<string>('');
-  const [messages, setMessages] = useState<{ message: string; username: string }[]>([]);
+  const [messages, setMessages] = useState<{ message: string; username: string; sendTo: string }[]>(
+    [],
+  );
   const [send, setSend] = useState<string>('');
 
   const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +43,9 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    if (!user?.username || !send) return;
+    if (!user?.username) return;
 
+    // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
     const q = query(
       collection(db, 'messages'),
       where('sendTo', 'in', [send, user.username]),
@@ -54,18 +57,20 @@ const ChatPage = () => {
         .map(doc => ({
           message: doc.data().message,
           username: doc.data().username,
+          sendTo: doc.data().sendTo,
+          timestamp: doc.data().timestamp,
         }))
         .filter(
           msg =>
             (msg.username === user.username && msg.sendTo === send) ||
-            (msg.username === send && msg.sendTo === user.username),
+            (msg.sendTo === user.username && msg.username === send),
         );
-
       setMessages(loadedMessages);
     });
 
+    // Cleanup the snapshot listener on component unmount
     // eslint-disable-next-line consistent-return
-    return unsubscribe; // Cleanup on component unmount
+    return () => unsubscribe();
   }, [user, send]);
 
   const scrollUp = () => {
@@ -92,7 +97,6 @@ const ChatPage = () => {
         {messages.map((m, index) => (
           <>
             <Message key={index} message={m.message} username={m.username} />
-            <br /> <br />
           </>
         ))}
       </div>
