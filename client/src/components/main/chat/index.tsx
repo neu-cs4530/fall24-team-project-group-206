@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import { query, collection, orderBy, onSnapshot, addDoc, where } from 'firebase/firestore';
+import { query, collection, orderBy, onSnapshot, addDoc } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import Message from './Message';
 import useUserContext from '../../../hooks/useUserContext';
@@ -15,6 +15,7 @@ const ChatPage = () => {
     [],
   );
   const [send, setSend] = useState<string>('');
+  const messageContainer = document.querySelector('.scrollable-container');
 
   const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
@@ -46,11 +47,7 @@ const ChatPage = () => {
     if (!user?.username) return;
 
     // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
-    const q = query(
-      collection(db, 'messages'),
-      where('sendTo', 'in', [send, user.username]),
-      orderBy('timestamp', 'asc'),
-    );
+    const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const loadedMessages = querySnapshot.docs
@@ -74,11 +71,11 @@ const ChatPage = () => {
   }, [user, send]);
 
   const scrollUp = () => {
-    window.scrollBy(0, -100);
+    messageContainer?.scrollBy(0, -100);
   };
 
   const scrollDown = () => {
-    window.scrollBy(0, 100);
+    messageContainer?.scrollBy(0, 100);
   };
 
   return (
@@ -93,7 +90,7 @@ const ChatPage = () => {
           onChange={handleSendTo}
         />
       </div>
-      <div className='ruled-paper'>
+      <div className='ruled-paper scrollable-container'>
         {messages.map((m, index) => (
           <>
             <Message key={index} message={m.message} username={m.username} />

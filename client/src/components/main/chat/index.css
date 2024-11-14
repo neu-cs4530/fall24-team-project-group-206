@@ -9,6 +9,12 @@
     overflow-y: scroll;
   }
 
+  .scrollable-container {
+    width: 100%;
+    height: 200px;
+    overflow-y: scroll;
+  }
+
   .ruled-paper {
     background-size: 100% 3em;          /* Adjusts spacing between horizontal lines */
     background-color: #FFFCF5;
@@ -51,6 +57,10 @@
     text-align: left;
     font-size: 24px;
     padding-bottom: 10px;
+
+    background: #f1f1f1;
+    color: #000 !important;
+    border-radius: 20px 20px 20px 3px;
   }
 
   .chat-text-me {
@@ -61,12 +71,6 @@
     background: #DFAEA1;
     color: #fff !important;
     border-radius: 20px 20px 3px 20px;
-  
-    display: inline-block;
-    float: right;
-    max-width: 60%;
-    word-wrap: break-word;
-    margin: 5px 0;
   }
 
   .username {
