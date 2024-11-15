@@ -45,7 +45,7 @@ const useLogin = () => {
     event.preventDefault();
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      setUser({ username: user.email ?? '', status: 'low' });
+      // setUser({ username: user.email ?? '', status: 'low' });
       navigate('/home');
     } catch (error) {
       setErrorMessage((error as Error).message);

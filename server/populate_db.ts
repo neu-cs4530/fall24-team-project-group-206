@@ -3,7 +3,8 @@ import AnswerModel from './models/answers';
 import QuestionModel from './models/questions';
 import TagModel from './models/tags';
 import CommunityModel from './models/communities';
-import { Answer, Comment, Question, Tag, Community } from './types';
+import UserModel from './models/users';
+import { Answer, Comment, Question, Tag, Community, User } from './types';
 import {
   Q1_DESC,
   Q1_TXT,
@@ -214,6 +215,22 @@ async function communityCreate(name: string, tags: string[], users: string[], qu
 }
 
 /**
+ * FIX THIS COMMENT
+ */
+async function userCreate(username: string, firstName: string, lastName: string, tags: Tag[], community: Community, status: string): Promise<User> {
+  if (firstName === '' || lastName === '' || tags.length === 0 || status === '') throw new Error('Invalid Community Format');
+  const user: User = {
+    username: username,
+    firstName: firstName,
+    lastName: lastName,
+    tags: tags,
+    community: community,
+    status: status,
+  };
+  return await UserModel.create(user);
+}
+
+/**
  * Populates the database with predefined data.
  * Logs the status of the operation to the console.
  */
@@ -298,11 +315,14 @@ const populate = async () => {
     // const aiQuestions = await getQuestionsByTags(AI_TAGS);
     const cloudQuestions = await getQuestionsByTags([t5, t8]);
 
-    await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
+    const community1 = await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
     // await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
     // await communityCreate('machine learning', ML_TAGS, [], machineLearningQuestions);
     // await communityCreate('ai', AI_TAGS, [], aiQuestions);
-    await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
+    const community2 = await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
+
+    await userCreate('user1', 'John', 'Doe', [t1, t2], community1, 'low');
+
 
     console.log('Database populated');
   } catch (err) {

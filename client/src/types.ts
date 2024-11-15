@@ -7,6 +7,10 @@ export type FakeSOSocket = Socket<ServerToClientEvents>;
  */
 export interface User {
   username: string;
+  firstName: string;
+  lastName: string;
+  tags: Tag[];
+  community: Community;
   status: string;
 }
 

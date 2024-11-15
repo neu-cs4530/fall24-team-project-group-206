@@ -20,6 +20,18 @@ export interface Community {
 }
 
 /**
+ * Interface representing User
+ */
+export interface User {
+  username: string;
+  firstName: string;
+  lastName: string;
+  tags: Tag[];
+  community: Community;
+  status: string;
+}
+
+/**
  * Interface representing an Answer document, which contains:
  * - _id - The unique identifier for the answer. Optional field
  * - text - The content of the answer
