@@ -4,7 +4,6 @@ import useUserContext from '../../../../hooks/useUserContext';
 import useTagNames from '../../../../hooks/useTagNames';
 import { db } from '../../../../firebaseConfig';
 import './index.css';
-
 /**
  * TagsInfo component which displays and allows the user to manage their chosen tags.
  */
@@ -66,7 +65,7 @@ const TagsInfo = () => {
       <div className='tags-title'>
         <h2>Your Chosen Tags</h2>
       </div>
-      <div>
+      <div className='tags-tag-list'>
         {chosenTags.length > 0 ? (
           chosenTags.map(tag => (
             <div key={tag} className='tags-tag-pill selected' onClick={() => handleTagRemove(tag)}>
@@ -78,7 +77,7 @@ const TagsInfo = () => {
         )}
       </div>
 
-      <div className='tags-title'>
+      <div className='tags-search-title'>
         <h3>Search and Add More Tags</h3>
       </div>
       <input
@@ -88,9 +87,9 @@ const TagsInfo = () => {
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
       />
-      <div>
+      <div className='tags-tag-list'>
         {filteredTags.map(tag => (
-          <div key={tag.name} className='tag-pill' onClick={() => handleTagAdd(tag.name)}>
+          <div key={tag.name} className='tags-tag-pill' onClick={() => handleTagAdd(tag.name)}>
             {tag.name}
           </div>
         ))}
