@@ -20,7 +20,7 @@ import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import CommunityHomePage from './main/homePage/community';
 // import PostLoginCommunity from './login/newUser/chooseCommunityPage';
-import ChooseCommunityPage from './login/newUser/chooseCommunityPage/chooseCommunity';
+import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 
 const ProtectedRoute = ({
   user,
