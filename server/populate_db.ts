@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import AnswerModel from './models/answers';
 import QuestionModel from './models/questions';
 import TagModel from './models/tags';
-import CommunityModel from './models/community';
+import CommunityModel from './models/communities';
 import { Answer, Comment, Question, Tag, Community } from './types';
 import {
   Q1_DESC,

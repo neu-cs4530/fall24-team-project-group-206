@@ -1,23 +1,32 @@
-import express from 'express';
-import { FakeSOSocket } from '../types';
+import express, { Request, Response, Router } from 'express';
+import CommunityModel from '../models/communities';
 
-const communityController = (socket: FakeSOSocket) => {
-  const router = express.Router();
+const communityController = () => {
+  const router: Router = express.Router();
 
-  // Example route for creating a community (currently no logic implemented)
-  router.post('/create', (req, res) => {
-    res.status(501).json({ message: 'Not implemented' });
-  });
+  /**
+   * Retrieves a list of tags along with the number of questions associated with each tag.
+   * If there is an error, the HTTP response's status is updated.
+   *
+   * @param _ The HTTP request object (not used in this function).
+   * @param res The HTTP response object used to send back the tag count mapping.
+   *
+   * @returns A Promise that resolves to void.
+   */
+  /**
+   * @param req The Request object containing the tag name in the URL parameters.
+   * @param res The HTTP response object used to send back the result of the operation.
+   */
+  const getCommunityNames = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const communities = await CommunityModel.find({}); // Retrieve only necessary fields
+      res.json(communities);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve communities' });
+    }
+  };
 
-  // Example route for retrieving all communities (currently no logic implemented)
-  router.get('/', (req, res) => {
-    res.status(501).json({ message: 'Not implemented' });
-  });
-
-  // Example route for retrieving a single community by ID (currently no logic implemented)
-  router.get('/:id', (req, res) => {
-    res.status(501).json({ message: 'Not implemented' });
-  });
+  router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
 
   return router;
 };
