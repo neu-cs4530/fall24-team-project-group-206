@@ -19,7 +19,8 @@ import CommunityInfo from './main/profile/community';
 import StatusInfo from './main/profile/status';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import CommunityHomePage from './main/homePage/community';
-import PostLoginCommunity from './login/newUser/chooseCommunityPage';
+// import PostLoginCommunity from './login/newUser/chooseCommunityPage';
+import ChooseCommunityPage from './login/newUser/chooseCommunityPage/chooseCommunity';
 
 const ProtectedRoute = ({
   user,
@@ -54,7 +55,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/new/tagselection' element={<ChooseTagsPage />} />
         <Route
           path='/new/tagselection/communityselection'
-          element={<PostLoginCommunity userId={user?.username || ''} />}
+          // element={<PostLoginCommunity userId={user?.username || ''} />}
+          element={<ChooseCommunityPage />}
         />
         {/* Protected Routes */}
         {
