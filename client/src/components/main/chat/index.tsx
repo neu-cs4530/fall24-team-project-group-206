@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import { query, collection, orderBy, onSnapshot, addDoc } from 'firebase/firestore';
+import { query, collection, orderBy, onSnapshot, addDoc, getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import Message from './Message';
 import useUserContext from '../../../hooks/useUserContext';
@@ -44,6 +44,8 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
+    console.log('Messages useEffect triggered');
+
     if (!user?.username) return;
 
     // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
@@ -51,6 +53,7 @@ const ChatPage = () => {
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const loadedMessages = querySnapshot.docs
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         .map(doc => ({
           message: doc.data().message,
           username: doc.data().username,
@@ -80,20 +83,25 @@ const ChatPage = () => {
 
   return (
     <div className='chat-container'>
-      <div className='chat-header'>
-        chatting now:{' '}
-        <input
-          className='username'
-          id='searchBar'
-          placeholder={pathname.includes('community') ? 'community' : 'email'}
-          type='text'
-          onChange={handleSendTo}
-        />
+      <div className='chat-header d-flex'>
+        <span className='chat-title'>chatting now: </span>
+        {pathname.includes('community') ? (
+          <span>community</span>
+        ) : (
+          <input
+            className='username'
+            id='searchBar'
+            placeholder={'email'}
+            type='text'
+            onChange={handleSendTo}
+          />
+        )}
       </div>
       <div className='ruled-paper scrollable-container'>
         {messages.map((m, index) => (
           <>
             <Message key={index} message={m.message} username={m.username} />
+            <br />
           </>
         ))}
       </div>

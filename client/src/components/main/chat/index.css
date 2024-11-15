@@ -32,15 +32,21 @@
     padding: 20px;
   }
 
-  .chat-header {
-    width: 100%;
-    background-color: #466694;
+  .chat-title {
     padding: 20px;
-    color: #FFFFFF;
-    text-align: center;
     font-size: 24px;
     font-weight: bold;
-    position: inherit;
+
+  }
+
+  .chat-header {
+    background-color: #466694;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .chat-footer {
@@ -53,24 +59,30 @@
     width: 100%;
   }
 
-  .chat-text-user {
-    text-align: left;
+  .chat-text-user, .chat-text-me {
+    display: inline-block;
     font-size: 24px;
-    padding-bottom: 10px;
+    max-width: 100%; /* Ensure the width doesn’t stretch too far */
+    white-space: nowrap; /* Prevents text from wrapping within a single message */
+    margin-bottom: 5px; /* Adds space between messages */
+  }
 
+  .chat-text-user {
+    text-align: left !important;
+    padding: 3px 15px;
     background: #f1f1f1;
     color: #000 !important;
     border-radius: 20px 20px 20px 3px;
   }
 
   .chat-text-me {
-    text-align: left;
-    font-size: 24px;
-    padding: 3px 7px;
-  
+    float: right;  /* Aligns the chat bubble to the right */
+    padding: 3px 15px;
     background: #DFAEA1;
     color: #fff !important;
     border-radius: 20px 20px 3px 20px;
+    margin-bottom: 10px;  /* Optional: Adds space below the bubble */
+    clear: both;  /* Ensures no other floated elements affect the layout */
   }
 
   .username {
@@ -78,14 +90,10 @@
     color: white;
     font-size: 24px;
     font-weight: bold;
-    border: #6D89B0;
-    outline: #6D89B0;
   }
 
   .username::placeholder {
     color: white;
-    border: #6D89B0;
-    outline: #6D89B0;
   }
 
   .message {
@@ -94,11 +102,15 @@
   }
 
   .send {
-    background: #32CD32;
+    background: #BABDE2;
     border-radius: 10px;
     padding: 5px;
     color: white;
     margin-right: 20px;
     font-size: 24px;
     font-weight: bold;
+  }
+
+  .send:hover {
+    background-color: #9498B5;
   }
