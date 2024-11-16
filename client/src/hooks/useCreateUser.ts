@@ -2,9 +2,9 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-// import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
-import useLoginContext from './useLoginContext';
+import { auth } from '../firebaseConfig';
+import { User } from '../types';
+import addUser from '../services/userService';
 
 /**
  * Custom hook to handle user creation input and submission.
@@ -25,7 +25,7 @@ const useCreateUser = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setUser } = useLoginContext();
+  // const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,10 +48,16 @@ const useCreateUser = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
-      // setUser({ username: user.email ?? '', status: 'low' });
-      // navigate('/home');
+      const user: User = {
+        username: email,
+        firstName,
+        lastName,
+        tags: [],
+        status: 'low',
+      };
+      await addUser(user);
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);

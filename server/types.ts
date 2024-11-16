@@ -27,7 +27,7 @@ export interface User {
   firstName: string;
   lastName: string;
   tags: Tag[];
-  community: Community;
+  community?: Community;
   status: string;
 }
 
