@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { User } from '../types';
-import addUser from '../services/userService';
+import { addUser } from '../services/userService';
 
 /**
  * Custom hook to handle user creation input and submission.

@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
-import { db, auth } from '../../../../firebaseConfig';
+import { auth } from '../../../../firebaseConfig';
+import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 
@@ -22,22 +22,11 @@ const ChooseCommunityPage = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        console.log(user.email);
-        if (user.email) {
-          const userRef = doc(db, 'users', user.email);
-          await setDoc(
-            userRef,
-            {
-              username: user.email,
-              community,
-            },
-            { merge: true },
-          );
-        } else {
-          console.error('Error saving community');
-        }
+        console.log('Saving community for user:', user.email);
+        await updateUserCommunity(user.email!, community); // Call the backend service
+        console.log('Community updated successfully');
       } else {
-        console.error('Error saving community');
+        console.error('No user is logged in.');
       }
     } catch (error) {
       console.error('Error saving community:', error);

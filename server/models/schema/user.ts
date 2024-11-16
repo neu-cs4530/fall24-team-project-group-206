@@ -20,10 +20,10 @@ const userSchema: Schema = new Schema(
       type: String,
     },
     tags: {
-      type: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+      type: [String],
     },
     community: {
-      type: { type: Schema.Types.ObjectId, ref: 'Community' },
+      type: String,
     },
     status: {
       type: String,

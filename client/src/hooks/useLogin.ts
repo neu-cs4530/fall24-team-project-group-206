@@ -2,7 +2,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import useLoginContext from './useLoginContext';
 import { auth } from '../firebaseConfig';
 
 /**
@@ -20,7 +19,6 @@ const useLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
   /**
@@ -44,8 +42,7 @@ const useLogin = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      // setUser({ username: user.email ?? '', status: 'low' });
+      await signInWithEmailAndPassword(auth, email, password);
       navigate('/home');
     } catch (error) {
       setErrorMessage((error as Error).message);

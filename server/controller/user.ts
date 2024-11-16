@@ -22,8 +22,51 @@ const userController = () => {
 
       return res.status(200).json(newUser);
     } catch (error) {
-      console.error('Error adding user:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Error adding user' });
+    }
+  });
+
+  router.put('/updateTags', async (req: Request, res: Response) => {
+    try {
+      const { username, tags } = req.body;
+
+      if (!username || !tags) {
+        return res.status(400).json({ error: 'Username and tags are required' });
+      }
+
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { username },
+        { $set: { tags } },
+        { new: true },
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      return res.status(500).json({ error: 'Error updating tags' });
+    }
+  });
+
+  router.put('/updateCommunity', async (req: Request, res: Response) => {
+    try {
+      const { username, community } = req.body;
+
+      if (!username || !community) {
+        return res.status(400).json({ message: 'Username and community are required' });
+      }
+
+      const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error updating community' });
     }
   });
 

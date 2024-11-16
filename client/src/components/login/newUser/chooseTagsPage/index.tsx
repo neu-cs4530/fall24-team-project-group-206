@@ -2,10 +2,9 @@
 import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
-import { doc, updateDoc } from 'firebase/firestore';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import useTagNames from '../../../../hooks/useTagNames';
-import { db, auth } from '../../../../firebaseConfig';
+import { auth } from '../../../../firebaseConfig';
+import { updateUserTags } from '../../../../services/userService'; // Import the userService function
 import logo from '../../../../logo.svg';
 
 /**
@@ -29,15 +28,11 @@ const ChooseTagsPage = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        console.log(user.email);
-        if (user.email) {
-          const userRef = doc(db, 'users', user.email);
-          await updateDoc(userRef, { tags });
-        } else {
-          console.error('Error saving tags');
-        }
+        console.log('Saving tags for user:', user.email);
+        await updateUserTags(user.email!, tags);
+        console.log('Tags updated successfully');
       } else {
-        console.error('Error saving tags');
+        console.error('No user is logged in.');
       }
     } catch (error) {
       console.error('Error saving tags:', error);

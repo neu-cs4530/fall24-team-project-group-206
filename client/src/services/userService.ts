@@ -1,4 +1,4 @@
-import { User } from '../types';
+import { Tag, User } from '../types';
 import api from './config';
 
 const USER_API_URL = `${process.env.REACT_APP_SERVER_URL}/user`;
@@ -22,4 +22,19 @@ const addUser = async (user: User): Promise<User> => {
   }
 };
 
-export default addUser;
+const updateUserTags = async (username: string, tags: string[]): Promise<User> => {
+  const res = await api.put(`${USER_API_URL}/updateTags`, { username, tags });
+  if (res.status !== 200) {
+    throw new Error('Failed to update user tags');
+  }
+  return res.data;
+};
+const updateUserCommunity = async (username: string, community: string): Promise<User> => {
+  const res = await api.put(`${USER_API_URL}/updateCommunity`, { username, community });
+  if (res.status !== 200) {
+    throw new Error('Failed to update user community');
+  }
+  return res.data;
+};
+
+export { addUser, updateUserTags, updateUserCommunity };

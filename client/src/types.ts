@@ -9,8 +9,8 @@ export interface User {
   username: string;
   firstName: string;
   lastName: string;
-  tags: Tag[];
-  community?: Community;
+  tags: string[];
+  community?: string;
   status: string;
 }
 
