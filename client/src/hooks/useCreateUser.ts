@@ -51,7 +51,6 @@ const useCreateUser = () => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
       // setUser({ username: user.email ?? '', status: 'low' });
-      navigate('/home');
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);
