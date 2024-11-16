@@ -37,4 +37,12 @@ const updateUserCommunity = async (username: string, community: string): Promise
   return res.data;
 };
 
-export { addUser, updateUserTags, updateUserCommunity };
+const getUser = async (username: string): Promise<User> => {
+  const res = await api.get(`${USER_API_URL}/getUser`, { params: { username } });
+  if (res.status !== 200) {
+    throw new Error('Failed to fetch user data');
+  }
+  return res.data;
+};
+
+export { addUser, updateUserTags, updateUserCommunity, getUser };

@@ -2,13 +2,12 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import { doc, getDoc } from 'firebase/firestore';
 import { NavLink } from 'react-router-dom';
-import { auth, db } from '../../../../firebaseConfig';
-import useUserContext from '../../../../hooks/useUserContext';
+import { auth } from '../../../../firebaseConfig';
+import { getUser } from '../../../../services/userService';
 
 /**
- * AccountInfo component which displays the user's username and password.
+ * AccountInfo component which displays the user's username and status.
  */
 const AccountInfo = () => {
   const [userData, setUserData] = useState({
@@ -18,25 +17,19 @@ const AccountInfo = () => {
     status: '',
   });
   const [creationTime, setCreationTime] = useState<string | null>(null);
-  const { user } = useUserContext();
+
   useEffect(() => {
     const fetchUserData = async () => {
       const firebaseUser = auth.currentUser;
       if (firebaseUser && firebaseUser.email) {
         try {
-          const userRef = doc(db, 'users', firebaseUser.email);
-          const userDoc = await getDoc(userRef);
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setUserData({
-              first_name: data.first_name || '',
-              last_name: data.last_name || '',
-              username: data.username || firebaseUser.email,
-              status: user.status || 'low',
-            });
-          } else {
-            console.log('No such user!');
-          }
+          const data = await getUser(firebaseUser.email);
+          setUserData({
+            first_name: data.firstName,
+            last_name: data.lastName,
+            username: data.username,
+            status: data.status,
+          });
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
