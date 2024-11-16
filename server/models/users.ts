@@ -1,7 +1,7 @@
 // Community Document Schema
 import mongoose, { Model } from 'mongoose';
 import { User } from '../types';
-import userSchema from './schema/community';
+import userSchema from './schema/user';
 
 /**
  * Mongoose model for the `Community` collection.
