@@ -27,12 +27,6 @@ const SideBarHome = () => (
       className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
       Community
     </NavLink>
-    <NavLink
-      to='/profile/status'
-      id='menu_tag'
-      className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-      Status
-    </NavLink>
   </div>
 );
 

@@ -1,9 +1,11 @@
 .sideBarNav {
   display: flex;
   flex-direction: column;
-  width: 9%;
+  flex-basis: 200px;
+  max-width: 10vw;
+  min-width: 130px;
   border-right: 2px solid black;
-  padding: 4% 1% 4% 1%;
+  padding: 4% 1%;
   align-items: flex-start;
 }
 
@@ -13,7 +15,7 @@
 
 .menu_button {
   height: 40px;
-  width: 80%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: flex-start;

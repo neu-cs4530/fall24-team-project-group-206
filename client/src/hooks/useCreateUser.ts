@@ -2,7 +2,8 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebaseConfig';
 import useLoginContext from './useLoginContext';
 
 /**
@@ -18,6 +19,8 @@ import useLoginContext from './useLoginContext';
  */
 const useCreateUser = () => {
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +34,14 @@ const useCreateUser = () => {
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+  };
+
+  const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,9 +61,13 @@ const useCreateUser = () => {
 
   return {
     email,
+    firstName,
+    lastName,
     password,
     errorMessage,
     isLoading,
+    handleFirstNameChange,
+    handleLastNameChange,
     handleEmailChange,
     handlePasswordChange,
     handleSubmit,
