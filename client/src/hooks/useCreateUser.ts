@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { User } from '../types';
 import { addUser } from '../services/userService';
+import useLoginContext from './useLoginContext';
 
 /**
  * Custom hook to handle user creation input and submission.
@@ -25,7 +26,7 @@ const useCreateUser = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // const { setUser } = useLoginContext();
+  const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +58,7 @@ const useCreateUser = () => {
         tags: [],
         status: 'low',
       };
+      setUser(user);
       await addUser(user);
       navigate('/new/tagselection');
     } catch (error) {

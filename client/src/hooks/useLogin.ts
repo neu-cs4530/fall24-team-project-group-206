@@ -1,8 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import useLoginContext from './useLoginContext';
+import { getUser } from '../services/userService';
 
 /**
  * Custom hook to handle login input and submission.
@@ -18,7 +19,7 @@ const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
   /**
@@ -43,6 +44,15 @@ const useLogin = () => {
     event.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      const userData = await getUser(email);
+      setUser({
+        username: userData.username,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        tags: userData.tags,
+        status: userData.status,
+      });
+
       navigate('/home');
     } catch (error) {
       setErrorMessage((error as Error).message);
