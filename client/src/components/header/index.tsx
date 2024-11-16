@@ -14,10 +14,6 @@ import logo from '../../logo.svg';
 const Header = () => {
   const { val, handleInputChange, handleKeyDown } = useHeader();
 
-  const handleLogout = () => {
-    console.log('Logging out');
-  };
-
   return (
     <div id='header' className='header'>
       {/* Render SVG logo */}
