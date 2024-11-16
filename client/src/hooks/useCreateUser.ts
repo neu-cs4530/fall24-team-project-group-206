@@ -2,7 +2,7 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+// import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import useLoginContext from './useLoginContext';
 
