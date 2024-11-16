@@ -16,7 +16,7 @@
   }
 
   .ruled-paper {
-    background-size: 100% 3em;          /* Adjusts spacing between horizontal lines */
+    background-size: 100% 3em;
     background-color: #FFFCF5;
     flex-grow: 1;
     width: 100%;
@@ -32,11 +32,21 @@
     padding: 20px;
   }
 
+  .community-title {
+    margin: 0 auto; /* Horizontally center */
+    background: #6D89B0;
+    text-align: start;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
   .chat-title {
     padding: 20px;
     font-size: 24px;
     font-weight: bold;
-
   }
 
   .chat-header {
@@ -62,9 +72,9 @@
   .chat-text-user, .chat-text-me {
     display: inline-block;
     font-size: 24px;
-    max-width: 100%; /* Ensure the width doesn’t stretch too far */
-    white-space: nowrap; /* Prevents text from wrapping within a single message */
-    margin-bottom: 5px; /* Adds space between messages */
+    max-width: 100%;
+    white-space: nowrap;
+    margin-bottom: 5px;
   }
 
   .chat-text-user {
@@ -76,19 +86,20 @@
   }
 
   .chat-text-me {
-    float: right;  /* Aligns the chat bubble to the right */
+    float: right;
     padding: 3px 15px;
     background: #DFAEA1;
     color: #fff !important;
-    border-radius: 20px 20px 3px 20px;
-    margin-bottom: 10px;  /* Optional: Adds space below the bubble */
-    clear: both;  /* Ensures no other floated elements affect the layout */
+    border-radius: 30px 20px 3px 30px;
+    margin-bottom: 10px;
+    clear: both;
   }
 
   .username {
     background: #6D89B0;
     color: white;
     font-size: 24px;
+    max-width: 975px;
     font-weight: bold;
   }
 
