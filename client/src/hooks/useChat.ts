@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import useUserContext from './useUserContext';
@@ -39,8 +40,6 @@ const useChat = () => {
   };
 
   useEffect(() => {
-    console.log('Messages useEffect triggered');
-
     if (!user?.username) return;
 
     // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
