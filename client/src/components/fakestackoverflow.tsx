@@ -18,8 +18,8 @@ import TagsInfo from './main/profile/tags';
 // import CommunityInfo from './main/profile/community';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import CommunityHomePage from './main/homePage/community';
-// import PostLoginCommunity from './login/newUser/chooseCommunityPage';
-import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
+import PostLoginCommunity from './login/newUser/chooseCommunityPage';
+import ChatPage from './main/chat';
 
 const ProtectedRoute = ({
   user,
@@ -66,8 +66,10 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
               </ProtectedRoute>
             }>
             <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='chat/community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />
+            <Route path='chat' element={<ChatPage />} />
             <Route path='/question/:qid' element={<AnswerPage />} />
             <Route path='/new/question' element={<NewQuestionPage />} />
             <Route path='/new/answer/:qid' element={<NewAnswerPage />} />

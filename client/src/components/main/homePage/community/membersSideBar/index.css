@@ -40,14 +40,16 @@
   }
   .chat-button {
     background-color: #d4a5a5;
+    text-decoration: none !important;
     color: white;
+    text-align: center;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     width: 150px;
-    margin-left: 34px;
+    margin-left: 25px;
     margin-top: 20px;
   }
 
