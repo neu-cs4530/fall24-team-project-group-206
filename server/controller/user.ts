@@ -1,5 +1,5 @@
-import express, { Request, Response, Router } from 'express';
-import UserModel from '../models/communities';
+import express, { Router } from 'express';
+// import UserModel from '../models/communities';
 
 const userController = () => {
   const router: Router = express.Router();

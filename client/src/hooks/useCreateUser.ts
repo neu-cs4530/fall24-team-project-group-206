@@ -2,8 +2,8 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-// import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth } from '../firebaseConfig';
 import useLoginContext from './useLoginContext';
 
 /**
@@ -51,7 +51,7 @@ const useCreateUser = () => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
       // setUser({ username: user.email ?? '', status: 'low' });
-      // navigate('/home');
+      navigate('/home');
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);
