@@ -47,7 +47,7 @@ const ChooseTagsPage = () => {
     <div className='container'>
       <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
       <div className='title'>
-        <h2>What topics interest you? Choose tags below:</h2>
+        <h2>what topics interest you? choose tags below:</h2>
       </div>
       <input
         type='text'
