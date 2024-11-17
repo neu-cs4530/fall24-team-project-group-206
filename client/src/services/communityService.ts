@@ -16,4 +16,12 @@ const getCommunityNames = async (): Promise<Community[]> => {
   return res.data;
 };
 
-export { getCommunityNames };
+const getCommunityByName = async (name: string): Promise<Community> => {
+  const res = await api.get(`${COMMUNITY_API_URL}/getCommunityByName/${name}`);
+  if (res.status !== 200) {
+    throw new Error('Error when fetching community by name');
+  }
+  return res.data;
+};
+
+export { getCommunityNames, getCommunityByName };
