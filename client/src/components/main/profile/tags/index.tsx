@@ -56,7 +56,7 @@ const TagsInfo = () => {
     .filter(tag => tag.name.toLowerCase().includes(searchTerm.toLowerCase()));
   return (
     <div className='tags-container'>
-      <div className='tags-title'>
+      <div className='tags-main-title'>
         <h2>Your Chosen Tags</h2>
       </div>
       <div className='tags-tag-list'>

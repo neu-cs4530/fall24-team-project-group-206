@@ -1,42 +1,33 @@
 .community-info {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start; 
-  width: 300%;
+  justify-content: flex-start;
+  width: 100%;
   padding: 20px;
-  /* background-color: #f5f5f5; */
   box-sizing: border-box;
-  height: 100%;
-  position: relative;
 }
 
-.community-title {
+.community-main-title {
   font-size: 26px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   width: 100%;
   text-align: center;
-  margin-right: 20px;
 }
 
-.save-community-button {
-  width: 160px;
-  padding: 12px 25px;
-  font-size: 1rem;
-  color: white;
-  background-color: #466694;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 10px;
-  align-self: center; 
+.title-two {
+  font-size: 26px;
+  font-weight: lighter;
+  color: #333;
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .community-pill {
-  background-color: #6f4046;
+  background-color: #d4a5a5;
   color: white;
   border-radius: 50px;
   margin: 5px;
@@ -53,13 +44,31 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.title-two {
-  font-size: 26px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 30px;
-  width: 100%;
-  text-align: center;
+.community-pill:hover {
+  background-color: #a66e6e;
+  transform: scale(1.05);
+}
+
+.community-pill.selected {
+  background-color: #ffffff;
+  color: #d4a5a5;
+  border: 2px solid #d4a5a5;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.save-community-button {
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #466694;
+  width: 160px;
+  height: 45px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 15px;
 }
 
 .save-community-button:disabled {
@@ -69,5 +78,10 @@
 
 .save-community-button:hover:not(:disabled) {
   background-color: #324B73;
-  transform: scale(1.02);
+  transform: scale(1.05);
+}
+
+.save-community-button:active:not(:disabled) {
+  background-color: #466694;
+  transform: translateY(0);
 }

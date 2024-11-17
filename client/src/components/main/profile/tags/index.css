@@ -9,13 +9,14 @@
 }
 
 
-.tags-title {
+.tags-main-title {
   font-size: 26px;
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
   margin-left: 200px;
   width: 100%;
+  text-align: center;
 }
 
 .tags-search-title {

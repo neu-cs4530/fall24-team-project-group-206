@@ -45,7 +45,7 @@ const CommunityInfo = () => {
 
   return (
     <div className='community-info'>
-      <div className='community-title'>
+      <div className='community-main-title'>
         <h2>Community Information</h2>
       </div>
       <p>
@@ -53,10 +53,8 @@ const CommunityInfo = () => {
           ? `You are in the community: ${userCommunity}`
           : 'You are not in any community.'}
       </p>
+      <h3>Select a new Community</h3>
       <div>
-        <div className='title-two'>
-          <h3>Select a new Community</h3>
-        </div>
         {communityNames.map(community => (
           <div
             key={community.name}
