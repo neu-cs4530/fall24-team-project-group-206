@@ -32,6 +32,10 @@ const CommunityInfo = () => {
     setUserCommunity(communityName);
   };
 
+  const handleCommunityRemove = () => {
+    setUserCommunity('');
+  };
+
   const saveCommunityToUserAccount = async () => {
     if (!user?.username) return;
 
@@ -43,27 +47,38 @@ const CommunityInfo = () => {
     }
   };
 
+  const filteredCommunities = communityNames.filter(community => community.name !== userCommunity);
+
   return (
     <div className='community-info'>
       <div className='community-main-title'>
-        <h2>Community Information</h2>
+        <h2>Your Community</h2>
       </div>
-      <p>
-        {userCommunity
-          ? `You are in the community: ${userCommunity}`
-          : 'You are not in any community.'}
-      </p>
-      <h3>Select a new Community</h3>
-      <div>
-        {communityNames.map(community => (
+
+      <div className='selected-community'>
+        {userCommunity ? (
+          <div className='community-pill selected' onClick={handleCommunityRemove}>
+            {userCommunity}
+          </div>
+        ) : (
+          <p>No community selected. Please select one from below:</p>
+        )}
+      </div>
+
+      <div className='title-two'>
+        <h3>Select a new Community</h3>
+      </div>
+      <div className='community-pills-container'>
+        {filteredCommunities.map(community => (
           <div
             key={community.name}
-            className={`community-pill ${community.name === userCommunity ? 'selected' : ''}`}
+            className='community-pill'
             onClick={() => handleCommunitySelect(community.name)}>
             {community.name}
           </div>
         ))}
       </div>
+
       <button
         className='save-community-button'
         onClick={saveCommunityToUserAccount}

@@ -4,30 +4,40 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
+  margin-top: -50px;
+  height: auto;
 }
 
 .community-main-title {
   font-size: 26px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   text-align: center;
 }
 
 .title-two {
-  font-size: 26px;
-  font-weight: lighter;
+  font-size: 24px;
   color: #333;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 2px;
   text-align: center;
 }
 
+.community-pills-container {
+  display: flex;
+  flex-wrap: wrap; /* Ensures pills wrap if they overflow */
+  gap: 10px; /* Adds space between pills */
+  justify-content: center; /* Centers the pills in the container */
+  align-items: center; /* Aligns pills vertically */
+  margin: 20px 0; /* Adds spacing around the container */
+}
+
 .community-pill {
-  background-color: #d4a5a5;
+  background-color:  #6f4046;
   color: white;
   border-radius: 50px;
   margin: 5px;
@@ -45,14 +55,14 @@
 }
 
 .community-pill:hover {
-  background-color: #a66e6e;
+  background-color: #895159;
   transform: scale(1.05);
 }
 
 .community-pill.selected {
   background-color: #ffffff;
-  color: #d4a5a5;
-  border: 2px solid #d4a5a5;
+  color: #6f4046;
+  border: 2px solid #6f4046;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -62,7 +72,7 @@
   cursor: pointer;
   background-color: #466694;
   width: 160px;
-  height: 45px;
+  height: 62px;
   color: white;
   border: none;
   border-radius: 5px;
