@@ -1,4 +1,4 @@
-import { Tag, User } from '../types';
+import { User } from '../types';
 import api from './config';
 
 const USER_API_URL = `${process.env.REACT_APP_SERVER_URL}/user`;
