@@ -2,8 +2,9 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
+import { auth } from '../firebaseConfig';
+import { User } from '../types';
+import { addUser } from '../services/userService';
 import useLoginContext from './useLoginContext';
 
 /**
@@ -48,25 +49,18 @@ const useCreateUser = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
-
-      const userRef = doc(db, 'users', user.email ?? '');
-      await setDoc(
-        userRef,
-        {
-          username: user.email,
-          first_name: firstName,
-          last_name: lastName,
-        },
-        { merge: true },
-      );
-
-      setUser({
-        username: user.email ?? '',
+      const user: User = {
+        username: email,
+        firstName,
+        lastName,
+        tags: [],
+        community: '',
         status: 'low',
-      });
-
+      };
+      setUser(user);
+      await addUser(user);
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);

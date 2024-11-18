@@ -1,103 +1,62 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
-import { collection, query, getDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { NavLink } from 'react-router-dom';
-import { db } from '../../../../firebaseConfig';
+import React, { useState } from 'react';
 import './index.css';
+import { NavLink } from 'react-router-dom';
+import { auth } from '../../../../firebaseConfig';
+import { updateUserCommunity } from '../../../../services/userService';
+import logo from '../../../../logo.svg';
+import useCommunityNames from '../../../../hooks/useCommunityNames';
 
-const PostLoginCommunity = ({ userId }: { userId: string }) => {
-  const [userTags, setUserTags] = useState<string[]>([]);
-  const [suggestedCommunities, setSuggestedCommunities] = useState<string[]>([]);
-  const [selectedCommunity, setSelectedCommunity] = useState<string | null>(null);
+/**
+ * Depicts communities that the user can choose from.
+ */
+const ChooseCommunityPage = () => {
+  const { communityNames } = useCommunityNames();
+  const [selectedCommunity, setSelectedCommunity] = useState<string>('');
 
-  useEffect(() => {
-    const fetchUserTags = async () => {
-      const userRef = doc(db, 'users', userId);
-      const docSnap = await getDoc(userRef);
+  const handleCommunityClick = (communityName: string) => {
+    setSelectedCommunity(prevCommunity => (prevCommunity === communityName ? '' : communityName));
+  };
 
-      if (docSnap.exists()) {
-        setUserTags(docSnap.data().tags || []);
-      } else {
-        console.log('User not found!');
-      }
-    };
-
-    fetchUserTags();
-  }, [userId]);
-
-  useEffect(() => {
-    if (userTags.length === 0) return;
-
-    const fetchSuggestedCommunities = async () => {
-      const communitiesRef = collection(db, 'communities');
-      const q = query(communitiesRef);
-
-      const querySnapshot = await getDocs(q);
-      const matchedCommunities: string[] = [];
-
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      querySnapshot.forEach(doc => {
-        const community = doc.data();
-        const commonTags = community.tags.filter((tag: string) => userTags.includes(tag));
-
-        // if there are common tags with a community, suggest that community -- can change
-        // implementation
-        if (commonTags.length > 0) {
-          matchedCommunities.push(doc.id);
-        }
-      });
-
-      setSuggestedCommunities(matchedCommunities);
-    };
-
-    fetchSuggestedCommunities();
-  }, [userTags]);
-
-  const handleCommunitySelect = async (community: string) => {
-    setSelectedCommunity(community);
-    const userRef = doc(db, 'users', userId);
-
+  const saveCommunityToUserAccount = async (community: string) => {
     try {
-      const docSnap = await getDoc(userRef);
-      if (!docSnap.exists()) {
-        console.log('User not found!');
-        return;
-      }
-      const userData = docSnap.data();
-      const communitySelected = userData.communitySelected || [];
-
-      // users can only select one community:
-      if (communitySelected.length === 0 || communitySelected[0] !== community) {
-        await updateDoc(userRef, {
-          communitySelected: [community],
-        });
-        console.log(`Community "${community}" added to user's selected communities`);
+      const user = auth.currentUser;
+      if (user) {
+        console.log('Saving community for user:', user.email);
+        await updateUserCommunity(user.email!, community); // Call the backend service
+        console.log('Community updated successfully');
       } else {
-        console.log(`Community "${community}" is already selected.`);
+        console.error('No user is logged in.');
       }
     } catch (error) {
-      console.error('Error adding community to user:', error);
+      console.error('Error saving community:', error);
     }
   };
 
   return (
     <div className='community-container'>
-      <h2 className='recommendation-header'>
-        We recommend the following communities based on your interests:
-      </h2>
-      <ul className='communities'>
-        {suggestedCommunities.map(community => (
-          <li
-            key={community}
-            onClick={() => handleCommunitySelect(community)}
-            className={selectedCommunity === community ? 'selected' : ''}>
-            {community}
-          </li>
-        ))}
-      </ul>
-      <p className='choose-more-text'></p>
+      <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
+      <div className='recommendation-header'>
+        <h2>Recommended Communities:</h2>
+      </div>
+      <div className='community-list'>
+        {communityNames &&
+          communityNames.map(community => (
+            <li
+              className={`community-pill ${selectedCommunity === community.name ? 'selected' : ''}`}
+              key={community.name}
+              onClick={() => handleCommunityClick(community.name)}>
+              {community.name}
+            </li>
+          ))}
+      </div>
       <div className='button-container'>
-        <button className='next-button'>
+        <button
+          className='next-button'
+          onClick={() => {
+            console.log('Saving community:', selectedCommunity);
+            saveCommunityToUserAccount(selectedCommunity);
+          }}>
           <NavLink className='button-text' to='/home'>
             Next
           </NavLink>
@@ -107,4 +66,4 @@ const PostLoginCommunity = ({ userId }: { userId: string }) => {
   );
 };
 
-export default PostLoginCommunity;
+export default ChooseCommunityPage;

@@ -10,6 +10,28 @@ export type FakeSOSocket = Server<ServerToClientEvents>;
 export type OrderType = 'newest' | 'unanswered' | 'active' | 'mostViewed';
 
 /**
+ * Interface representing Community
+ */
+export interface Community {
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
+}
+
+/**
+ * Interface representing User
+ */
+export interface User {
+  username: string;
+  firstName: string;
+  lastName: string;
+  tags: string[];
+  community: string;
+  status: 'low' | 'high';
+}
+
+/**
  * Interface representing an Answer document, which contains:
  * - _id - The unique identifier for the answer. Optional field
  * - text - The content of the answer

@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, doc, updateDoc } from 'firebase/firestore';
 import useUserContext from '../../../../hooks/useUserContext';
 import useTagNames from '../../../../hooks/useTagNames';
-import { db } from '../../../../firebaseConfig';
 import './index.css';
+import { updateUserTags, getUser } from '../../../../services/userService';
+
 /**
  * TagsInfo component which displays and allows the user to manage their chosen tags.
  */
@@ -14,21 +14,14 @@ const TagsInfo = () => {
   const [chosenTags, setChosenTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Fetch tags from MongoDB when the component is mounted
   useEffect(() => {
     const fetchTags = async () => {
       if (!user?.username) return;
 
       try {
-        const q = query(collection(db, 'users'), where('username', '==', user.username));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const userDoc = querySnapshot.docs[0];
-          const userData = userDoc.data();
-          setChosenTags(userData.tags || []);
-        } else {
-          console.log('User not found');
-        }
+        const data = await getUser(user.username); // Fetch user data from MongoDB
+        setChosenTags(data.tags || []);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
@@ -37,10 +30,12 @@ const TagsInfo = () => {
     fetchTags();
   }, [user]);
 
+  // Handle adding a tag to the chosen list
   const handleTagAdd = (tagName: string) => {
     setChosenTags(prevTags => [...prevTags, tagName]);
   };
 
+  // Handle removing a tag from the chosen list
   const handleTagRemove = (tagName: string) => {
     setChosenTags(prevTags => prevTags.filter(tag => tag !== tagName));
   };
@@ -49,8 +44,7 @@ const TagsInfo = () => {
     if (!user?.username) return;
 
     try {
-      const userDocRef = doc(db, 'users', user.username);
-      await updateDoc(userDocRef, { tags: chosenTags });
+      await updateUserTags(user.username, chosenTags);
       console.log('Tags updated:', chosenTags);
     } catch (error) {
       console.error('Error saving tags:', error);
@@ -58,9 +52,8 @@ const TagsInfo = () => {
   };
 
   const filteredTags = tagNames
-    .filter(tag => !chosenTags.includes(tag.name)) // Only show tags not already chosen
-    .filter(tag => tag.name.toLowerCase().includes(searchTerm.toLowerCase())); // Apply search filter
-
+    .filter(tag => !chosenTags.includes(tag.name))
+    .filter(tag => tag.name.toLowerCase().includes(searchTerm.toLowerCase()));
   return (
     <div className='tags-container'>
       <div className='tags-title'>

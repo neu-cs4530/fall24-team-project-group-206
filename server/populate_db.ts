@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 import AnswerModel from './models/answers';
 import QuestionModel from './models/questions';
 import TagModel from './models/tags';
-import { Answer, Comment, Question, Tag } from './types';
+import CommunityModel from './models/communities';
+import UserModel from './models/users';
+import { Answer, Comment, Question, Tag, Community, User } from './types';
 import {
   Q1_DESC,
   Q1_TXT,
@@ -44,6 +46,15 @@ import {
   C10_TEXT,
   C11_TEXT,
   C12_TEXT,
+  FRONT_END_TAGS,
+  // BACK_END_TAGS,
+  // ML_TAGS,
+  // AI_TAGS,
+  CLOUD_TAGS,
+  T7_NAME,
+  T7_DESC,
+  T8_NAME,
+  T8_DESC,
 } from './data/posts_strings';
 import CommentModel from './models/comments';
 
@@ -174,6 +185,52 @@ async function questionCreate(
 }
 
 /**
+ * Fetches questions from the database based on the tags provided.
+ *
+ * @param tags An array of tags to search for.
+ * @returns A Promise that resolves to an array of Question documents.
+ */
+async function getQuestionsByTags(tags: Tag[]): Promise<Question[]> {
+  return await QuestionModel.find({ tags: { $in: tags } });
+}
+
+/**
+ * Creates a new Community document in the database.
+ * @param name The name of the community.
+ * @param tags The tags associated with the community.
+ * @param users The users who are part of the community.
+ * @param questions The questions that have been asked in the community.
+ * @returns A Promise that resolves to the created Community document.
+ * @throws An error if any of the parameters are invalid.
+ */
+async function communityCreate(name: string, tags: string[], users: string[], questions: Question[]): Promise<Community> {
+  if (name === '' || tags.length === 0) throw new Error('Invalid Community Format');
+  const community: Community = {
+    name: name,
+    tags: tags,
+    users: users,
+    questions: questions,
+  };
+  return await CommunityModel.create(community);
+}
+
+/**
+ * FIX THIS COMMENT
+ */
+// async function userCreate(username: string, firstName: string, lastName: string, tags: Tag[], community: Community, status: string): Promise<User> {
+//   if (firstName === '' || lastName === '' || tags.length === 0 || status === '') throw new Error('Invalid Community Format');
+//   const user: User = {
+//     username: username,
+//     firstName: firstName,
+//     lastName: lastName,
+//     tags: tags,
+//     community: community,
+//     status: status,
+//   };
+//   return await UserModel.create(user);
+// }
+
+/**
  * Populates the database with predefined data.
  * Logs the status of the operation to the console.
  */
@@ -185,6 +242,9 @@ const populate = async () => {
     const t4 = await tagCreate(T4_NAME, T4_DESC);
     const t5 = await tagCreate(T5_NAME, T5_DESC);
     const t6 = await tagCreate(T6_NAME, T6_DESC);
+    const t7 = await tagCreate(T7_NAME, T7_DESC);
+    const t8 = await tagCreate(T8_NAME, T8_DESC);
+
 
     const c1 = await commentCreate(C1_TEXT, 'sana', new Date('2023-12-12T03:30:00'));
     const c2 = await commentCreate(C2_TEXT, 'ihba001', new Date('2023-12-01T15:24:19'));
@@ -249,6 +309,21 @@ const populate = async () => {
       [c12],
     );
 
+    const frontEndQuestions = await getQuestionsByTags([t1, t6, t7]);
+    // const backEndQuestions = await getQuestionsByTags(BACK_END_TAGS);
+    // const machineLearningQuestions = await getQuestionsByTags(ML_TAGS);
+    // const aiQuestions = await getQuestionsByTags(AI_TAGS);
+    const cloudQuestions = await getQuestionsByTags([t5, t8]);
+
+    const community1 = await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
+    // await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
+    // await communityCreate('machine learning', ML_TAGS, [], machineLearningQuestions);
+    // await communityCreate('ai', AI_TAGS, [], aiQuestions);
+    const community2 = await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
+
+    // await userCreate('user1', 'John', 'Doe', [t1, t2], community1, 'low');
+
+
     console.log('Database populated');
   } catch (err) {
     console.log('ERROR: ' + err);
@@ -256,6 +331,7 @@ const populate = async () => {
     if (db) db.close();
     console.log('done');
   }
+
 };
 
 populate();

@@ -17,6 +17,7 @@ import AccountInfo from './main/profile/accountInfo';
 import TagsInfo from './main/profile/tags';
 import CommunityInfo from './main/profile/community';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
+import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
 import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 import ChatPage from './main/chat';
@@ -52,10 +53,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
         <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route
-          path='/new/tagselection/communityselection'
-          element={<PostLoginCommunity userId={user?.username || ''} />}
-        />
+        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+
         {/* Protected Routes */}
         {
           <Route
@@ -75,7 +74,7 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='profile' element={<ProfilePage />}>
               <Route path='account' element={<AccountInfo />} />
               <Route path='tags' element={<TagsInfo />} />
-              <Route path='community' element={<CommunityInfo userId={user?.username || ''} />} />
+              {/* <Route path='community' element={<CommunityInfo/>} /> */}
             </Route>
           </Route>
         }

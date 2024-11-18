@@ -7,9 +7,11 @@ export type FakeSOSocket = Socket<ServerToClientEvents>;
  */
 export interface User {
   username: string;
-  first_name?: string;
-  last_name?: string;
-  status: string;
+  firstName: string;
+  lastName: string;
+  tags: string[];
+  community: string;
+  status: 'low' | 'high';
 }
 
 /**
@@ -150,4 +152,19 @@ export interface ServerToClientEvents {
   viewsUpdate: (question: Question) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (update: CommentUpdatePayload) => void;
+}
+
+/**
+ * Interface representing Community.
+ *
+ * - name - The name of the community.
+ * - tags - An array of strings with the tag names.
+ * - users - An array of strings of the user's names.
+ * - questions - An array of references to `Question` documents associated with the community.
+ */
+export interface Community {
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
 }
