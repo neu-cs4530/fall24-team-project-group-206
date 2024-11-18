@@ -26,9 +26,13 @@ const CommunityHomePage = () => {
 
       {/* Display questions related to the community */}
       <div>
-        {qlist.map(q => (
-          <QuestionView key={q._id} q={q} /> // Directly pass q to QuestionView
-        ))}
+        {qlist.length > 0 ? (
+          qlist.map(q => (
+            <QuestionView key={q._id} q={q} /> // Directly pass q to QuestionView
+          ))
+        ) : (
+          <p>No questions available for this community.</p>
+        )}
       </div>
     </div>
   );

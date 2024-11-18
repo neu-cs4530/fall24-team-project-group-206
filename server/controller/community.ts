@@ -1,5 +1,8 @@
+/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
+import { Community } from '../types';
+import QuestionModel from '../models/questions';
 
 const communityController = () => {
   const router: Router = express.Router();
@@ -26,7 +29,41 @@ const communityController = () => {
     }
   };
 
+  // const getCommunityByName = async (req: Request, res: Response): Promise<void> => {
+  //   try {
+  //     const { name } = req.params;
+  //     const community = await CommunityModel.findOne({ name });
+
+  //     if (!community) {
+  //       res.status(404).send(`Community with name "${name}" not found`);
+  //     } else {
+  //       res.json(community); // Return the community as JSON
+  //     }
+  //   } catch (err) {
+  //     res.status(500).send(`Error when fetching community: ${(err as Error).message}`);
+  //   }
+  // };
+
+  const getCommunityByName = async (name: string): Promise<Community | null> => {
+    try {
+      const community = await CommunityModel.findOne({ name }).populate('questions');
+      if (!community) {
+        return null;
+      }
+      if (!community.questions || community.questions.length === 0) {
+        console.log('No questions available for this community.');
+        return { ...community.toObject(), questions: [] };
+      }
+      // Return the community with populated question data
+      return { ...community.toObject(), questions: community.questions };
+    } catch (error) {
+      console.error('Error fetching community by name:', error);
+      throw error;
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
+  router.get('/getCommunityByName/:name', getCommunityByName);
 
   return router;
 };
