@@ -15,11 +15,9 @@ import UserSelection from './login';
 import ProfilePage from './main/profile';
 import AccountInfo from './main/profile/accountInfo';
 import TagsInfo from './main/profile/tags';
-import CommunityInfo from './main/profile/community';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
-import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 import ChatPage from './main/chat';
 
 const ProtectedRoute = ({
