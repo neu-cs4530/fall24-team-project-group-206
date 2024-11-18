@@ -2,7 +2,7 @@
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { Community } from '../types';
-import QuestionModel from '../models/questions';
+// import QuestionModel from '../models/questions';
 
 const communityController = () => {
   const router: Router = express.Router();
@@ -62,8 +62,41 @@ const communityController = () => {
     }
   };
 
+  /**
+   * Adds a user's username to the community.
+   * This function will update the community model by adding the username to the community's list of users.
+   */
+  const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
+    const { username } = req.body; // Expecting the userId and username in the body of the request
+    const { communityName } = req.params; // Get communityId from URL parameter
+
+    try {
+      const community = await CommunityModel.findById(communityName);
+
+      if (!community) {
+        res.status(404).send('Community not found');
+        return;
+      }
+
+      // Check if the username is already in the community's users list
+      if (community.users.includes(username)) {
+        res.status(400).send('Username is already in the community');
+      }
+      // Add the username to the community's users list
+      community.users.push(username);
+      await community.save();
+
+      // Return the updated community
+      res.json(community);
+    } catch (error) {
+      console.error('Error when adding user to community:', error);
+      res.status(500).json({ error: 'Failed to add user to community' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
   router.get('/getCommunityByName/:name', getCommunityByName);
+  router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
 
   return router;
 };
