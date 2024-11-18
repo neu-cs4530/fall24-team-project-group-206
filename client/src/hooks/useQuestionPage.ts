@@ -5,8 +5,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useUserContext from './useUserContext';
 import { Answer, Community, OrderType, Question } from '../types';
-import { getQuestionsByFilter } from '../services/questionService';
+import { getQuestionById, getQuestionsByFilter } from '../services/questionService';
 import { getCommunityByName } from '../services/communityService';
+import { getUser } from '../services/userService';
 
 /**
  * Custom hook for managing the question page state, filtering, and real-time updates.
@@ -17,39 +18,99 @@ import { getCommunityByName } from '../services/communityService';
  */
 const useQuestionPage = () => {
   const { socket, user } = useUserContext();
-
   const [searchParams] = useSearchParams();
   const [titleText, setTitleText] = useState<string>('All Questions');
   const [search, setSearch] = useState<string>('');
   const [questionOrder, setQuestionOrder] = useState<OrderType>('newest');
   const [qlist, setQlist] = useState<Question[]>([]);
   const [community, setCommunity] = useState<Community | null>(null);
+  const [userCommunity, setUserCommunity] = useState<string>('');
+
+  // const community = user?.community || '';
+
+  useEffect(() => {
+    const fetchUserCommunityQuestions = async () => {
+      if (!user?.username) return;
+
+      try {
+        // Fetch user data to get the community
+        const data = await getUser(user.username); // Fetch user data from MongoDB
+        setUserCommunity(data.community || '');
+
+        // Fetch questions for the user's community
+        if (data.community) {
+          const questions = await getQuestionsByFilter(questionOrder, search, data.community); // Fetch questions based on community
+          setQlist(questions || []);
+        }
+      } catch (error) {
+        console.error('Error fetching community or questions:', error);
+      }
+    };
+
+    fetchUserCommunityQuestions();
+  }, [user, questionOrder, search]);
+
+  // useEffect(() => {
+  //   let pageTitle = 'All Questions';
+  //   let searchString = '';
+  //   // const communityName = searchParams.get('communityName');
+  //   const searchQuery = searchParams.get('search');
+  //   const tagQuery = searchParams.get('tag');
+  //   // const communityQuery = searchParams.get('community');
+
+  //   console.log('checking user', user);
+  //   if (user.community) {
+  //     pageTitle = user.community;
+  //     console.log('community:', pageTitle);
+  //     getCommunityByName(pageTitle)
+  //       .then(fetchedCommunity => {
+  //         setCommunity(fetchedCommunity);
+
+  //         const questionIdsAsStrings = fetchedCommunity.questions.map(id => id.toString());
+  //         const fetchQuestions = async () => {
+  //           try {
+  //             const questions = await Promise.all(
+  //               questionIdsAsStrings.map(async qid => {
+  //                 const question = await getQuestionById(qid, user.username);
+  //                 return question;
+  //               }),
+  //             );
+  //             setQlist(questions);
+  //           } catch (error) {
+  //             console.error('Error fetching questions:', error);
+  //           }
+  //         };
+  //         fetchQuestions();
+  //       })
+  //       .catch(error => console.error('Error fetching community:', error));
+  //   } else {
+  //     setCommunity(null);
+  //     if (searchQuery) {
+  //       pageTitle = 'Search Results';
+  //       searchString = searchQuery;
+  //     } else if (tagQuery) {
+  //       pageTitle = tagQuery;
+  //       searchString = `[${tagQuery}]`;
+  //     }
+  //   }
+
+  //   setTitleText(pageTitle);
+  //   setSearch(searchString);
+  // }, [searchParams]);
 
   useEffect(() => {
     let pageTitle = 'All Questions';
     let searchString = '';
-    // const communityName = searchParams.get('communityName');
+
     const searchQuery = searchParams.get('search');
     const tagQuery = searchParams.get('tag');
 
-    if (user.community) {
-      pageTitle = user.community;
-      console.log('community:', pageTitle);
-      getCommunityByName(pageTitle)
-        .then(fetchedCommunity => {
-          setCommunity(fetchedCommunity);
-          setQlist(fetchedCommunity.questions);
-        })
-        .catch(error => console.error('Error fetching community:', error));
-    } else {
-      setCommunity(null);
-      if (searchQuery) {
-        pageTitle = 'Search Results';
-        searchString = searchQuery;
-      } else if (tagQuery) {
-        pageTitle = tagQuery;
-        searchString = `[${tagQuery}]`;
-      }
+    if (searchQuery) {
+      pageTitle = 'Search Results';
+      searchString = searchQuery;
+    } else if (tagQuery) {
+      pageTitle = tagQuery;
+      searchString = `[${tagQuery}]`;
     }
 
     setTitleText(pageTitle);
@@ -57,20 +118,20 @@ const useQuestionPage = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    /**
-     * Function to fetch questions based on the filter and update the question list.
-     */
-    const fetchData = async () => {
-      try {
-        if (!community) {
-          const res = await getQuestionsByFilter(questionOrder, search);
-          setQlist(res || []);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
+    // /**
+    //  * Function to fetch questions based on the filter and update the question list.
+    //  */
+    // const fetchData = async () => {
+    //   try {
+    //     if (!community) {
+    //       const res = await getQuestionsByFilter(questionOrder, search);
+    //       setQlist(res || []);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // fetchData();
 
     /**
      * Function to handle question updates from the socket.
@@ -111,7 +172,7 @@ const useQuestionPage = () => {
       setQlist(prevQlist => prevQlist.map(q => (q._id === question._id ? question : q)));
     };
 
-    fetchData();
+    // fetchData();
 
     socket.on('questionUpdate', handleQuestionUpdate);
     socket.on('answerUpdate', handleAnswerUpdate);

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Question } from '../types';
 import api from './config';
 
@@ -10,15 +11,39 @@ const QUESTION_API_URL = `${process.env.REACT_APP_SERVER_URL}/question`;
  * @param search - The search term to filter questions. Default is an empty string.
  * @throws Error if there is an issue fetching or filtering questions.
  */
+// const getQuestionsByFilter = async (
+//   order: string = 'newest',
+//   search: string = '',
+// ): Promise<Question[]> => {
+//   const res = await api.get(`${QUESTION_API_URL}/getQuestion?order=${order}&search=${search}`);
+//   if (res.status !== 200) {
+//     throw new Error('Error when fetching or filtering questions');
+//   }
+//   return res.data;
+// };
+
 const getQuestionsByFilter = async (
   order: string = 'newest',
   search: string = '',
-): Promise<Question[]> => {
-  const res = await api.get(`${QUESTION_API_URL}/getQuestion?order=${order}&search=${search}`);
-  if (res.status !== 200) {
-    throw new Error('Error when fetching or filtering questions');
+  community: string = '',
+): Promise<Question[] | undefined> => {
+  const queryParams = new URLSearchParams();
+  queryParams.append('order', order);
+  queryParams.append('search', search);
+  if (community) {
+    queryParams.append('community', community);
   }
-  return res.data;
+
+  try {
+    const res = await api.get(`${QUESTION_API_URL}/getQuestion?${queryParams.toString()}`);
+    if (res.status !== 200) {
+      throw new Error('Error when fetching or filtering questions');
+    }
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
 };
 
 /**
