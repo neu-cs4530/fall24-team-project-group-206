@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useUserContext from './useUserContext';
 import { Answer, OrderType, Question } from '../types';
 import { getQuestionsByFilter } from '../services/questionService';
+import { getUser } from '../services/userService';
 
 /**
  * Custom hook for managing the question page state, filtering, and real-time updates.
@@ -12,13 +14,14 @@ import { getQuestionsByFilter } from '../services/questionService';
  * @returns setQuestionOrder - Function to set the sorting order of questions (e.g., newest, oldest).
  */
 const useQuestionPage = () => {
-  const { socket } = useUserContext();
+  const { socket, user } = useUserContext();
 
   const [searchParams] = useSearchParams();
   const [titleText, setTitleText] = useState<string>('All Questions');
   const [search, setSearch] = useState<string>('');
   const [questionOrder, setQuestionOrder] = useState<OrderType>('newest');
   const [qlist, setQlist] = useState<Question[]>([]);
+  const [userCommunity, setUserCommunity] = useState<string>('');
 
   useEffect(() => {
     let pageTitle = 'All Questions';
@@ -105,7 +108,22 @@ const useQuestionPage = () => {
     };
   }, [questionOrder, search, socket]);
 
-  return { titleText, qlist, setQuestionOrder };
+  useEffect(() => {
+    const fetchUserCommunity = async () => {
+      if (!user?.username) return;
+
+      try {
+        const data = await getUser(user.username); // Fetch user data from MongoDB
+        setUserCommunity(data.community || '');
+      } catch (error) {
+        console.error('Error fetching community:', error);
+      }
+    };
+
+    fetchUserCommunity();
+  }, [user]);
+
+  return { titleText, qlist, setQuestionOrder, userCommunity };
 };
 
 export default useQuestionPage;
