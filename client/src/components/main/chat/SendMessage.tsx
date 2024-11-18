@@ -12,6 +12,5 @@ const SendMessage = async (message: string, sendTo: string) => {
     sendTo,
     createdAt: serverTimestamp(),
   });
-  // scroll?.current.scrollIntoView({ behavior: "smooth" });
 };
 export default SendMessage;

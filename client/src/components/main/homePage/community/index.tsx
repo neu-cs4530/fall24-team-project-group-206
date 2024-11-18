@@ -1,6 +1,6 @@
 import './index.css';
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MembersSidebar from './membersSideBar';
 import useQuestionPage from '../../../../hooks/useQuestionPage';
 import QuestionView from './questions';
@@ -11,7 +11,7 @@ import QuestionView from './questions';
  */
 const CommunityHomePage = () => {
   // Use the custom hook to manage the state and fetch community-specific questions
-  const { titleText, qlist } = useQuestionPage();
+  const { titleText, qlist, userCommunity } = useQuestionPage();
 
   return (
     <div className='home-page-container'>
@@ -22,7 +22,9 @@ const CommunityHomePage = () => {
       {/* Sidebar for members */}
       <MembersSidebar />
       {/* Button to chat with the community */}
-      <button className='chat-button'>Chat with Community</button>
+      <Link className='chat-button' to={`/chat/community/${userCommunity}`}>
+        Chat with Community
+      </Link>
 
       {/* Display questions related to the community */}
       <div>

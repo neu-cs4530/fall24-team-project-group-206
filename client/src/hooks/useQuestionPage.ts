@@ -7,6 +7,7 @@ import useUserContext from './useUserContext';
 import { Answer, Community, OrderType, Question } from '../types';
 import { getQuestionsByFilter } from '../services/questionService';
 import { getCommunityByName } from '../services/communityService';
+import { getUser } from '../services/userService';
 
 /**
  * Custom hook for managing the question page state, filtering, and real-time updates.
@@ -24,6 +25,7 @@ const useQuestionPage = () => {
   const [questionOrder, setQuestionOrder] = useState<OrderType>('newest');
   const [qlist, setQlist] = useState<Question[]>([]);
   const [community, setCommunity] = useState<Community | null>(null);
+  const [userCommunity, setUserCommunity] = useState<string>('');
 
   useEffect(() => {
     let pageTitle = 'All Questions';
@@ -124,7 +126,22 @@ const useQuestionPage = () => {
     };
   }, [questionOrder, search, socket, community]);
 
-  return { titleText, qlist, setQuestionOrder };
+  useEffect(() => {
+    const fetchUserCommunity = async () => {
+      if (!user?.username) return;
+
+      try {
+        const data = await getUser(user.username); // Fetch user data from MongoDB
+        setUserCommunity(data.community || '');
+      } catch (error) {
+        console.error('Error fetching community:', error);
+      }
+    };
+
+    fetchUserCommunity();
+  }, [user]);
+
+  return { titleText, qlist, setQuestionOrder, userCommunity };
 };
 
 export default useQuestionPage;

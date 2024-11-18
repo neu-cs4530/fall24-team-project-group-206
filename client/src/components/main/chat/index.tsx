@@ -1,11 +1,13 @@
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
 const ChatPage = () => {
   const { pathname } = useLocation();
+  const { community } = useParams();
+
   const {
     currentMessage,
     messages,
@@ -22,7 +24,7 @@ const ChatPage = () => {
       <div className='chat-header d-flex'>
         {pathname.includes('community') ? (
           <span className='chat-title'>
-            chatting now: <span className='community-title'>community</span>
+            chatting now: <span className='community-title'>{community}</span>
           </span>
         ) : (
           <>

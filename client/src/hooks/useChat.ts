@@ -1,10 +1,13 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
 import { db } from '../firebaseConfig';
 
 const useChat = () => {
+  const { pathname } = useLocation();
+  const { community } = useParams();
   const { user } = useUserContext();
   const [currentMessage, setCurrentMessage] = useState<string>('');
   const [messages, setMessages] = useState<{ message: string; username: string; sendTo: string }[]>(
@@ -13,7 +16,14 @@ const useChat = () => {
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
 
+  useEffect(() => {
+    if (pathname.includes('community')) {
+      setSend(community || '');
+    }
+  }, [community, pathname, setSend]);
+
   const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    messageContainer?.scrollIntoView({ behavior: 'smooth' });
     setSend(e.target.value);
   };
 
