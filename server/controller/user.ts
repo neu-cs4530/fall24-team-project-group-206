@@ -55,7 +55,7 @@ const userController = () => {
     try {
       const { username, community } = req.body;
 
-      if (!username || !community) {
+      if (!username) {
         return res.status(400).json({ message: 'Username and community are required' });
       }
 
