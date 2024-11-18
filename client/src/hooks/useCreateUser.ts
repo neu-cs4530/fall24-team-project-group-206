@@ -56,6 +56,7 @@ const useCreateUser = () => {
         firstName,
         lastName,
         tags: [],
+        community: '',
         status: 'low',
       };
       setUser(user);

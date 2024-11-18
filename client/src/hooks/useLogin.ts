@@ -50,6 +50,7 @@ const useLogin = () => {
         firstName: userData.firstName,
         lastName: userData.lastName,
         tags: userData.tags,
+        community: userData.community,
         status: userData.status,
       });
 

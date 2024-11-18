@@ -10,13 +10,14 @@ const userController = () => {
    */
   router.post('/add', async (req: Request, res: Response) => {
     try {
-      const { username, firstName, lastName, tags, status } = req.body;
+      const { username, firstName, lastName, tags, community, status } = req.body;
 
       const newUser = await UserModel.create({
         username,
         firstName,
         lastName,
         tags: tags || [],
+        community: community || '',
         status,
       });
 
