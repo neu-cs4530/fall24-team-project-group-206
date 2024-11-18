@@ -18,6 +18,7 @@ import TagsInfo from './main/profile/tags';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
+import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 import ChatPage from './main/chat';
 
 const ProtectedRoute = ({
@@ -72,7 +73,7 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='profile' element={<ProfilePage />}>
               <Route path='account' element={<AccountInfo />} />
               <Route path='tags' element={<TagsInfo />} />
-              {/* <Route path='community' element={<CommunityInfo/>} /> */}
+              <Route path='community' element={<CommunityInfo />} />
             </Route>
           </Route>
         }

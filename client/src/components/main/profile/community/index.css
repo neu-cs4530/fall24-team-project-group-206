@@ -1,14 +1,92 @@
 .community-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px; 
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-top: -50px;
+  height: auto;
+}
 
-    .community-info p {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 25px;
-    }
-    
+.community-main-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.title-two {
+  font-size: 24px;
+  color: #333;
+  width: 100%;
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.community-pills-container {
+  display: flex;
+  flex-wrap: wrap; /* Ensures pills wrap if they overflow */
+  gap: 10px; /* Adds space between pills */
+  justify-content: center; /* Centers the pills in the container */
+  align-items: center; /* Aligns pills vertically */
+  margin: 20px 0; /* Adds spacing around the container */
+}
+
+.community-pill {
+  background-color:  #6f4046;
+  color: white;
+  border-radius: 50px;
+  margin: 5px;
+  padding: 5px 10px;
+  width: 160px;
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.community-pill:hover {
+  background-color: #895159;
+  transform: scale(1.05);
+}
+
+.community-pill.selected {
+  background-color: #ffffff;
+  color: #6f4046;
+  border: 2px solid #6f4046;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.save-community-button {
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #466694;
+  width: 160px;
+  height: 62px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 15px;
+}
+
+.save-community-button:hover:not(:disabled) {
+  background-color: #324B73;
+  transform: scale(1.05);
+}
+
+.save-community-button:active:not(:disabled) {
+  background-color: #466694;
+  transform: translateY(0);
+}
