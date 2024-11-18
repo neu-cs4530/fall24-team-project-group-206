@@ -17,7 +17,7 @@ const userController = () => {
         firstName,
         lastName,
         tags: tags || [],
-        community,
+        community: community || '',
         status,
       });
 
