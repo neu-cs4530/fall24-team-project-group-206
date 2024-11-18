@@ -1,23 +1,23 @@
 .ask-q-button {
-    padding: 12px 25px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #466694; 
-    width: 160px;
-    height: 45px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  .ask-q-button:hover {
-    background-color: #324B73; 
-    transform: translateY(-2px);
-  }
-  
-  .ask-q-button:active {
-    background-color: #466694;
-    transform: translateY(0);
-  }
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #BABDE2; 
+  width: 160px;
+  height: 55px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.ask-q-button:hover {
+  background-color: #9498B5; 
+  transform: translateY(-2px);
+}
+
+.ask-q-button:active {
+  background-color: #466694;
+  transform: translateY(0);
+}

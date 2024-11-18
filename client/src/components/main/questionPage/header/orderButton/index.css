@@ -1,8 +1,18 @@
 .btn {
-  background: #ffffff;
-  border: #000000 1px solid;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #BABDE2;
+  border: #BABDE2;
+  color: white;
+  border-radius: 0;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 .btn:hover {
-  background-color: #007bff;
+  background-color: #9498B5;
+}
+
+.btn:active {
+  background-color: #466694;
 }
