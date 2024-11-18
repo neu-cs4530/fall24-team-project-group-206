@@ -27,14 +27,14 @@ const TagView = ({ t, clickTag }: TagProps) => {
 
   return (
     <div
-      className='tagNode'
+      className="tag-box"
       onClick={() => {
         clickTag(t.name);
       }}
     >
-      <div className='tagName'>{tag.name}</div>
-      <div className='tagDescription'>{tag.description}</div>
-      <div>{t.qcnt} questions</div>
+      <div className="tag-name">{tag.name}</div>
+      <div className="tag-description">{tag.description}</div>
+      <div className="tag-questions">{t.qcnt} questions</div>
     </div>
   );
 };
