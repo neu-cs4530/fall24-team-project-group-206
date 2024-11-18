@@ -18,8 +18,8 @@ import TagsInfo from './main/profile/tags';
 import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
-import PostLoginCommunity from './login/newUser/chooseCommunityPage';
 import ChatPage from './main/chat';
+import CommunityInfo from './main/profile/community';
 
 const ProtectedRoute = ({
   user,
