@@ -1,12 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
-// /* eslint-disable no-console */
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useUserContext from './useUserContext';
-import { Answer, Community, OrderType, Question } from '../types';
+import { Answer, OrderType, Question } from '../types';
 import { getQuestionsByFilter } from '../services/questionService';
-import { getCommunityByName } from '../services/communityService';
 
 /**
  * Custom hook for managing the question page state, filtering, and real-time updates.
@@ -16,40 +12,27 @@ import { getCommunityByName } from '../services/communityService';
  * @returns setQuestionOrder - Function to set the sorting order of questions (e.g., newest, oldest).
  */
 const useQuestionPage = () => {
-  const { socket, user } = useUserContext();
+  const { socket } = useUserContext();
 
   const [searchParams] = useSearchParams();
   const [titleText, setTitleText] = useState<string>('All Questions');
   const [search, setSearch] = useState<string>('');
   const [questionOrder, setQuestionOrder] = useState<OrderType>('newest');
   const [qlist, setQlist] = useState<Question[]>([]);
-  const [community, setCommunity] = useState<Community | null>(null);
 
   useEffect(() => {
     let pageTitle = 'All Questions';
     let searchString = '';
-    // const communityName = searchParams.get('communityName');
+
     const searchQuery = searchParams.get('search');
     const tagQuery = searchParams.get('tag');
 
-    if (user.community) {
-      pageTitle = user.community;
-      console.log('community:', pageTitle);
-      getCommunityByName(pageTitle)
-        .then(fetchedCommunity => {
-          setCommunity(fetchedCommunity);
-          setQlist(fetchedCommunity.questions);
-        })
-        .catch(error => console.error('Error fetching community:', error));
-    } else {
-      setCommunity(null);
-      if (searchQuery) {
-        pageTitle = 'Search Results';
-        searchString = searchQuery;
-      } else if (tagQuery) {
-        pageTitle = tagQuery;
-        searchString = `[${tagQuery}]`;
-      }
+    if (searchQuery) {
+      pageTitle = 'Search Results';
+      searchString = searchQuery;
+    } else if (tagQuery) {
+      pageTitle = tagQuery;
+      searchString = `[${tagQuery}]`;
     }
 
     setTitleText(pageTitle);
@@ -62,15 +45,13 @@ const useQuestionPage = () => {
      */
     const fetchData = async () => {
       try {
-        if (!community) {
-          const res = await getQuestionsByFilter(questionOrder, search);
-          setQlist(res || []);
-        }
+        const res = await getQuestionsByFilter(questionOrder, search);
+        setQlist(res || []);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       }
     };
-    fetchData();
 
     /**
      * Function to handle question updates from the socket.
@@ -122,7 +103,7 @@ const useQuestionPage = () => {
       socket.off('answerUpdate', handleAnswerUpdate);
       socket.off('viewsUpdate', handleViewsUpdate);
     };
-  }, [questionOrder, search, socket, community]);
+  }, [questionOrder, search, socket]);
 
   return { titleText, qlist, setQuestionOrder };
 };
