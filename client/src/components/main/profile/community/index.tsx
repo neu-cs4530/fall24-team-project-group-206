@@ -61,7 +61,7 @@ const CommunityInfo = () => {
             {userCommunity}
           </div>
         ) : (
-          <p>No community selected. Please select one from below:</p>
+          <p>No community selected.</p>
         )}
       </div>
 
@@ -79,10 +79,7 @@ const CommunityInfo = () => {
         ))}
       </div>
 
-      <button
-        className='save-community-button'
-        onClick={saveCommunityToUserAccount}
-        disabled={!userCommunity}>
+      <button className='save-community-button' onClick={saveCommunityToUserAccount}>
         Save Community
       </button>
     </div>

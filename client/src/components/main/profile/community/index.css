@@ -81,11 +81,6 @@
   margin-top: 15px;
 }
 
-.save-community-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 .save-community-button:hover:not(:disabled) {
   background-color: #324B73;
   transform: scale(1.05);

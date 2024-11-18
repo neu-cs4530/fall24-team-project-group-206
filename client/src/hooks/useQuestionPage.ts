@@ -15,7 +15,7 @@ import { getCommunityByName } from '../services/communityService';
  * @returns setQuestionOrder - Function to set the sorting order of questions (e.g., newest, oldest).
  */
 const useQuestionPage = () => {
-  const { socket } = useUserContext();
+  const { socket, user } = useUserContext();
 
   const [searchParams] = useSearchParams();
   const [titleText, setTitleText] = useState<string>('All Questions');
@@ -27,13 +27,14 @@ const useQuestionPage = () => {
   useEffect(() => {
     let pageTitle = 'All Questions';
     let searchString = '';
-    const communityName = searchParams.get('communityName');
+    // const communityName = searchParams.get('communityName');
     const searchQuery = searchParams.get('search');
     const tagQuery = searchParams.get('tag');
 
-    if (communityName) {
-      pageTitle = communityName;
-      getCommunityByName(communityName)
+    if (user.community) {
+      pageTitle = user.community;
+      console.log('community:', pageTitle);
+      getCommunityByName(pageTitle)
         .then(fetchedCommunity => {
           setCommunity(fetchedCommunity);
           setQlist(fetchedCommunity.questions);
