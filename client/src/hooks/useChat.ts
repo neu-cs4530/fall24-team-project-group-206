@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
-import { db } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
+import { getUser } from '../services/userService';
 
 const useChat = () => {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ const useChat = () => {
   );
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     if (pathname.includes('community')) {
@@ -31,9 +33,9 @@ const useChat = () => {
   };
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
-    console.log('in save messages');
     try {
-      if (user && user.username) {
+      const data = await getUser(sendTo);
+      if (user && user.username && data) {
         await addDoc(collection(db, 'messages'), {
           username: user.username,
           message,
@@ -45,7 +47,7 @@ const useChat = () => {
         console.error('User not authenticated or username missing');
       }
     } catch (error) {
-      console.error('Error saving message:', error);
+      console.error('Error saving message or user does not exist:', error);
     }
   };
 
