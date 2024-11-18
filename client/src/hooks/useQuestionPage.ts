@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 // /* eslint-disable no-console */
 import { useSearchParams } from 'react-router-dom';
