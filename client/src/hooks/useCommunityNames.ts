@@ -36,8 +36,6 @@
 //   };
 // };
 
-// export default useCommunityNames;
-
 import { useEffect, useState } from 'react';
 import { getCommunityNames } from '../services/communityService';
 import { Community } from '../types';
@@ -52,6 +50,10 @@ const useCommunityNames = (userTags: string[]) => {
   const [communityNames, setCommunityNames] = useState<Community[]>([]);
 
   useEffect(() => {
+    if (!userTags.length) {
+      return; // If no tags are selected, do nothing
+    }
+
     const fetchData = async () => {
       try {
         const allCommunities = await getCommunityNames();
@@ -72,7 +74,7 @@ const useCommunityNames = (userTags: string[]) => {
     };
 
     fetchData();
-  }, [userTags]);
+  }, [userTags]); // Re-fetch communities whenever the userTags change
 
   return { communityNames };
 };

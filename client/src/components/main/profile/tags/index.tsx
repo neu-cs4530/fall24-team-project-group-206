@@ -21,6 +21,7 @@ const TagsInfo = () => {
 
       try {
         const data = await getUser(user.username); // Fetch user data from MongoDB
+        console.log('User:', user);
         setChosenTags(data.tags || []);
       } catch (error) {
         console.error('Error fetching tags:', error);
