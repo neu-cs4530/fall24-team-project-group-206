@@ -1,10 +1,13 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
 import { db } from '../firebaseConfig';
 
 const useChat = () => {
+  const { pathname } = useLocation();
+  const { community } = useParams();
   const { user } = useUserContext();
   const [currentMessage, setCurrentMessage] = useState<string>('');
   const [messages, setMessages] = useState<{ message: string; username: string; sendTo: string }[]>(
@@ -12,6 +15,12 @@ const useChat = () => {
   );
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
+
+  useEffect(() => {
+    if (pathname.includes('community')) {
+      setSend(community || '');
+    }
+  }, [community, pathname, setSend]);
 
   const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
@@ -22,6 +31,7 @@ const useChat = () => {
   };
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
+    console.log('in save messages');
     try {
       if (user && user.username) {
         await addDoc(collection(db, 'messages'), {
@@ -45,6 +55,24 @@ const useChat = () => {
     // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
     const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
 
+    if (pathname.includes('community') && community) {
+      const unsubscribe = onSnapshot(q, querySnapshot => {
+        const loadedMessages = querySnapshot.docs
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          .map(doc => ({
+            message: doc.data().message,
+            username: doc.data().username,
+            sendTo: doc.data().sendTo,
+            timestamp: doc.data().timestamp,
+          }))
+          .filter(msg => msg.sendTo === community);
+        setMessages(loadedMessages);
+      });
+
+      // eslint-disable-next-line consistent-return
+      return () => unsubscribe();
+    }
+
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const loadedMessages = querySnapshot.docs
         // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -62,10 +90,9 @@ const useChat = () => {
       setMessages(loadedMessages);
     });
 
-    // Cleanup the snapshot listener on component unmount
     // eslint-disable-next-line consistent-return
     return () => unsubscribe();
-  }, [user, send]);
+  }, [user, send, pathname, community]);
 
   const scrollUp = () => {
     messageContainer?.scrollBy(0, -100);

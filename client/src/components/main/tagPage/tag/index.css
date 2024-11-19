@@ -1,14 +1,18 @@
 .tag-box {
+  border: 2px solid #d4a5a5; 
   border: 2px solid #d4a5a5;
   padding: 20px;
   margin: 15px;
   border-radius: 8px;
+  background-color: white;
+  border-radius: 8px; 
   background-color: white;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
 .tag-box:hover {
+  transform: scale(1.02);
   transform: scale(1.02); 
 }
 
@@ -16,12 +20,14 @@
   font-size: 18px;
   font-weight: bold;
   color: #815151; 
+  color: #815151; 
   margin-bottom: 8px;
 }
 
 
 .tag-description {
   font-size: 14px;
+  color: #333; 
   color: #333; 
   margin-bottom: 8px;
 }

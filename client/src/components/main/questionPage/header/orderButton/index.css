@@ -1,16 +1,18 @@
 .btn {
-  background-color: #ffffff;
-  border: 2px solid #466694;
-  color: #466694;
-  padding: 8px 16px; 
-  font-size: 14px; 
-  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #466694;
+  border: #BABDE2;
+  color: white;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  margin-right: 10px;
 }
 
 .btn:hover {
+  background-color: #324B73;
+}
+
+.btn:active {
   background-color: #466694;
-  color: #ffffff;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); 
 }
