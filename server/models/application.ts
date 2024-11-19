@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ObjectId } from 'mongodb';
 import { QueryOptions } from 'mongoose';
 import {
@@ -5,6 +6,7 @@ import {
   AnswerResponse,
   Comment,
   CommentResponse,
+  Community,
   OrderType,
   Question,
   QuestionResponse,
@@ -14,6 +16,7 @@ import AnswerModel from './answers';
 import QuestionModel from './questions';
 import TagModel from './tags';
 import CommentModel from './comments';
+import CommunityModel from './communities';
 
 /**
  * Parses tags from a search string.
@@ -642,3 +645,24 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return { error: 'Error when construction tag map' };
   }
 };
+
+// export const getRelevantCommunities = async (userTags: string[]): Promise<Community[]> => {
+//   try {
+//     const tags = await TagModel.find({ name: { $in: userTags } });
+
+//     // Change later...?
+//     if (tags.length === 0) {
+//       return [];
+//     }
+//     // Get the tag names
+//     const tagNames = tags.map(tag => tag.name);
+//     // Find communities that have any of these tag names in their `tags` field
+//     const communities = await CommunityModel.find({
+//       tags: { $in: tagNames },
+//     });
+//     return communities;
+//   } catch (error) {
+//     console.error('Error fetching relevant communities:', error);
+//     throw new Error('Failed to fetch relevant communities');
+//   }
+// };

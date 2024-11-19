@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
+import TagModel from '../models/tags';
 import { Community } from '../types';
 // import QuestionModel from '../models/questions';
 
@@ -94,9 +95,35 @@ const communityController = () => {
     }
   };
 
+  const getRelevantCommunities = async (req: Request, res: Response): Promise<void> => {
+    const { tags } = req.body;
+
+    if (!tags || !Array.isArray(tags)) {
+      res.status(400).json({ error: 'Invalid or missing tags' });
+      return;
+    }
+
+    try {
+      const matchingTags = await TagModel.find({ name: { $in: tags } });
+
+      if (matchingTags.length === 0) {
+        res.json([]); // No matching tags, return empty list
+        return;
+      }
+
+      const tagNames = matchingTags.map(tag => tag.name);
+      const communities = await CommunityModel.find({ tags: { $in: tagNames } });
+      res.json(communities);
+    } catch (error) {
+      console.error('Error fetching relevant communities:', error);
+      res.status(500).json({ error: 'Failed to fetch relevant communities' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
   router.get('/getCommunityByName/:name', getCommunityByName);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
+  router.post('/relevant-communities', getRelevantCommunities); // New route for relevant communities
 
   return router;
 };
