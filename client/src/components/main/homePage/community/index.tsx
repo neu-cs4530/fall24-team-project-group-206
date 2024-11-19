@@ -1,44 +1,28 @@
+// CommunityHomePage.tsx
 import './index.css';
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import MembersSidebar from './membersSideBar';
-import useQuestionPage from '../../../../hooks/useQuestionPage';
-import QuestionView from './questions';
+import CommunityQuestions from './communityQuestions'; // Import the new CommunityQuestions component
 
 /**
  * CommunityHomePage component renders a page displaying the user's community
- * and questions related to that community based on filters such as order and search terms.
+ * and questions related to that community.
  */
-const CommunityHomePage = () => {
-  // Use the custom hook to manage the state and fetch community-specific questions
-  const { titleText, qlist, userCommunity } = useQuestionPage();
-
-  return (
-    <div className='home-page-container'>
-      {/* Display the dynamic title for the community */}
-      <h2 className='home-page-title'>{titleText}</h2>
-      <hr />
-
-      {/* Sidebar for members */}
-      <MembersSidebar />
-      {/* Button to chat with the community */}
-      <Link className='chat-button' to={`/chat/community/${userCommunity}`}>
-        Chat with Community
-      </Link>
-
-      {/* Display questions related to the community */}
-      <div>
-        {qlist.length > 0 ? (
-          qlist.map(q => (
-            <QuestionView key={q._id} q={q} /> // Directly pass q to QuestionView
-          ))
-        ) : (
-          <p>No questions available for this community.</p>
-        )}
-      </div>
-    </div>
-  );
-};
-
+const CommunityHomePage = () => (
+  // Use the userCommunity (the name of the current community)
+  <div className='home-page-container'>
+    {/* Display the dynamic title for the community */}
+    <h2 className='home-page-title'>Community Home</h2>
+    <hr />
+    {/* Sidebar for members */}
+    <MembersSidebar />
+    {/* Button to chat with the community */}
+    <Link className='chat-button' to={`/chat/community/${localStorage.getItem('communityName')}`}>
+      Chat with Community
+    </Link>
+    {/* Display the community questions */}
+    <CommunityQuestions /> {/* Render the CommunityQuestions component */}
+  </div>
+);
 export default CommunityHomePage;

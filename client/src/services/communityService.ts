@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import api from './config';
-import { Community } from '../types';
+import { Community, Question } from '../types';
 
 const COMMUNITY_API_URL = `${process.env.REACT_APP_SERVER_URL}/community`;
 
@@ -16,10 +16,10 @@ const getCommunityNames = async (): Promise<Community[]> => {
   return res.data;
 };
 
-const getCommunityByName = async (name: string): Promise<Community> => {
-  const res = await api.get(`${COMMUNITY_API_URL}/getCommunityByName/${name}`);
+const getCommunityQuestions = async (community: string): Promise<Question[]> => {
+  const res = await api.get(`${COMMUNITY_API_URL}/getCommunityQuestions/${community}`);
   if (res.status !== 200) {
-    throw new Error('Error when fetching community by name');
+    throw new Error('Error when fetching community questions');
   }
   return res.data;
 };
@@ -32,4 +32,4 @@ const addUserToCommunity = async (username: string, communityName: string): Prom
   return res.data;
 };
 
-export { getCommunityNames, getCommunityByName, addUserToCommunity };
+export { getCommunityNames, getCommunityQuestions, addUserToCommunity };
