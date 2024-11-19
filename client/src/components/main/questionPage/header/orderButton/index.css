@@ -1,7 +1,7 @@
 .btn {
   padding: 5px 10px;
   font-size: 14px;
-  background-color: #BABDE2;
+  background-color: #466694;
   border: #BABDE2;
   color: white;
   border-radius: 0;
@@ -10,7 +10,7 @@
 }
 
 .btn:hover {
-  background-color: #9498B5;
+  background-color: #324B73;
 }
 
 .btn:active {

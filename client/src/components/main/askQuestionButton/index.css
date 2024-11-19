@@ -2,7 +2,7 @@
   padding: 12px 25px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #BABDE2; 
+  background-color: #466694; 
   width: 160px;
   height: 55px;
   color: white;
@@ -13,7 +13,7 @@
 }
 
 .ask-q-button:hover {
-  background-color: #9498B5; 
+  background-color: #324B73; 
   transform: translateY(-2px);
 }
 
