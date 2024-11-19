@@ -55,6 +55,12 @@ import {
   T7_DESC,
   T8_NAME,
   T8_DESC,
+  BACK_END_TAGS,
+  T9_DESC,
+  T9_NAME,
+  Q5_DESC,
+  Q5_TXT,
+  MOBILE_APP_TAGS,
 } from './data/posts_strings';
 import CommentModel from './models/comments';
 
@@ -244,6 +250,7 @@ const populate = async () => {
     const t6 = await tagCreate(T6_NAME, T6_DESC);
     const t7 = await tagCreate(T7_NAME, T7_DESC);
     const t8 = await tagCreate(T8_NAME, T8_DESC);
+    const t9 = await tagCreate(T9_NAME, T9_DESC);
 
 
     const c1 = await commentCreate(C1_TEXT, 'sana', new Date('2023-12-12T03:30:00'));
@@ -308,18 +315,39 @@ const populate = async () => {
       [],
       [c12],
     );
+    await questionCreate(
+      Q5_DESC,
+      Q5_TXT,
+      [t9],
+      [],
+      'tigerCDE',
+      new Date('2023-03-10T14:28:01'),
+      [],
+      [],
+    );
 
-    const frontEndQuestions = await getQuestionsByTags([t1, t6, t7]);
-    // const backEndQuestions = await getQuestionsByTags(BACK_END_TAGS);
+    // FRONT-END: react, website, css, javascript
+    const frontEndQuestions = await getQuestionsByTags([t1, t2, t6, t7]);
+
+    // BACK-END: mongodb
+    const backEndQuestions = await getQuestionsByTags([t9]);
+
     // const machineLearningQuestions = await getQuestionsByTags(ML_TAGS);
+
     // const aiQuestions = await getQuestionsByTags(AI_TAGS);
+
+    // MOBILE APP DEVELOPMENT: android-studio, shared-preferences
+    const mobileAppQuestions = await getQuestionsByTags([t3, t4]);
+
+    // CLOUD COMPUTING: aws, storage
     const cloudQuestions = await getQuestionsByTags([t5, t8]);
 
-    const community1 = await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
-    // await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
+  await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
+  await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
     // await communityCreate('machine learning', ML_TAGS, [], machineLearningQuestions);
     // await communityCreate('ai', AI_TAGS, [], aiQuestions);
-    const community2 = await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
+  await communityCreate('mobile-app-development', MOBILE_APP_TAGS, [], mobileAppQuestions);
+  await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
 
     // await userCreate('user1', 'John', 'Doe', [t1, t2], community1, 'low');
 

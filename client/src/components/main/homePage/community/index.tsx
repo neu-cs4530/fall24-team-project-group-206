@@ -25,7 +25,7 @@ const CommunityHomePage = () => {
       <button className='chat-button'>Chat with Community</button>
 
       {/* Display questions related to the community */}
-      <div>
+      {/* <div>
         {qlist.length > 0 ? (
           qlist.map(q => (
             <QuestionView key={q._id} q={q} /> // Directly pass q to QuestionView
@@ -33,7 +33,7 @@ const CommunityHomePage = () => {
         ) : (
           <p>No questions available for this community.</p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

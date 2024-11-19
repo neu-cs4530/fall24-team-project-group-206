@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './index.css';
@@ -10,8 +11,28 @@ import { getUser, updateUserCommunity } from '../../../../services/userService';
  */
 const CommunityInfo = () => {
   const { user } = useUserContext();
-  const { communityNames } = useCommunityNames();
+  // const { communityNames } = useCommunityNames();
   const [userCommunity, setUserCommunity] = useState<string>('');
+  const [userTags, setUserTags] = useState<string[]>([]);
+
+  // Fetch user tags to filter communities
+  useEffect(() => {
+    const fetchUserTags = async () => {
+      try {
+        if (user) {
+          const userData = await getUser(user.username!); // Fetch user data
+          setUserTags(userData.tags || []); // Set tags from user profile
+        }
+      } catch (error) {
+        console.error('Error fetching user tags:', error);
+      }
+    };
+
+    fetchUserTags();
+  }, [user]);
+
+  // Fetch communities based on user-selected tags
+  const { communityNames } = useCommunityNames(userTags);
 
   useEffect(() => {
     const fetchUserCommunity = async () => {

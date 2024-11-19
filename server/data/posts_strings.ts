@@ -15,6 +15,10 @@ export const Q4_DESC = 'Quick question about storage on android';
 export const Q4_TXT =
   'I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains';
 
+export const Q5_DESC = 'Question about Mongodb';
+export const Q5_TXT =
+  'I am trying to store a large amount of data in a MongoDB database. I have heard that storing content as BLOBs is not recommended. What is the best way to store large amounts of data in a MongoDB database?';
+
 export const A1_TXT =
   "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.";
 export const A2_TXT =
@@ -55,9 +59,15 @@ export const T6_DESC =
 export const T7_NAME = 'css';
 export const T7_DESC =
   'Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language like HTML. CSS is a cornerstone technology, alongside HTML and JavaScript.';
+
 export const T8_NAME = 'aws';
 export const T8_DESC =
   'Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon. It offers a mix of infrastructure as a service (IaaS), platform as a service (PaaS), and packaged software as a service (SaaS) offerings.';
+
+export const T9_NAME = 'mongodb';
+export const T9_DESC =
+  'MongoDB is a cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas.';
+
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =
@@ -82,8 +92,9 @@ export const C11_TEXT =
   'I found the discussion on SharedPreferences vs apply() very useful. Great explanation of the differences!';
 export const C12_TEXT =
   "I feel like there's so much more to Android Studio that I'm just scratching the surface of. Thanks for sharing your experience!";
-export const FRONT_END_TAGS = [T1_NAME, T6_NAME, T7_NAME];
-// export const BACK_END_TAGS = ['mongodb', 'node.js'];
+export const FRONT_END_TAGS = [T1_NAME, T2_NAME, T6_NAME, T7_NAME];
+export const BACK_END_TAGS = [T9_NAME];
+export const MOBILE_APP_TAGS = [T3_NAME, T4_NAME];
 // export const ML_TAGS = ['neural-networks', 'deep-learning'];
 // export const AI_TAGS = ['neural-networks', 'reinforcement-learning', 'pytorch', 'nlp'];
 export const CLOUD_TAGS = [T8_NAME, T5_NAME]; // ADD AZURE, GCP
