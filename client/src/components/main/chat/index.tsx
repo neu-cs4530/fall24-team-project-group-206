@@ -1,6 +1,7 @@
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { useLocation, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
@@ -12,11 +13,17 @@ const ChatPage = () => {
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   } = useChat();
 
   return (
@@ -28,14 +35,32 @@ const ChatPage = () => {
           </span>
         ) : (
           <>
-            <span className='chat-title'>chatting now: </span>
-            <input
-              className='username'
-              id='searchBar'
-              placeholder={'email'}
-              type='text'
-              onChange={handleSendTo}
-            />
+            {/* <div className='chat-title'> */}
+            <div className='search-container'>
+              <span className='chat-title'>chatting now: </span>
+              <input
+                className='username'
+                id='searchBar'
+                placeholder='Search username...'
+                type='text'
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onBlur={() => setTimeout(() => setDropdownOpen(false), 200)} // Close dropdown after clicking outside
+                onFocus={() => setDropdownOpen(true)} // Open dropdown on focus
+              />
+              {dropdownOpen && filteredUsers.length > 0 && (
+                <div className='dropdown-list'>
+                  {filteredUsers.map(user => (
+                    <div
+                      key={user}
+                      className={`dropdown-item ${selectedUsers.includes(user) ? 'selected' : ''}`}
+                      onClick={() => handleUserClick(user)}>
+                      {user}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>

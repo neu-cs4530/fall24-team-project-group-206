@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
+import { getListOfAllUsers } from '../services/userService';
 import { db } from '../firebaseConfig';
+import { User } from '../types';
 
 const useChat = () => {
   const { pathname } = useLocation();
@@ -15,6 +17,39 @@ const useChat = () => {
   );
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
+  const [listOfUsers, setListOfUsers] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  const filteredUsers = listOfUsers
+    .filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(curr => curr.toLowerCase() !== user.username);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setDropdownOpen(true); // Open the dropdown when typing
+  };
+
+  const handleUserClick = (username: string) => {
+    setSend(username);
+    setSearchTerm(username);
+    setDropdownOpen(false); // Close the dropdown after selection
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const result = await getListOfAllUsers();
+      const usernames = Array.isArray(result) ? result.map((u: User) => u.username) : [];
+      setListOfUsers(usernames);
+    } catch (err) {
+      console.error('Error fetching list of users:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers(); // Fetch users on mount
+  }, []);
 
   useEffect(() => {
     if (pathname.includes('community')) {
@@ -22,16 +57,11 @@ const useChat = () => {
     }
   }, [community, pathname, setSend]);
 
-  const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSend(e.target.value);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentMessage(e.target.value);
   };
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
-    console.log('in save messages');
     try {
       if (user && user.username) {
         await addDoc(collection(db, 'messages'), {
@@ -41,11 +71,9 @@ const useChat = () => {
           timestamp: new Date(),
         });
         setCurrentMessage(''); // Clear the input after sending
-      } else {
-        console.error('User not authenticated or username missing');
       }
     } catch (error) {
-      console.error('Error saving message:', error);
+      console.error('Error saving message or user does not exist:', error);
     }
   };
 
@@ -107,11 +135,17 @@ const useChat = () => {
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   };
 };
 
