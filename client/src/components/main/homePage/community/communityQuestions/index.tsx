@@ -12,18 +12,18 @@ const CommunityQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const { user, socket } = useUserContext();
 
-  const { user } = useUserContext(); // Get current user data
   useEffect(() => {
     const fetchQuestions = async () => {
-      if (user.community === '') {
+      if (!user.community) {
         setError('User is not part of any community');
         setLoading(false);
         return;
       }
 
       try {
-        console.log(user.community);
+        console.log(`Fetching questions for community: ${user.community}`);
         const fetchedQuestions = await getCommunityQuestions(user.community);
         setQuestions(fetchedQuestions);
       } catch (err) {
@@ -38,16 +38,32 @@ const CommunityQuestions = () => {
     }
   }, [user.community]);
 
-  // Display loading, error, or the list of questions
+  useEffect(() => {
+    if (!socket || !user.community) return;
+
+    // Listener for community updates
+    const handleCommunityUpdate = (update: { community: string; questions: Question[] }) => {
+      if (update.community === user.community) {
+        console.log(`Received update for community: ${update.community}`);
+        setQuestions(update.questions);
+      }
+    };
+
+    socket.on('communityUpdate', handleCommunityUpdate);
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      socket.off('communityUpdate', handleCommunityUpdate);
+    };
+  }, [socket, user.community]);
+
   if (loading) return <p>Loading questions...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       {questions.length > 0 ? (
-        questions.map(q => (
-          <QuestionView key={q._id} q={q} /> // Display each question
-        ))
+        questions.map(q => <QuestionView key={q._id} q={q} />)
       ) : (
         <p>No questions available for this community.</p>
       )}

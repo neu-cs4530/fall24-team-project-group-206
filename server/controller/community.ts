@@ -1,26 +1,11 @@
-/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community } from '../types';
 import TagModel from '../models/tags';
-// import QuestionModel from '../models/questions';
+import { FakeSOSocket } from '../types';
 
-const communityController = () => {
+const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
-  /**
-   * Retrieves a list of tags along with the number of questions associated with each tag.
-   * If there is an error, the HTTP response's status is updated.
-   *
-   * @param _ The HTTP request object (not used in this function).
-   * @param res The HTTP response object used to send back the tag count mapping.
-   *
-   * @returns A Promise that resolves to void.
-   */
-  /**
-   * @param req The Request object containing the tag name in the URL parameters.
-   * @param res The HTTP response object used to send back the result of the operation.
-   */
   const getCommunityNames = async (req: Request, res: Response): Promise<void> => {
     try {
       const communities = await CommunityModel.find({});
@@ -37,21 +22,20 @@ const communityController = () => {
       const communityData = await CommunityModel.findOne({ name: community }).populate('questions');
       if (!communityData) {
         res.status(404).json({ error: 'Community not found' });
-        console.log('here, was null');
         return;
       }
-      console.log(communityData.questions);
 
       res.json(communityData.questions);
+
+      socket.emit('communityUpdate', {
+        community,
+        questions: communityData.questions,
+      });
     } catch (error) {
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
   };
 
-  /**
-   * Adds a user's username to the community.
-   * This function will update the community model by adding the username to the community's list of users.
-   */
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     const { username } = req.body;
     const { communityName } = req.params;
@@ -66,12 +50,18 @@ const communityController = () => {
 
       if (community.users.includes(username)) {
         res.status(400).send('Username is already in the community');
+        return;
       }
 
       community.users.push(username);
       await community.save();
 
       res.json(community);
+
+      // socket.emit('userAddedToCommunity', {
+      //   community: communityName,
+      //   username,
+      // });
     } catch (error) {
       res.status(500).json({ error: 'Error when adding user to community' });
     }
@@ -89,13 +79,15 @@ const communityController = () => {
       const matchingTags = await TagModel.find({ name: { $in: tags } });
 
       if (matchingTags.length === 0) {
-        res.json([]); // No matching tags, return empty list
+        res.json([]);
         return;
       }
 
       const tagNames = matchingTags.map(tag => tag.name);
       const communities = await CommunityModel.find({ tags: { $in: tagNames } });
       res.json(communities);
+
+      // Emit real-time community suggestions based on tags
     } catch (error) {
       console.error('Error fetching relevant communities:', error);
       res.status(500).json({ error: 'Failed to fetch relevant communities' });
@@ -106,6 +98,7 @@ const communityController = () => {
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
   router.get('/getRelevantCommunities', getRelevantCommunities);
+
   return router;
 };
 
