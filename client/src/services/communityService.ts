@@ -25,11 +25,16 @@ const getCommunityByName = async (name: string): Promise<Community> => {
 };
 
 const addUserToCommunity = async (username: string, communityName: string): Promise<Community> => {
-  const res = await api.put(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, username);
+  const res = await api.patch(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, {
+    username, // Include username as a key-value in the request body
+  });
+
   if (res.status !== 200) {
     throw new Error('Error when adding user to community');
   }
+
   return res.data;
 };
+
 
 export { getCommunityNames, getCommunityByName, addUserToCommunity };

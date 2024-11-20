@@ -2,10 +2,15 @@
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { Community } from '../types';
+import {FakeSOSocket } from '../types';
+
+import { Socket } from 'socket.io';
+import { ObjectId } from 'mongodb';
 // import QuestionModel from '../models/questions';
 
-const communityController = () => {
+const communityController = (socket: FakeSOSocket)=> {
   const router: Router = express.Router();
+
 
   /**
    * Retrieves a list of tags along with the number of questions associated with each tag.
@@ -66,37 +71,56 @@ const communityController = () => {
    * Adds a user's username to the community.
    * This function will update the community model by adding the username to the community's list of users.
    */
-  const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
-    const { username } = req.body; // Expecting the userId and username in the body of the request
-    const { communityName } = req.params; // Get communityId from URL parameter
-
+  const addUserToCommunity = (socket: FakeSOSocket) => async (req: Request, res: Response): Promise<void> => {
+    const { username } = req.body; // Extract username from the request body
+    const { communityName } = req.params; // Extract community name from the URL parameter
+  
     try {
-      const community = await CommunityModel.findById(communityName);
-
+      // Find the community by name
+      const community = await CommunityModel.findOne({ name: communityName });
+  
       if (!community) {
-        res.status(404).send('Community not found');
+        res.status(404).json({ error: 'Community not found' });
         return;
       }
-
-      // Check if the username is already in the community's users list
+  
+      // Check if the user is already in the community
       if (community.users.includes(username)) {
-        res.status(400).send('Username is already in the community');
+        res.status(400).json({ error: 'User already exists in the community' });
+        return;
       }
-      // Add the username to the community's users list
+  
+      // Add the user to the `users` array
       community.users.push(username);
-      await community.save();
-
-      // Return the updated community
-      res.json(community);
+  
+      // Save the updated community to the database
+      const updatedCommunity = await community.save();
+  
+      // Emit a `communityUpdate` event via Socket.IO
+      socket.emit('communityUpdate', {
+        name: updatedCommunity.name, // Community name
+        tags: updatedCommunity.tags, // Community tags
+        users: updatedCommunity.users, // Updated list of users
+        questions: updatedCommunity.questions, // Associated questions
+      });
+  
+      // Respond with the updated community
+      res.status(200).json(updatedCommunity);
     } catch (error) {
-      console.error('Error when adding user to community:', error);
+      console.error('Error adding user to community:', error);
       res.status(500).json({ error: 'Failed to add user to community' });
     }
   };
+  
+  
+  
 
-  router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
+  
+  router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityByName/:name', getCommunityByName);
-  router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
+  // Add user to community with socket integration
+  router.patch('/addUserToCommunity/:communityName', addUserToCommunity(socket));
+
 
   return router;
 };

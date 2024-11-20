@@ -20,7 +20,7 @@ const CommunityHomePage = () => {
       <hr />
 
       {/* Sidebar for members */}
-      <MembersSidebar />
+      <MembersSidebar communityName={titleText} />
       {/* Button to chat with the community */}
       <button className='chat-button'>Chat with Community</button>
 

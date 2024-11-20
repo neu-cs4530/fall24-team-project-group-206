@@ -7,9 +7,6 @@ import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 
-/**
- * Depicts communities that the user can choose from.
- */
 const ChooseCommunityPage = () => {
   const { communityNames } = useCommunityNames();
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
@@ -23,8 +20,25 @@ const ChooseCommunityPage = () => {
       const user = auth.currentUser;
       if (user) {
         console.log('Saving community for user:', user.email);
-        await updateUserCommunity(user.email!, community); // Call the backend service
-        console.log('Community updated successfully');
+        
+        // Call the backend API to add the user to the selected community
+        const response = await fetch(`/community/addUserToCommunity/${community}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: user.email }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add user to the community');
+        }
+
+        console.log('Community updated successfully in the backend');
+
+        // Optionally save the community to the user's profile
+        await updateUserCommunity(user.email!, community);
+        console.log('Community also saved to user account');
       } else {
         console.error('No user is logged in.');
       }
@@ -52,7 +66,8 @@ const ChooseCommunityPage = () => {
       </div>
       <div className='button-container'>
         <button
-          className='next-button'
+          className={`next-button ${!selectedCommunity ? 'disabled' : ''}`}
+          disabled={!selectedCommunity}
           onClick={() => {
             console.log('Saving community:', selectedCommunity);
             saveCommunityToUserAccount(selectedCommunity);

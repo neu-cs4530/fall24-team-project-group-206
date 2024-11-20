@@ -222,6 +222,16 @@ export interface AnswerUpdatePayload {
   answer: AnswerResponse;
 }
 
+
+/**
+ * Interface representing populatedCommunity
+ * Used when additional populated fields are required.
+ */
+export interface populatedCommunity extends Community {
+  users: string[]; 
+
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
@@ -231,4 +241,5 @@ export interface ServerToClientEvents {
   viewsUpdate: (question: QuestionResponse) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
+  communityUpdate: (community: populatedCommunity) => void;
 }
