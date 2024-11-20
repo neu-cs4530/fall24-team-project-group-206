@@ -24,6 +24,14 @@ const getCommunityQuestions = async (community: string): Promise<Question[]> => 
   return res.data;
 };
 
+const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
+  const res = await api.get(`${COMMUNITY_API_URL}/getRelevantCommunities`);
+  if (res.status !== 200) {
+    throw new Error('Error when fetching relevant communities');
+  }
+  return res.data;
+};
+
 const addUserToCommunity = async (username: string, communityName: string): Promise<Community> => {
   const res = await api.put(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, username);
   if (res.status !== 200) {
@@ -32,4 +40,4 @@ const addUserToCommunity = async (username: string, communityName: string): Prom
   return res.data;
 };
 
-export { getCommunityNames, getCommunityQuestions, addUserToCommunity };
+export { getCommunityNames, getCommunityQuestions, getRelevantCommunities, addUserToCommunity };

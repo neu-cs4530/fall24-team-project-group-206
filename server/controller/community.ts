@@ -2,6 +2,7 @@
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { Community } from '../types';
+import TagModel from '../models/tags';
 // import QuestionModel from '../models/questions';
 
 const communityController = () => {
@@ -76,9 +77,35 @@ const communityController = () => {
     }
   };
 
+  const getRelevantCommunities = async (req: Request, res: Response): Promise<void> => {
+    const { tags } = req.body;
+
+    if (!tags || !Array.isArray(tags)) {
+      res.status(400).json({ error: 'Invalid or missing tags' });
+      return;
+    }
+
+    try {
+      const matchingTags = await TagModel.find({ name: { $in: tags } });
+
+      if (matchingTags.length === 0) {
+        res.json([]); // No matching tags, return empty list
+        return;
+      }
+
+      const tagNames = matchingTags.map(tag => tag.name);
+      const communities = await CommunityModel.find({ tags: { $in: tagNames } });
+      res.json(communities);
+    } catch (error) {
+      console.error('Error fetching relevant communities:', error);
+      res.status(500).json({ error: 'Failed to fetch relevant communities' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
+  router.get('/getRelevantCommunities', getRelevantCommunities);
   return router;
 };
 

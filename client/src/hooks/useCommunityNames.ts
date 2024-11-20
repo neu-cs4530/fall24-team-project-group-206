@@ -1,37 +1,49 @@
 import { useEffect, useState } from 'react';
-import { getCommunityNames } from '../services/communityService';
-import { Community } from '../types';
+import { getRelevantCommunities } from '../services/communityService';
 
 /**
- * Custom hook to handle fetching community details by community name.
+ * Custom hook to handle fetching relevant community details based on provided tags.
  *
- * @param t - The tag object to fetch data for
+ * @param tags - The list of tags to fetch relevant communities for.
  *
- * @returns community - The current community details.
- * @returns setCommunity - Setter to manually update the community state if needed.
+ * @returns relevantCommunities - The current list of relevant communities.
+ * @returns setRelevantCommunities - Setter to manually update the relevant communities state if needed.
  */
-const useCommunityNames = () => {
-  const [communityNames, setCommunityNames] = useState<Community[]>([]);
+const useCommunityNames = (tags: string[]) => {
+  const [relevantCommunities, setRelevantCommunities] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRelevantCommunities = async () => {
+      setLoading(true);
+      setError('');
       try {
-        const res = await getCommunityNames();
+        const res = await getRelevantCommunities(tags);
         if (Array.isArray(res)) {
-          setCommunityNames(res);
+          setRelevantCommunities(res);
         } else {
-          setCommunityNames([]);
+          setRelevantCommunities([]);
         }
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e);
+        // Handle errors gracefully
+        setError('Failed to fetch relevant communities.');
+        console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchData();
-  });
+
+    if (tags.length > 0) {
+      fetchRelevantCommunities();
+    }
+  }, [tags]); // Re-fetch communities when the tags change
 
   return {
-    communityNames,
+    relevantCommunities,
+    setRelevantCommunities,
+    loading,
+    error,
   };
 };
 
