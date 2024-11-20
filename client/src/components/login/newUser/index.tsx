@@ -69,11 +69,11 @@ const CreateUser = () => {
           id='passwordInput'
         />
         <div className='button-group'>
-          <button type='submit' className='login-button'>
-            Create Account
-          </button>
           <button type='button' className='back-button' onClick={handleUserTypeSelection}>
             Back
+          </button>
+          <button type='submit' className='login-button'>
+            Create Account
           </button>
         </div>
       </form>
