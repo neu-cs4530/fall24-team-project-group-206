@@ -46,39 +46,40 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
 
   return (
     <LoginContext.Provider value={{ setUser }}>
-      <Routes>
-        {/* Public Route */}
-        <Route path='/' element={<UserSelection />} />
-        <Route path='/existing' element={<Login />} />
-        <Route path='/new' element={<CreateUser />} />
-        <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+      <UserContext.Provider value={{ user: user!, socket: socket! }}>
+        <Routes>
+          {/* Public Route */}
+          <Route path='/' element={<UserSelection />} />
+          <Route path='/existing' element={<Login />} />
+          <Route path='/new' element={<CreateUser />} />
+          <Route path='/new/tagselection' element={<ChooseTagsPage />} />
+          <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
 
-        {/* Protected Routes */}
-        {
-          <Route
-            element={
-              <ProtectedRoute user={user} socket={socket}>
-                <Layout />
-              </ProtectedRoute>
-            }>
-            <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
-            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
-            <Route path='chat/community' element={<ChatPage />} />
-            <Route path='tags' element={<TagPage />} />
-            <Route path='questions' element={<QuestionPage />} />
-            <Route path='chat' element={<ChatPage />} />
-            <Route path='/question/:qid' element={<AnswerPage />} />
-            <Route path='/new/question' element={<NewQuestionPage />} />
-            <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
-            <Route path='profile' element={<ProfilePage />}>
-              <Route path='account' element={<AccountInfo />} />
-              <Route path='tags' element={<TagsInfo />} />
-              <Route path='community' element={<CommunityInfo />} />
+          {/* Protected Routes */}
+          {
+            <Route
+              element={
+                <ProtectedRoute user={user} socket={socket}>
+                  <Layout />
+                </ProtectedRoute>
+              }>
+              <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+              <Route path='chat/community' element={<ChatPage />} />
+              <Route path='tags' element={<TagPage />} />
+              <Route path='questions' element={<QuestionPage />} />
+              <Route path='chat' element={<ChatPage />} />
+              <Route path='/question/:qid' element={<AnswerPage />} />
+              <Route path='/new/question' element={<NewQuestionPage />} />
+              <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
+              <Route path='profile' element={<ProfilePage />}>
+                <Route path='account' element={<AccountInfo />} />
+                <Route path='tags' element={<TagsInfo />} />
+                <Route path='community' element={<CommunityInfo />} />
+              </Route>
             </Route>
-          </Route>
-        }
-      </Routes>
+          }
+        </Routes>
+      </UserContext.Provider>
     </LoginContext.Provider>
   );
 };
