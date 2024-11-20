@@ -1,12 +1,23 @@
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import { useLocation, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
 const ChatPage = () => {
   const { pathname } = useLocation();
   const { community } = useParams();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUser, setSelectedUser] = useState('');
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+  const handleSelectUser = (email: string) => {
+    setSearchTerm(email);
+    // setSendTo(email);
+  };
 
   const {
     currentMessage,
@@ -17,7 +28,10 @@ const ChatPage = () => {
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    listOfUsers,
   } = useChat();
+
+  console.log(listOfUsers);
 
   return (
     <div className='chat-container'>
@@ -28,6 +42,28 @@ const ChatPage = () => {
           </span>
         ) : (
           <>
+            {/* <div className='chat-title'> */}
+            <span className='chat-title'>chatting now: </span>
+            <input
+              className='username'
+              id='searchBar'
+              placeholder='username'
+              type='text'
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            {searchTerm && listOfUsers?.length > 0 ? (
+              <ul className='dropdown-list'>
+                {listOfUsers.map((currUser: string) => (
+                  <li key={currUser} onClick={() => handleSelectUser(currUser)}>
+                    {currUser}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              'none'
+            )}
+
             <span className='chat-title'>chatting now: </span>
             <input
               className='username'

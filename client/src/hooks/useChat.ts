@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
-import { auth, db } from '../firebaseConfig';
-import { getUser } from '../services/userService';
+import { getListOfAllUsers } from '../services/userService';
+import { db } from '../firebaseConfig';
+import { User } from '../types';
 
 const useChat = () => {
   const { pathname } = useLocation();
@@ -16,7 +17,21 @@ const useChat = () => {
   );
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
-  const [username, setUsername] = useState('');
+  const [listOfUsers, setListOfUsers] = useState<string[]>([]);
+
+  const fetchUsers = async () => {
+    try {
+      const result = await getListOfAllUsers();
+      const usernames = Array.isArray(result) ? result.map((u: User) => u.username) : [];
+      setListOfUsers(usernames);
+    } catch (err) {
+      console.error('Error fetching list of users:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers(); // Fetch users on mount
+  }, []);
 
   useEffect(() => {
     if (pathname.includes('community')) {
@@ -34,8 +49,7 @@ const useChat = () => {
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
     try {
-      const data = await getUser(sendTo);
-      if (user && user.username && data) {
+      if (user && user.username) {
         await addDoc(collection(db, 'messages'), {
           username: user.username,
           message,
@@ -43,8 +57,6 @@ const useChat = () => {
           timestamp: new Date(),
         });
         setCurrentMessage(''); // Clear the input after sending
-      } else {
-        console.error('User not authenticated or username missing');
       }
     } catch (error) {
       console.error('Error saving message or user does not exist:', error);
@@ -114,6 +126,7 @@ const useChat = () => {
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    listOfUsers,
   };
 };
 
