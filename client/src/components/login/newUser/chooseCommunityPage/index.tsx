@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import { auth } from '../../../../firebaseConfig';
-import { updateUserCommunity } from '../../../../services/userService';
+import { getUser, updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useRelevantCommunities from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
@@ -13,18 +13,31 @@ import useUserContext from '../../../../hooks/useUserContext';
  */
 const ChooseCommunityPage = () => {
   const { user } = useUserContext();
-  const userTags = user?.tags || []; // Assuming tags are available in user context
-  const { relevantCommunities, loading, error } = useRelevantCommunities(userTags);
-  console.log('relevantCommunities:', relevantCommunities);
-  console.log('loading:', loading);
-  console.log('error:', error);
+  // const userTags = user?.tags || []; // Assuming tags are available in user context
+  console.log('user tags:', user.tags);
+  // console.log('relevantCommunities:', relevantCommunities);
+  // console.log('loading:', loading);
+  // console.log('error:', error);
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+  const [chosenTags, setChosenTags] = useState<string[]>([]);
 
   useEffect(() => {
-    if (user) {
-      console.log('User info:', user);
-    }
+    const fetchTags = async () => {
+      if (!user?.username) return;
+      try {
+        const data = await getUser(user.username); // Fetch user data from MongoDB
+        console.log('Fetched user data:', data); // Ensure 'tags' exists
+        setChosenTags(data.tags || []);
+        console.log('Tags fetched:', data.tags);
+      } catch (anError) {
+        console.error('Error fetching tags:', anError);
+      }
+    };
+
+    fetchTags();
   }, [user]);
+
+  const { relevantCommunities, loading, error } = useRelevantCommunities(user.tags);
 
   useEffect(() => {
     if (relevantCommunities.length > 0) {
@@ -38,10 +51,10 @@ const ChooseCommunityPage = () => {
 
   const saveCommunityToUserAccount = async (community: string) => {
     try {
-      const { currentUser } = auth;
-      if (currentUser) {
-        console.log('Saving community for user:', currentUser.email);
-        await updateUserCommunity(currentUser.email!, community);
+      const currUser = auth.currentUser;
+      if (currUser) {
+        console.log('Saving community for user:', currUser.email);
+        await updateUserCommunity(currUser.email!, community);
         console.log('Community updated successfully');
       } else {
         console.error('No user is logged in.');

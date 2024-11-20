@@ -22,12 +22,14 @@ const TagsInfo = () => {
       try {
         const data = await getUser(user.username); // Fetch user data from MongoDB
         setChosenTags(data.tags || []);
+        console.log('Tags fetched:', data.tags);
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
     };
-
-    fetchTags();
+    if (user?.username) {
+      fetchTags();
+    }
   }, [user]);
 
   // Handle adding a tag to the chosen list
