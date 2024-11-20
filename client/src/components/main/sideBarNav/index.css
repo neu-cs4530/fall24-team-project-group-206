@@ -4,7 +4,7 @@
   flex-basis: 200px;
   max-width: 10vw;
   min-width: 130px;
-  border-right: 2px solid black;
+  background: #dedede;
   padding: 4% 1%;
   align-items: flex-start;
 }

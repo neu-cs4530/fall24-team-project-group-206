@@ -20,7 +20,7 @@ const NewAnswerPage = () => {
         err={textErr}
       />
       <div className='btn_indicator_container'>
-        <button className='form_postBtn' onClick={postAnswer}>
+        <button className='post-a-button' onClick={postAnswer}>
           Post Answer
         </button>
         <div className='mandatory_indicator'>* indicates mandatory fields</div>

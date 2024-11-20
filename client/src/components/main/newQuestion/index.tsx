@@ -51,7 +51,7 @@ const NewQuestionPage = () => {
       />
       <div className='btn_indicator_container'>
         <button
-          className='form_postBtn'
+          className='post-q-button'
           onClick={() => {
             postQuestion();
           }}>

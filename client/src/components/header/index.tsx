@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import useHeader from '../../hooks/useHeader';
@@ -17,7 +15,6 @@ const Header = () => {
   return (
     <div id='header' className='header'>
       {/* Render SVG logo */}
-
       <NavLink
         to='/home'
         id='menu_tag'
@@ -36,16 +33,14 @@ const Header = () => {
         onKeyDown={handleKeyDown}
       />
 
-      <span className='icon-here'>
-        <NavLink
-          to='/profile/account'
-          id='menu_tag'
-          className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-          <span className='icon'>
-            <FaUser size={35} />
-          </span>
-        </NavLink>
-      </span>
+      <NavLink
+        to='/profile/account'
+        id='menu_tag'
+        className={
+          ({ isActive }) => `icon-here ${isActive ? 'selected' : ''}` // Apply styles based on active state
+        }>
+        <FaUser size={35} />
+      </NavLink>
     </div>
   );
 };
