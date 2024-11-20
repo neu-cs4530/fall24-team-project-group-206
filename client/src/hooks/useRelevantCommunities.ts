@@ -26,7 +26,6 @@ const useRelevantCommunities = (tags: string[]) => {
           setRelevantCommunities([]);
         }
       } catch (e) {
-        // Handle errors gracefully
         setError('Failed to fetch relevant communities.');
         console.error(e);
       } finally {
@@ -37,7 +36,7 @@ const useRelevantCommunities = (tags: string[]) => {
     if (tags.length > 0) {
       fetchRelevantCommunities();
     }
-  }, [tags]); // Re-fetch communities when the tags change
+  }, [tags]);
 
   return {
     relevantCommunities,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import { IoMdHome } from 'react-icons/io';
@@ -12,8 +12,11 @@ import useUserContext from '../../../hooks/useUserContext';
 const SideBarNav = () => {
   const { user } = useUserContext();
 
-  // Conditionally set the navigation path
-  const homePath = user?.community ? '/communityHome' : '/defaultHome';
+  // Dynamically set the navigation path based on user.community
+  const homePath = useMemo(
+    () => (user?.community ? '/communityHome' : '/defaultHome'),
+    [user?.community],
+  );
 
   return (
     <div id='sideBarNav' className='sideBarNav'>

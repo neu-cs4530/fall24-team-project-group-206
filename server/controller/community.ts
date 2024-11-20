@@ -68,7 +68,7 @@ const communityController = (socket: FakeSOSocket) => {
   };
 
   const getRelevantCommunities = async (req: Request, res: Response): Promise<void> => {
-    const { tags } = req.body;
+    const { tags } = req.query;
 
     if (!tags || !Array.isArray(tags)) {
       res.status(400).json({ error: 'Invalid or missing tags' });
@@ -76,6 +76,7 @@ const communityController = (socket: FakeSOSocket) => {
     }
 
     try {
+      // Find matching tags in the Tag model
       const matchingTags = await TagModel.find({ name: { $in: tags } });
 
       if (matchingTags.length === 0) {
@@ -85,12 +86,10 @@ const communityController = (socket: FakeSOSocket) => {
 
       const tagNames = matchingTags.map(tag => tag.name);
       const communities = await CommunityModel.find({ tags: { $in: tagNames } });
-      res.json(communities);
-
-      // Emit real-time community suggestions based on tags
+      const communityNames = communities.map(community => community.name);
+      res.json(communityNames);
     } catch (error) {
-      console.error('Error fetching relevant communities:', error);
-      res.status(500).json({ error: 'Failed to fetch relevant communities' });
+      res.status(500).json({ error: 'Error fetching relevant communities' });
     }
   };
 

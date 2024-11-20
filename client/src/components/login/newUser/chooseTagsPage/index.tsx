@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import useTagNames from '../../../../hooks/useTagNames';
-import { auth } from '../../../../firebaseConfig';
 import { updateUserTags } from '../../../../services/userService'; // Import the userService function
 import logo from '../../../../logo.svg';
 import useUserContext from '../../../../hooks/useUserContext';
@@ -29,9 +28,8 @@ const ChooseTagsPage = () => {
   const saveTagsToUserAccount = async (tags: string[]) => {
     try {
       if (user) {
-        console.log('Saving tags for user:', user.username);
+        user.tags = tags;
         await updateUserTags(user.username!, tags);
-        console.log('Tags updated successfully');
       } else {
         console.error('No user is logged in.');
       }
@@ -72,7 +70,6 @@ const ChooseTagsPage = () => {
         <button
           className='next-button'
           onClick={() => {
-            console.log('Saving tags:', selectedTags);
             saveTagsToUserAccount(selectedTags);
           }}>
           <NavLink className='button-text' to='/new/tagselection/communityselection'>

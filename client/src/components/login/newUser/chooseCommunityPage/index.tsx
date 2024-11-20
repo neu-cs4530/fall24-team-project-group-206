@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
@@ -7,15 +6,18 @@ import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useRelevantCommunities from '../../../../hooks/useRelevantCommunities';
 import useUserContext from '../../../../hooks/useUserContext';
+import useCommunityNames from '../../../../hooks/useCommunityNames';
 
 /**
  * Depicts communities that the user can choose from.
  */
 const ChooseCommunityPage = () => {
   const { user } = useUserContext();
-  const userTags = user?.tags || [];
-  const { relevantCommunities, loading, error } = useRelevantCommunities(userTags);
+  const { relevantCommunities, loading, error } = useRelevantCommunities(user.tags);
+  const { communityNames, loading: loadingAll, error: errorAll } = useCommunityNames();
+
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,9 +34,8 @@ const ChooseCommunityPage = () => {
     try {
       const { currentUser } = auth;
       if (currentUser) {
-        console.log('Saving community for user:', currentUser.email);
         await updateUserCommunity(currentUser.email!, community);
-        console.log('Community updated successfully');
+        user.community = community;
       } else {
         console.error('No user is logged in.');
       }
@@ -52,47 +53,69 @@ const ChooseCommunityPage = () => {
     }
   };
 
-  if (loading) {
+  if (loading || loadingAll) {
     return <p>Loading communities...</p>;
   }
 
-  if (error) {
-    return <p>Error: {error}</p>;
+  if (error || errorAll) {
+    return <p>Error: {error || errorAll}</p>;
   }
+
+  const allCommunitiesExceptRecommended = communityNames.filter(
+    community => !relevantCommunities.includes(community),
+  );
+
+  const filteredAllCommunities = allCommunitiesExceptRecommended.filter(community =>
+    community.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   return (
     <div className='community-container'>
       <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
+
       <div className='recommendation-header'>
         <h2>Recommended Communities:</h2>
       </div>
       {relevantCommunities.length > 0 ? (
-        <>
-          <div className='top-recommendation'>
-            <h3>Top Recommended Community:</h3>
+        <div className='community-list'>
+          {relevantCommunities.map(community => (
             <li
-              className={`community-pill ${selectedCommunity === relevantCommunities[0] ? 'selected' : ''}`}
-              onClick={() => handleCommunityClick(relevantCommunities[0])}>
-              {relevantCommunities[0]}
+              className={`community-pill ${selectedCommunity === community ? 'selected' : ''}`}
+              key={community}
+              onClick={() => handleCommunityClick(community)}>
+              {community}
             </li>
-          </div>
-          <div className='other-recommendations'>
-            <h3>Other Recommendations:</h3>
-            <ul className='community-list'>
-              {relevantCommunities.slice(1).map(community => (
-                <li
-                  className={`community-pill ${selectedCommunity === community ? 'selected' : ''}`}
-                  key={community}
-                  onClick={() => handleCommunityClick(community)}>
-                  {community}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
+          ))}
+        </div>
       ) : (
-        <p>No communities available to recommend.</p>
+        <p>No recommended communities available.</p>
       )}
+
+      <div className='recommendation-header'>
+        <h2>All Communities:</h2>
+      </div>
+      <input
+        type='text'
+        className='search-bar'
+        placeholder='Search all communities...'
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
+      />
+      {filteredAllCommunities.length > 0 ? (
+        <div className='community-list'>
+          {filteredAllCommunities.map(community => (
+            <li
+              className={`community-pill ${selectedCommunity === community ? 'selected' : ''}`}
+              key={community}
+              onClick={() => handleCommunityClick(community)}>
+              {community}
+            </li>
+          ))}
+        </div>
+      ) : (
+        <p>No other communities match your search.</p>
+      )}
+
       <div className='button-container'>
         <button className='next-button' onClick={handleNextButtonClick}>
           Next
