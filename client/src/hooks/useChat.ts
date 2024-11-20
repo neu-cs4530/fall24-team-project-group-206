@@ -27,6 +27,7 @@ const useChat = () => {
     .filter(curr => curr.toLowerCase() !== user.username);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSend(e.target.value);
     setSearchTerm(e.target.value);
     setDropdownOpen(true); // Open the dropdown when typing
   };
@@ -54,8 +55,9 @@ const useChat = () => {
   useEffect(() => {
     if (pathname.includes('community')) {
       setSend(community || '');
+      setSearchTerm(community || '');
     }
-  }, [community, pathname, setSend]);
+  }, [community, pathname, setSend, setSearchTerm]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentMessage(e.target.value);
@@ -63,7 +65,12 @@ const useChat = () => {
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
     try {
-      if (user && user.username) {
+      if (
+        user &&
+        user.username &&
+        listOfUsers.includes(sendTo) &&
+        listOfUsers.includes(searchTerm)
+      ) {
         await addDoc(collection(db, 'messages'), {
           username: user.username,
           message,

@@ -35,7 +35,6 @@ const ChatPage = () => {
           </span>
         ) : (
           <>
-            {/* <div className='chat-title'> */}
             <div className='search-container'>
               <span className='chat-title'>chatting now: </span>
               <input
