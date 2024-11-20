@@ -1,50 +1,41 @@
 import { useEffect, useState } from 'react';
-import { getRelevantCommunities } from '../services/communityService';
+import { getCommunityNames } from '../services/communityService';
 
 /**
- * Custom hook to handle fetching relevant community details based on provided tags.
+ * Custom hook to handle fetching community names.
  *
- * @param tags - The list of tags to fetch relevant communities for.
- *
- * @returns relevantCommunities - The current list of relevant communities.
- * @returns setRelevantCommunities - Setter to manually update the relevant communities state if needed.
+ * @returns communityNames - The list of community names.
+ * @returns loading - A state indicating if the communities are still loading.
+ * @returns error - A state indicating if there was an error during fetching.
  */
-const useCommunityNames = (tags: string[]) => {
-  const [relevantCommunities, setRelevantCommunities] = useState<string[]>([]);
+const useCommunityNames = () => {
+  const [communityNames, setCommunityNames] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const fetchRelevantCommunities = async () => {
+    const fetchCommunityNames = async () => {
       setLoading(true);
       setError('');
       try {
-        const res = await getRelevantCommunities(tags);
+        const res = await getCommunityNames();
         if (Array.isArray(res)) {
-          setRelevantCommunities(res);
+          setCommunityNames(res.map(community => community.name)); // Assuming `name` is a property of the community object.
         } else {
-          setRelevantCommunities([]);
+          setCommunityNames([]);
         }
       } catch (e) {
-        // Handle errors gracefully
-        setError('Failed to fetch relevant communities.');
+        setError('Failed to fetch community names.');
         console.error(e);
       } finally {
         setLoading(false);
       }
     };
 
-    if (tags.length > 0) {
-      fetchRelevantCommunities();
-    }
-  }, [tags]); // Re-fetch communities when the tags change
+    fetchCommunityNames();
+  }, []); // Run the fetch only once on mount
 
-  return {
-    relevantCommunities,
-    setRelevantCommunities,
-    loading,
-    error,
-  };
+  return { communityNames, loading, error };
 };
 
 export default useCommunityNames;

@@ -54,7 +54,11 @@ const useLogin = () => {
         status: userData.status,
       });
 
-      navigate('/home');
+      if (userData.community) {
+        navigate('/communityHome');
+      } else {
+        navigate('/defaultHome');
+      }
     } catch (error) {
       setErrorMessage((error as Error).message);
     }

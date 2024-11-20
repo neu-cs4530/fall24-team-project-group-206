@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import './index.css';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../../../../firebaseConfig';
 import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
-import useRelevantCommunities from '../../../../hooks/useCommunityNames';
+import useRelevantCommunities from '../../../../hooks/useRelevantCommunities';
 import useUserContext from '../../../../hooks/useUserContext';
 
 /**
@@ -13,13 +13,14 @@ import useUserContext from '../../../../hooks/useUserContext';
  */
 const ChooseCommunityPage = () => {
   const { user } = useUserContext();
-  const userTags = user?.tags || []; // Assuming tags are available in user context
+  const userTags = user?.tags || [];
   const { relevantCommunities, loading, error } = useRelevantCommunities(userTags);
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (relevantCommunities.length > 0) {
-      setSelectedCommunity(relevantCommunities[0]); // Automatically select the top recommended community
+      setSelectedCommunity(relevantCommunities[0]);
     }
   }, [relevantCommunities]);
 
@@ -39,6 +40,15 @@ const ChooseCommunityPage = () => {
       }
     } catch (saveError) {
       console.error('Error saving community:', saveError);
+    }
+  };
+
+  const handleNextButtonClick = async () => {
+    if (selectedCommunity) {
+      await saveCommunityToUserAccount(selectedCommunity);
+      navigate(`/communityHome`);
+    } else {
+      navigate('/defaultHome');
     }
   };
 
@@ -84,15 +94,8 @@ const ChooseCommunityPage = () => {
         <p>No communities available to recommend.</p>
       )}
       <div className='button-container'>
-        <button
-          className='next-button'
-          onClick={() => {
-            console.log('Saving community:', selectedCommunity);
-            saveCommunityToUserAccount(selectedCommunity);
-          }}>
-          <NavLink className='button-text' to='/home'>
-            Next
-          </NavLink>
+        <button className='next-button' onClick={handleNextButtonClick}>
+          Next
         </button>
       </div>
     </div>
