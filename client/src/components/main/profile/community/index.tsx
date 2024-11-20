@@ -3,61 +3,75 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
-import { getUser, updateUserCommunity } from '../../../../services/userService';
+import { updateUserCommunity } from '../../../../services/userService';
+import { addUserToCommunity } from '../../../../services/communityService';
 
 /**
- * CommunityInfo component which displays the community (if applicable) that they are in.
+ * CommunityInfo component which displays the community (if applicable) that the user is in.
  */
 const CommunityInfo = () => {
-  const { user } = useUserContext();
-  const { communityNames } = useCommunityNames();
-  const [userCommunity, setUserCommunity] = useState<string>('');
+  const { user } = useUserContext(); // Get user context
+  const { communityNames } = useCommunityNames(); // Get community names
+  const [userCommunity, setUserCommunity] = useState<string>(''); // Store the user's selected community
 
+  // Fetch user's current community from the context
   useEffect(() => {
-    const fetchUserCommunity = async () => {
-      if (!user?.username) return;
-
-      try {
-        const data = await getUser(user.username); // Fetch user data from MongoDB
-        setUserCommunity(data.community || '');
-      } catch (error) {
-        console.error('Error fetching community:', error);
-      }
-    };
-
-    fetchUserCommunity();
+    if (user?.community) {
+      setUserCommunity(user.community);
+    }
   }, [user]);
 
-  const handleCommunitySelect = (communityName: string) => {
-    setUserCommunity(communityName);
+  // Handle selecting a new community
+  const handleCommunitySelect = async (communityName: string) => {
+    try {
+      const username = 'exampleUser'; // Replace with actual username logic
+      const updatedCommunity = await addUserToCommunity(communityName, username);
+      console.log('Updated Community:', updatedCommunity);
+    } catch (error) {
+      console.error('Failed to add user to community:', error);
+    }
   };
+  
 
+  // Handle removing the current community
   const handleCommunityRemove = () => {
     setUserCommunity('');
   };
 
+  // Save the selected community to the backend
   const saveCommunityToUserAccount = async () => {
-    if (!user?.username) return;
+    if (!user?.username || !userCommunity) {
+      console.error('Cannot save: No user or no community selected.');
+      return;
+    }
 
     try {
-      await updateUserCommunity(user.username, userCommunity);
-      console.log('Community updated:', userCommunity);
+      console.log(`Saving community "${userCommunity}" for user: ${user.username}`);
+      await updateUserCommunity(user.username, userCommunity); // Update backend
+      console.log('Community updated successfully!');
     } catch (error) {
       console.error('Error saving community:', error);
     }
   };
 
-  const filteredCommunities = communityNames.filter(community => community.name !== userCommunity);
+  // Filter out the current community from the list of available communities
+  const filteredCommunities = communityNames.filter(
+    community => community.name !== userCommunity
+  );
 
   return (
-    <div className='community-info'>
-      <div className='community-main-title'>
+    <div className="community-info">
+      <div className="community-main-title">
         <h2>Your Community</h2>
       </div>
 
-      <div className='selected-community'>
+      <div className="selected-community">
         {userCommunity ? (
-          <div className='community-pill selected' onClick={handleCommunityRemove}>
+          <div
+            className="community-pill selected"
+            onClick={handleCommunityRemove}
+            title="Click to remove your current community"
+          >
             {userCommunity}
           </div>
         ) : (
@@ -65,21 +79,26 @@ const CommunityInfo = () => {
         )}
       </div>
 
-      <div className='title-two'>
-        <h3>Select a new Community</h3>
+      <div className="title-two">
+        <h3>Select a New Community</h3>
       </div>
-      <div className='community-pills-container'>
+      <div className="community-pills-container">
         {filteredCommunities.map(community => (
           <div
             key={community.name}
-            className='community-pill'
-            onClick={() => handleCommunitySelect(community.name)}>
+            className="community-pill"
+            onClick={() => handleCommunitySelect(community.name)}
+          >
             {community.name}
           </div>
         ))}
       </div>
 
-      <button className='save-community-button' onClick={saveCommunityToUserAccount}>
+      <button
+        className="save-community-button"
+        onClick={saveCommunityToUserAccount}
+        disabled={!userCommunity} // Disable button if no community is selected
+      >
         Save Community
       </button>
     </div>

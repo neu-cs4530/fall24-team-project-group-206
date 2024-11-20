@@ -30,7 +30,7 @@ mongoose
 const app = express();
 const server = http.createServer(app);
 const socket: FakeSOSocket = new Server(server, {
-  cors: { origin: '*' },
+  cors: { origin: CLIENT_URL },
 });
 
 function startServer() {

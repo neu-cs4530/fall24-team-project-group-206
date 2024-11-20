@@ -52,7 +52,14 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
         <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+        <Route
+          path='/new/tagselection/communityselection'
+          element={
+            <ProtectedRoute user={user} socket={socket}>
+              <ChooseCommunityPage />
+            </ProtectedRoute>
+          }
+        /> 
 
         {/* Protected Routes */}
         {
