@@ -18,6 +18,24 @@ const useChat = () => {
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
   const [listOfUsers, setListOfUsers] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  const filteredUsers = listOfUsers
+    .filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(curr => curr.toLowerCase() !== user.username);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setDropdownOpen(true); // Open the dropdown when typing
+  };
+
+  const handleUserClick = (username: string) => {
+    setSend(username);
+    setSearchTerm(username);
+    setDropdownOpen(false); // Close the dropdown after selection
+  };
 
   const fetchUsers = async () => {
     try {
@@ -38,10 +56,6 @@ const useChat = () => {
       setSend(community || '');
     }
   }, [community, pathname, setSend]);
-
-  const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSend(e.target.value);
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentMessage(e.target.value);
@@ -121,12 +135,17 @@ const useChat = () => {
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
-    listOfUsers,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   };
 };
 

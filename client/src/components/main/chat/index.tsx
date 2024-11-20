@@ -9,29 +9,22 @@ const ChatPage = () => {
   const { pathname } = useLocation();
   const { community } = useParams();
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-  const handleSelectUser = (email: string) => {
-    setSearchTerm(email);
-    // setSendTo(email);
-  };
-
   const {
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
-    listOfUsers,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   } = useChat();
-
-  console.log(listOfUsers);
 
   return (
     <div className='chat-container'>
@@ -43,35 +36,31 @@ const ChatPage = () => {
         ) : (
           <>
             {/* <div className='chat-title'> */}
-            <span className='chat-title'>chatting now: </span>
-            <input
-              className='username'
-              id='searchBar'
-              placeholder='username'
-              type='text'
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            {searchTerm && listOfUsers?.length > 0 ? (
-              <ul className='dropdown-list'>
-                {listOfUsers.map((currUser: string) => (
-                  <li key={currUser} onClick={() => handleSelectUser(currUser)}>
-                    {currUser}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              'none'
-            )}
-
-            <span className='chat-title'>chatting now: </span>
-            <input
-              className='username'
-              id='searchBar'
-              placeholder={'email'}
-              type='text'
-              onChange={handleSendTo}
-            />
+            <div className='search-container'>
+              <span className='chat-title'>chatting now: </span>
+              <input
+                className='username'
+                id='searchBar'
+                placeholder='Search username...'
+                type='text'
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onBlur={() => setTimeout(() => setDropdownOpen(false), 200)} // Close dropdown after clicking outside
+                onFocus={() => setDropdownOpen(true)} // Open dropdown on focus
+              />
+              {dropdownOpen && filteredUsers.length > 0 && (
+                <div className='dropdown-list'>
+                  {filteredUsers.map(user => (
+                    <div
+                      key={user}
+                      className={`dropdown-item ${selectedUsers.includes(user) ? 'selected' : ''}`}
+                      onClick={() => handleUserClick(user)}>
+                      {user}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
