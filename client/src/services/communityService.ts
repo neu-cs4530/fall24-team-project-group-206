@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 import api from './config';
 import { Community, Question } from '../types';
@@ -25,7 +26,8 @@ const getCommunityQuestions = async (community: string): Promise<Question[]> => 
 };
 
 const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
-  const res = await api.get(`${COMMUNITY_API_URL}/getRelevantCommunities`);
+  console.log('Sending request with tags:', tags);
+  const res = await api.get(`${COMMUNITY_API_URL}/getRelevantCommunities`, { params: { tags } });
   if (res.status !== 200) {
     throw new Error('Error when fetching relevant communities');
   }

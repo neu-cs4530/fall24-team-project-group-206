@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { getRelevantCommunities } from '../services/communityService';
 
@@ -18,8 +19,10 @@ const useCommunityNames = (tags: string[]) => {
     const fetchRelevantCommunities = async () => {
       setLoading(true);
       setError('');
+      console.log('Fetching communities for tags:', tags);
       try {
         const res = await getRelevantCommunities(tags);
+        console.log('Response received:', res);
         if (Array.isArray(res)) {
           setRelevantCommunities(res);
         } else {

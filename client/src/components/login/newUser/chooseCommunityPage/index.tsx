@@ -15,7 +15,16 @@ const ChooseCommunityPage = () => {
   const { user } = useUserContext();
   const userTags = user?.tags || []; // Assuming tags are available in user context
   const { relevantCommunities, loading, error } = useRelevantCommunities(userTags);
+  console.log('relevantCommunities:', relevantCommunities);
+  console.log('loading:', loading);
+  console.log('error:', error);
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+
+  useEffect(() => {
+    if (user) {
+      console.log('User info:', user);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (relevantCommunities.length > 0) {
