@@ -21,7 +21,6 @@ const ChooseCommunityPage = () => {
       if (user) {
         console.log('Saving community for user:', user.email);
         
-        // Call the backend API to add the user to the selected community
         const response = await fetch(`/community/addUserToCommunity/${community}`, {
           method: 'PATCH',
           headers: {
