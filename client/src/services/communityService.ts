@@ -32,4 +32,17 @@ const addUserToCommunity = async (username: string, communityName: string): Prom
   return res.data;
 };
 
-export { getCommunityNames, getCommunityByName, addUserToCommunity };
+/**
+ * Fetches relevant communities based on user tags.
+ * @param tags - An array of tag names.
+ * @returns An array of `Community` objects.
+ */
+const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
+  const res = await api.post(`${COMMUNITY_API_URL}/relevant-communities`, { tags });
+  if (res.status !== 200) {
+    throw new Error('Error when fetching relevant communities');
+  }
+  return res.data;
+};
+
+export { getCommunityNames, getCommunityByName, addUserToCommunity, getRelevantCommunities };
