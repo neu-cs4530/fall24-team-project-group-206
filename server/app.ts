@@ -75,7 +75,7 @@ app.use('/tag', tagController());
 app.use('/answer', answerController(socket));
 app.use('/comment', commentController(socket));
 app.use('/community', communityController(socket));
-app.use('/user', userController());
+app.use('/user', userController(socket));
 
 // Export the app instance
 export { app, server, startServer };

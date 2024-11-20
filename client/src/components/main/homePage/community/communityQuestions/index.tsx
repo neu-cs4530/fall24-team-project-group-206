@@ -49,11 +49,11 @@ const CommunityQuestions = () => {
       }
     };
 
-    socket.on('communityUpdate', handleCommunityUpdate);
+    // socket.on('communityUpdate', handleCommunityUpdate);
 
     // eslint-disable-next-line consistent-return
     return () => {
-      socket.off('communityUpdate', handleCommunityUpdate);
+      // socket.off('communityUpdate', handleCommunityUpdate);
     };
   }, [socket, user.community]);
 

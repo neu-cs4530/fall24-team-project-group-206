@@ -224,7 +224,6 @@ export interface AnswerUpdatePayload {
 
 export interface CommunityUpdatePayload {
   community: string;
-  questions: Question[];
 }
 
 /**

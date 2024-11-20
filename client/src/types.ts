@@ -145,7 +145,6 @@ export interface CommentUpdatePayload {
 
 export interface CommunityUpdatePayload {
   community: string;
-  questions: Question[];
 }
 
 /**

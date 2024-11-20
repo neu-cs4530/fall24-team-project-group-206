@@ -27,10 +27,10 @@ const communityController = (socket: FakeSOSocket) => {
 
       res.json(communityData.questions);
 
-      socket.emit('communityUpdate', {
-        community,
-        questions: communityData.questions,
-      });
+      // socket.emit('communityUpdate', {
+      //   community,
+      //   questions: communityData.questions,
+      // });
     } catch (error) {
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
