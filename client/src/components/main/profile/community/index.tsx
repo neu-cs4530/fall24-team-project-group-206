@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 import './index.css';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
@@ -12,6 +13,8 @@ const CommunityInfo = () => {
   const { user } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [userCommunity, setUserCommunity] = useState<string>('');
+
+  const socket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:8000');
 
   useEffect(() => {
     const fetchUserCommunity = async () => {
@@ -36,16 +39,29 @@ const CommunityInfo = () => {
     setUserCommunity('');
   };
 
-  const saveCommunityToUserAccount = async () => {
+  const saveCommunityToUserAccount = async (community: string) => {
     if (!user?.username) return;
 
     try {
-      await updateUserCommunity(user.username, userCommunity);
-      console.log('Community updated:', userCommunity);
-    } catch (error) {
-      console.error('Error saving community:', error);
+      const updatedUser = await updateUserCommunity(user.username, community); // Save community
+      setUserCommunity(updatedUser.community);
+      socket.emit('communityUpdate', { communityName: community, user: user.username }); // Notify via socket
+      console.log('Community updated successfully:', updatedUser.community);
+    } catch (err) {
+      console.error('Failed to update user community:', err);
     }
   };
+
+  useEffect(() => {
+    socket.on('communityUpdate', updatedCommunity => {
+      if (updatedCommunity.users.includes(user.username)) {
+        setUserCommunity(updatedCommunity.name); // Sync UI with updated community
+      }
+    });
+    return () => {
+      socket.off('communityUpdate'); // Clean up on component unmount
+    };
+  }, [socket, user.username]);
 
   const filteredCommunities = communityNames.filter(community => community.name !== userCommunity);
 
@@ -79,7 +95,9 @@ const CommunityInfo = () => {
         ))}
       </div>
 
-      <button className='save-community-button' onClick={saveCommunityToUserAccount}>
+      <button
+        className='save-community-button'
+        onClick={() => saveCommunityToUserAccount(userCommunity)}>
         Save Community
       </button>
     </div>
