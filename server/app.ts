@@ -4,6 +4,7 @@
 // the server will listen on .env.CLIENT_URL if set, otherwise 8000
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
+import session from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { Server } from 'socket.io';
@@ -28,6 +29,14 @@ mongoose
   .catch(err => console.log('MongoDB connection error: ', err));
 
 const app = express();
+app.set('trust proxy', 1);
+app.use(session({
+  secret: process.env.SECRET || 'default_secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true },
+}));
+
 const server = http.createServer(app);
 const socket: FakeSOSocket = new Server(server, {
   cors: { origin: '*' },
