@@ -55,6 +55,12 @@ const useLogin = () => {
         community: userData.community,
         status: userData.status,
       });
+      if (userData.community) {
+        navigate('/communityHome');
+      } else {
+        navigate('/defaultHome');
+      }
+
       localStorage.setItem('user', JSON.stringify(userData));
       const redirectPath = localStorage.getItem('redirectPath') || '/home';
       localStorage.removeItem('redirectPath');
