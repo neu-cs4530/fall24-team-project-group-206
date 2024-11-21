@@ -94,6 +94,8 @@ const communityController = () => {
     }
   };
 
+  // Need to add a getter?
+
   router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
   router.get('/getCommunityByName/:name', getCommunityByName);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community

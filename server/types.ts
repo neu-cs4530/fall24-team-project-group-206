@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { Server } from 'socket.io';
+import QuestionModel from './models/questions';
 
 export type FakeSOSocket = Server<ServerToClientEvents>;
 
@@ -222,6 +223,14 @@ export interface AnswerUpdatePayload {
   answer: AnswerResponse;
 }
 
+export interface CommunityUpdatePayload {
+  _id?: string;
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
@@ -231,4 +240,5 @@ export interface ServerToClientEvents {
   viewsUpdate: (question: QuestionResponse) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
+  communityUpdate: (community: CommunityUpdatePayload) => void;
 }
