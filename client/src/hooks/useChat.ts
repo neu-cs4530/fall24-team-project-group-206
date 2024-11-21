@@ -68,8 +68,7 @@ const useChat = () => {
       if (
         user &&
         user.username &&
-        listOfUsers.includes(sendTo) &&
-        listOfUsers.includes(searchTerm)
+        ((listOfUsers.includes(sendTo) && listOfUsers.includes(searchTerm)) || community)
       ) {
         await addDoc(collection(db, 'messages'), {
           username: user.username,
@@ -138,6 +137,8 @@ const useChat = () => {
   };
 
   return {
+    pathname,
+    community,
     user,
     currentMessage,
     messages,

@@ -8,7 +8,11 @@ const Message = ({ message, username }: { message: string; username: string }) =
   return (
     <>
       <div className={`${username === user?.username ? 'chat-text-me' : 'chat-text-user'}`}>
-        {pathname.includes('community') && <p className='user-name'>{username}</p>}
+        {pathname.includes('community') && (
+          <p className={`${username === user?.username ? 'user-name-me' : 'user-name'}`}>
+            {username}
+          </p>
+        )}
         <p className='message'>{message}</p>
       </div>
       <br />

@@ -1,15 +1,12 @@
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
-import { useLocation, useParams } from 'react-router-dom';
-import { useState } from 'react';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
 const ChatPage = () => {
-  const { pathname } = useLocation();
-  const { community } = useParams();
-
   const {
+    pathname,
+    community,
     currentMessage,
     messages,
     send,

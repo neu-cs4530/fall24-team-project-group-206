@@ -62,12 +62,22 @@
 
 .chat-footer {
   background-color: #466694;
-  color: #FFFFFF;
+  color: #c6c6c6;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+}
+
+.user-name {
+  font-size: 15px;
+  color: #6b6b6b;
+}
+
+.user-name-me {
+  font-size: 15px;
+  color: #f0eded;
 }
 
 .chat-text-user, .chat-text-me {
@@ -84,6 +94,8 @@
   background: #f1f1f1;
   color: #000 !important;
   border-radius: 20px 20px 20px 3px;
+  margin-left: 10px;
+  font-size: 18px;
 }
 
 .chat-text-me {
@@ -94,6 +106,8 @@
   border-radius: 30px 20px 3px 30px;
   margin-bottom: 10px;
   clear: both;
+  margin-right: 10px;
+  font-size: 18px;
 }
 
 .username {
