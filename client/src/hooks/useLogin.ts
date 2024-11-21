@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
@@ -55,17 +56,26 @@ const useLogin = () => {
         community: userData.community,
         status: userData.status,
       });
+
+      Cookies.set('user', JSON.stringify(userData), {
+        expires: 7,
+        secure: true,
+        sameSite: 'Strict',
+        path: '/',
+      });
+      console.log('User cookie set:', Cookies.get('user'));
+
       if (userData.community) {
         navigate('/communityHome');
       } else {
         navigate('/defaultHome');
       }
 
-      localStorage.setItem('user', JSON.stringify(userData));
-      const redirectPath = localStorage.getItem('redirectPath') || '/home';
-      localStorage.removeItem('redirectPath');
+      // localStorage.setItem('user', JSON.stringify(userData));
+      // const redirectPath = localStorage.getItem('redirectPath') || '/home';
+      // localStorage.removeItem('redirectPath');
 
-      // // navigate('/home');
+      // navigate('/home');
       // navigate(redirectPath); // Redirect to the stored path
       // Cookies.set('user', JSON.stringify(userData), { expires: 7 });
       // Cookies.remove('redirectPath');
@@ -75,7 +85,7 @@ const useLogin = () => {
       // Cookies.remove('redirectPath');
 
       // Navigate to the saved path
-      navigate(redirectPath);
+      // navigate(redirectPath);
     } catch (error) {
       setErrorMessage((error as Error).message);
     }
