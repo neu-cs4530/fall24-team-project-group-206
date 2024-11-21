@@ -41,13 +41,14 @@ const CommunityInfo = () => {
 
     try {
       await updateUserCommunity(user.username, userCommunity);
+      user.community = userCommunity;
       console.log('Community updated:', userCommunity);
     } catch (error) {
       console.error('Error saving community:', error);
     }
   };
 
-  const filteredCommunities = communityNames.filter(community => community.name !== userCommunity);
+  const filteredCommunities = communityNames.filter(community => community !== userCommunity);
 
   return (
     <div className='community-info'>
@@ -71,10 +72,10 @@ const CommunityInfo = () => {
       <div className='community-pills-container'>
         {filteredCommunities.map(community => (
           <div
-            key={community.name}
+            key={community}
             className='community-pill'
-            onClick={() => handleCommunitySelect(community.name)}>
-            {community.name}
+            onClick={() => handleCommunitySelect(community)}>
+            {community}
           </div>
         ))}
       </div>

@@ -39,13 +39,14 @@
     margin-bottom: 5px;
   }
   .chat-button {
-    background-color: #d4a5a5;
+    background-color: #466694;
     text-decoration: none !important;
     color: white;
     text-align: center;
     padding: 10px;
     border: none;
     border-radius: 5px;
+    border: 2px solid white;
     cursor: pointer;
     font-size: 14px;
     width: 150px;
@@ -54,7 +55,6 @@
   }
 
   .chat-button:hover {
-    background-color: #f4ebe9;
-    color: #8c6e6e;
+    background-color: #324B73;
   }
       

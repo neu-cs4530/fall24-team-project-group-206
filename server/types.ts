@@ -222,6 +222,10 @@ export interface AnswerUpdatePayload {
   answer: AnswerResponse;
 }
 
+export interface CommunityUpdatePayload {
+  community: string;
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
@@ -231,4 +235,5 @@ export interface ServerToClientEvents {
   viewsUpdate: (question: QuestionResponse) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
+  communityUpdate: (update: CommunityUpdatePayload) => void;
 }

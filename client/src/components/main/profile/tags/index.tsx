@@ -45,7 +45,7 @@ const TagsInfo = () => {
 
     try {
       await updateUserTags(user.username, chosenTags);
-      console.log('Tags updated:', chosenTags);
+      user.tags = chosenTags;
     } catch (error) {
       console.error('Error saving tags:', error);
     }

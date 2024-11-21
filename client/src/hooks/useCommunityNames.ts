@@ -1,38 +1,41 @@
 import { useEffect, useState } from 'react';
 import { getCommunityNames } from '../services/communityService';
-import { Community } from '../types';
 
 /**
- * Custom hook to handle fetching community details by community name.
+ * Custom hook to handle fetching community names.
  *
- * @param t - The tag object to fetch data for
- *
- * @returns community - The current community details.
- * @returns setCommunity - Setter to manually update the community state if needed.
+ * @returns communityNames - The list of community names.
+ * @returns loading - A state indicating if the communities are still loading.
+ * @returns error - A state indicating if there was an error during fetching.
  */
 const useCommunityNames = () => {
-  const [communityNames, setCommunityNames] = useState<Community[]>([]);
+  const [communityNames, setCommunityNames] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCommunityNames = async () => {
+      setLoading(true);
+      setError('');
       try {
         const res = await getCommunityNames();
         if (Array.isArray(res)) {
-          setCommunityNames(res);
+          setCommunityNames(res.map(community => community.name)); // Assuming `name` is a property of the community object.
         } else {
           setCommunityNames([]);
         }
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e);
+        setError('Failed to fetch community names.');
+        console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchData();
-  });
 
-  return {
-    communityNames,
-  };
+    fetchCommunityNames();
+  }, []); // Run the fetch only once on mount
+
+  return { communityNames, loading, error };
 };
 
 export default useCommunityNames;

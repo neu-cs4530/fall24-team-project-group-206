@@ -21,6 +21,7 @@ import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
 import ChatPage from './main/chat';
+import DefaultHomePage from './main/homePage/default';
 import CommunityInfo from './main/profile/community';
 
 const ProtectedRoute = ({
@@ -137,7 +138,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='communityHome' element={<CommunityHomePage />} />
+            <Route path='defaultHome' element={<DefaultHomePage />} />
             <Route path='chat/community/:community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />
