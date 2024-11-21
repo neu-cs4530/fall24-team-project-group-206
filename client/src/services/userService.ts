@@ -46,5 +46,4 @@ const getUser = async (username: string): Promise<User> => {
   return res.data;
 };
 
-
 export { addUser, updateUserTags, updateUserCommunity, getUser };

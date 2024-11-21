@@ -44,7 +44,7 @@ const CommunityInfo = () => {
     setLoading(true); // Start loading
     try {
       const updatedUser = await updateUserCommunity(user.username, community); // Save community
-      setUser((prevUser) => ({
+      setUser(prevUser => ({
         ...prevUser,
         community: updatedUser.community,
       })); // Update context
@@ -62,7 +62,7 @@ const CommunityInfo = () => {
 
   // Listen for socket updates
   useEffect(() => {
-    socket.on('communityUpdate', (updatedCommunity) => {
+    socket.on('communityUpdate', updatedCommunity => {
       if (updatedCommunity.users.includes(user.username)) {
         setUserCommunity(updatedCommunity.name); // Sync UI with updated community
       }
@@ -74,23 +74,20 @@ const CommunityInfo = () => {
   }, [user.username]);
 
   // Filter out the user's current community from the list
-  const filteredCommunities = communityNames.filter(
-    (community) => community.name !== userCommunity
-  );
+  const filteredCommunities = communityNames.filter(community => community.name !== userCommunity);
 
   return (
-    <div className="community-info">
-      <div className="community-main-title">
+    <div className='community-info'>
+      <div className='community-main-title'>
         <h2>Your Community</h2>
       </div>
 
-      <div className="selected-community">
+      <div className='selected-community'>
         {userCommunity ? (
           <div
-            className="community-pill selected"
+            className='community-pill selected'
             onClick={handleCommunityRemove}
-            title="Click to remove your current community"
-          >
+            title='Click to remove your current community'>
             {userCommunity}
           </div>
         ) : (
@@ -98,25 +95,24 @@ const CommunityInfo = () => {
         )}
       </div>
 
-      <div className="title-two">
+      <div className='title-two'>
         <h3>Select a New Community</h3>
       </div>
-      <div className="community-pills-container">
-        {filteredCommunities.map((community) => (
+      <div className='community-pills-container'>
+        {filteredCommunities.map(community => (
           <div
             key={community.name}
-            className="community-pill"
-            onClick={() => handleCommunitySelect(community.name)}
-          >
+            className='community-pill'
+            onClick={() => handleCommunitySelect(community.name)}>
             {community.name}
           </div>
         ))}
       </div>
 
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className='error-message'>{error}</p>}
 
       <button
-        className="save-community-button"
+        className='save-community-button'
         onClick={() => saveCommunityToUserAccount(userCommunity)}
         disabled={loading || !userCommunity} // Disable if no community is selected or loading
       >

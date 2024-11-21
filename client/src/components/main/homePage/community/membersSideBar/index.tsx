@@ -18,10 +18,10 @@ const MembersSidebar = ({ communityName }: { communityName: string }) => {
   }, [communityName]);
 
   return (
-    <div className="members-sidebar">
+    <div className='members-sidebar'>
       <h3>Community Members</h3>
       <ul>
-        {members.map((member) => (
+        {members.map(member => (
           <li key={member}>{member}</li>
         ))}
       </ul>

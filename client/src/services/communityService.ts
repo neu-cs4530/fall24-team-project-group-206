@@ -35,7 +35,7 @@ const getCommunityByName = async (name: string): Promise<Community> => {
     // Encode the name to handle spaces or special characters
     const encodedName = encodeURIComponent(name);
     const res = await api.get(`${COMMUNITY_API_URL}/getCommunityByName/${encodedName}`);
-    
+
     if (res.status !== 200) {
       throw new Error('Error when fetching community by name');
     }
@@ -46,7 +46,6 @@ const getCommunityByName = async (name: string): Promise<Community> => {
     throw axiosError;
   }
 };
-
 
 /**
  * Adds a user to a community.
@@ -60,7 +59,7 @@ const addUserToCommunity = async (communityName: string, username: string) => {
     const encodedCommunityName = encodeURIComponent(communityName); // Encode community name
     const response = await axios.patch(
       `${COMMUNITY_API_URL}/addUserToCommunity/${encodedCommunityName}`,
-      { username }
+      { username },
     );
     return response.data;
   } catch (error) {
@@ -69,8 +68,5 @@ const addUserToCommunity = async (communityName: string, username: string) => {
     throw axiosError; // Throw the error to be caught in saveCommunityAndContinue
   }
 };
-
-
-
 
 export { getCommunityNames, getCommunityByName, addUserToCommunity };

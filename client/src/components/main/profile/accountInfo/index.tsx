@@ -27,7 +27,7 @@ const AccountInfo = () => {
   useEffect(() => {
     console.log('Fetched user data:', userData);
   }, [userData]);
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       const firebaseUser = auth.currentUser;
@@ -95,6 +95,6 @@ const AccountInfo = () => {
       </div>
     </div>
   );
-      };  
+};
 
 export default AccountInfo;

@@ -36,11 +36,7 @@ const ProtectedRoute = ({
     return <Navigate to='/' />;
   }
 
-  return (
-    <UserContext.Provider value={{ user, setUser, socket }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, setUser, socket }}>{children}</UserContext.Provider>;
 };
 
 /**
