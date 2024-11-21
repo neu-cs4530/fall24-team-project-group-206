@@ -18,7 +18,7 @@ const TagPage = () => {
         <div className='bold_title'>All Tags</div>
         <AskQuestionButton />
       </div>
-      <div className='tag_list right_padding'>
+      <div className='tag-list right_padding'>
         {tlist.map((t, idx) => (
           <TagView key={idx} t={t} clickTag={clickTag} />
         ))}

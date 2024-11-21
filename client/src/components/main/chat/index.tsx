@@ -1,20 +1,26 @@
 import './index.css';
 import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
 const ChatPage = () => {
-  const { pathname } = useLocation();
   const {
+    pathname,
+    community,
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   } = useChat();
 
   return (
@@ -22,18 +28,35 @@ const ChatPage = () => {
       <div className='chat-header d-flex'>
         {pathname.includes('community') ? (
           <span className='chat-title'>
-            chatting now: <span className='community-title'>community</span>
+            chatting now: <span className='community-title'>{community}</span>
           </span>
         ) : (
           <>
-            <span className='chat-title'>chatting now: </span>
-            <input
-              className='username'
-              id='searchBar'
-              placeholder={'email'}
-              type='text'
-              onChange={handleSendTo}
-            />
+            <div className='search-container'>
+              <span className='chat-title'>chatting now: </span>
+              <input
+                className='username'
+                id='searchBar'
+                placeholder='Search username...'
+                type='text'
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onBlur={() => setTimeout(() => setDropdownOpen(false), 200)} // Close dropdown after clicking outside
+                onFocus={() => setDropdownOpen(true)} // Open dropdown on focus
+              />
+              {dropdownOpen && filteredUsers.length > 0 && (
+                <div className='dropdown-list'>
+                  {filteredUsers.map(user => (
+                    <div
+                      key={user}
+                      className={`dropdown-item ${selectedUsers.includes(user) ? 'selected' : ''}`}
+                      onClick={() => handleUserClick(user)}>
+                      {user}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>

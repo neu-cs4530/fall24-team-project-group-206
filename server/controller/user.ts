@@ -110,6 +110,20 @@ const userController = () => {
   });
   
 
+  router.get('/getListOfAllUsers', async (req: Request, res: Response) => {
+    try {
+      const users = await UserModel.find();
+
+      if (!users) {
+        return res.status(404).json({ message: 'No users not found' });
+      }
+
+      return res.status(200).json(users);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error fetching user data' });
+    }
+  });
+
   return router;
 };
 

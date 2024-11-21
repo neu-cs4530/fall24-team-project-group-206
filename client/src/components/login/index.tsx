@@ -19,22 +19,18 @@ const UserSelection = () => {
   };
 
   return (
-    <>
-      <div className='container'>
-        <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
-        <div>
-          <h2>Welcome to Fake Stack Overflow!</h2>
-        </div>
-        <div className='button-group'>
-          <button type='button' className='user-button' onClick={handleNewUserClick}>
-            New User
-          </button>
-          <button type='button' className='user-button' onClick={handleExistingUserClick}>
-            Existing User
-          </button>
-        </div>
+    <div className='container'>
+      <img src={logo} alt='code quest logo' className='logo-login' />
+      <h2>Welcome to CodeQuest!</h2>
+      <div className='button-group'>
+        <button type='button' className='user-button' onClick={handleNewUserClick}>
+          New User
+        </button>
+        <button type='button' className='user-button' onClick={handleExistingUserClick}>
+          Existing User
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

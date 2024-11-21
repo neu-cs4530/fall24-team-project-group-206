@@ -1,13 +1,9 @@
 import React from 'react';
-import './index.css';
+import '../index.css';
 import { useNavigate } from 'react-router-dom';
 import useLogin from '../../../hooks/useLogin';
 import logo from '../../../logo.svg';
 
-/**
- * Login Component contains a form that allows the user to input their username, which is then submitted
- * to the application's context through the useLoginContext hook.
- */
 const Login = () => {
   const navigate = useNavigate();
   const handleUserTypeSelection = () => {
@@ -22,7 +18,7 @@ const Login = () => {
       <img src={logo} alt='Fake Stack Overflow Logo' className='logo-login' />
       <h2>Welcome back!</h2>
       <h4>Please enter your email and password.</h4>
-      {errorMessage && <p className='error-message'>{errorMessage}</p>}{' '}
+      {errorMessage && <p className='error-message'>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type='email'
@@ -31,7 +27,7 @@ const Login = () => {
           placeholder='Enter your email'
           required
           className='input-text'
-          id={'emailInput'}
+          id='emailInput'
         />
         <input
           type='password'
@@ -40,14 +36,16 @@ const Login = () => {
           placeholder='Enter your password'
           required
           className='input-text'
-          id={'passwordInput'}
+          id='passwordInput'
         />
-        <button type='submit' className='login-button'>
-          Submit
-        </button>
-        <button type='button' className='back-button' onClick={handleUserTypeSelection}>
-          Back
-        </button>
+        <div className='button-group'>
+          <button type='button' className='back-button' onClick={handleUserTypeSelection}>
+            Back
+          </button>
+          <button type='submit' className='login-button'>
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

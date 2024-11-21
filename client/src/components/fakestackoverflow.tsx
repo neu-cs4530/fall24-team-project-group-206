@@ -77,8 +77,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket }) => {
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='home' element={<CommunityHomePage />} />
-            <Route path='chat/community' element={<ChatPage />} />
+            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='chat/community/:community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />
             <Route path='chat' element={<ChatPage />} />

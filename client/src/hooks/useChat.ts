@@ -1,10 +1,15 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { useLocation, useParams } from 'react-router-dom';
 import useUserContext from './useUserContext';
+import { getListOfAllUsers } from '../services/userService';
 import { db } from '../firebaseConfig';
+import { User } from '../types';
 
 const useChat = () => {
+  const { pathname } = useLocation();
+  const { community } = useParams();
   const { user } = useUserContext();
   const [currentMessage, setCurrentMessage] = useState<string>('');
   const [messages, setMessages] = useState<{ message: string; username: string; sendTo: string }[]>(
@@ -12,10 +17,47 @@ const useChat = () => {
   );
   const [send, setSend] = useState<string>('');
   const messageContainer = document.querySelector('.scrollable-container');
+  const [listOfUsers, setListOfUsers] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedUsers] = useState<string[]>([]);
 
-  const handleSendTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const filteredUsers = listOfUsers
+    .filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(curr => curr.toLowerCase() !== user.username);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
+    setSearchTerm(e.target.value);
+    setDropdownOpen(true); // Open the dropdown when typing
   };
+
+  const handleUserClick = (username: string) => {
+    setSend(username);
+    setSearchTerm(username);
+    setDropdownOpen(false); // Close the dropdown after selection
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const result = await getListOfAllUsers();
+      const usernames = Array.isArray(result) ? result.map((u: User) => u.username) : [];
+      setListOfUsers(usernames);
+    } catch (err) {
+      console.error('Error fetching list of users:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers(); // Fetch users on mount
+  }, []);
+
+  useEffect(() => {
+    if (pathname.includes('community')) {
+      setSend(community || '');
+      setSearchTerm(community || '');
+    }
+  }, [community, pathname, setSend, setSearchTerm]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentMessage(e.target.value);
@@ -23,7 +65,11 @@ const useChat = () => {
 
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
     try {
-      if (user && user.username) {
+      if (
+        user &&
+        user.username &&
+        ((listOfUsers.includes(sendTo) && listOfUsers.includes(searchTerm)) || community)
+      ) {
         await addDoc(collection(db, 'messages'), {
           username: user.username,
           message,
@@ -31,11 +77,9 @@ const useChat = () => {
           timestamp: new Date(),
         });
         setCurrentMessage(''); // Clear the input after sending
-      } else {
-        console.error('User not authenticated or username missing');
       }
     } catch (error) {
-      console.error('Error saving message:', error);
+      console.error('Error saving message or user does not exist:', error);
     }
   };
 
@@ -44,6 +88,24 @@ const useChat = () => {
 
     // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
     const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
+
+    if (pathname.includes('community') && community) {
+      const unsubscribe = onSnapshot(q, querySnapshot => {
+        const loadedMessages = querySnapshot.docs
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          .map(doc => ({
+            message: doc.data().message,
+            username: doc.data().username,
+            sendTo: doc.data().sendTo,
+            timestamp: doc.data().timestamp,
+          }))
+          .filter(msg => msg.sendTo === community);
+        setMessages(loadedMessages);
+      });
+
+      // eslint-disable-next-line consistent-return
+      return () => unsubscribe();
+    }
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const loadedMessages = querySnapshot.docs
@@ -62,10 +124,9 @@ const useChat = () => {
       setMessages(loadedMessages);
     });
 
-    // Cleanup the snapshot listener on component unmount
     // eslint-disable-next-line consistent-return
     return () => unsubscribe();
-  }, [user, send]);
+  }, [user, send, pathname, community]);
 
   const scrollUp = () => {
     messageContainer?.scrollBy(0, -100);
@@ -76,15 +137,23 @@ const useChat = () => {
   };
 
   return {
+    pathname,
+    community,
     user,
     currentMessage,
     messages,
     send,
-    handleSendTo,
     handleInputChange,
     scrollUp,
     saveMessagesToUserAccount,
     scrollDown,
+    handleUserClick,
+    dropdownOpen,
+    selectedUsers,
+    handleSearchChange,
+    filteredUsers,
+    setDropdownOpen,
+    searchTerm,
   };
 };
 

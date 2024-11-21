@@ -1,0 +1,28 @@
+.post-a-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #466694; 
+    width: 180px;
+    height: 55px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .post-a-button:hover {
+    background-color: #324B73; 
+    transform: translateY(-2px);
+  }
+  
+  .post-a-button:active {
+    background-color: #466694;
+    transform: translateY(0);
+  }
+
+  .mandatory_indicator {
+    color: white;
+  }
+  
