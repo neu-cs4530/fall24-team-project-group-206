@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import UserModel from '../models/users';
+import CommunityModel from '../models/communities';
 
 const userController = () => {
   const router: Router = express.Router();
@@ -53,43 +54,61 @@ const userController = () => {
 
   router.put('/updateCommunity', async (req: Request, res: Response) => {
     try {
-      const { username, community } = req.body;
-
-      if (!username) {
+      const { username, community: newCommunity } = req.body;
+  
+      if (!username || !newCommunity) {
         return res.status(400).json({ message: 'Username and community are required' });
       }
-
-      const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
-
+  
+      // Find the user to get their current community
+      const user = await UserModel.findOne({ username });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-
-      return res.status(200).json(user);
+  
+      const oldCommunity = user.community;
+  
+      // Update the user's community
+      user.community = newCommunity;
+      await user.save();
+  
+      // Remove the user from the old community if it exists
+      if (oldCommunity) {
+        await CommunityModel.updateOne(
+          { name: oldCommunity },
+          { $pull: { users: username } } // Remove the username from the users array
+        );
+      }
+  
+      // Add the user to the new community
+      await CommunityModel.updateOne(
+        { name: newCommunity },
+        { $addToSet: { users: username } }, // Add the username to the users array (no duplicates)
+        { upsert: true } // If the community doesn't exist, create it
+      );
+  
+      return res.status(200).json(user); // Return the updated user
     } catch (error) {
+      console.error('Error updating community:', error);
       return res.status(500).json({ message: 'Error updating community' });
     }
   });
+  
 
   router.get('/getUser', async (req: Request, res: Response) => {
-    try {
-      const { username } = req.query;
-
-      if (!username) {
-        return res.status(400).json({ message: 'Username is required' });
-      }
-
-      const user = await UserModel.findOne({ username });
-
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      return res.status(200).json(user);
-    } catch (error) {
-      return res.status(500).json({ message: 'Error fetching user data' });
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
     }
+  
+    const user = await UserModel.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  
+    return res.status(200).json(user);
   });
+  
 
   return router;
 };

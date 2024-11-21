@@ -1,18 +1,12 @@
 import { useContext } from 'react';
-import LoginContext, { LoginContextType } from '../contexts/LoginContext';
+import LoginContext from '../contexts/LoginContext';
+import { LoginContextType } from '../contexts/LoginContext';
 
-/**
- * Custom hook to access the LoginContext.
- *
- * @throws It will throw an error if the `LoginContext` is null.
- *
- * @returns context - the context value for managing login state, including the `setUser` function.
- */
 const useLoginContext = (): LoginContextType => {
   const context = useContext(LoginContext);
 
-  if (context === null) {
-    throw new Error('Login context is null.');
+  if (!context) {
+    throw new Error('useLoginContext must be used within a LoginContext.Provider');
   }
 
   return context;

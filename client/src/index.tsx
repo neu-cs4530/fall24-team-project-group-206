@@ -13,25 +13,26 @@ const App = () => {
 
   const serverURL = process.env.REACT_APP_SERVER_URL;
 
-  if (serverURL === undefined) {
+  if (!serverURL) {
     throw new Error("Environment variable 'REACT_APP_SERVER_URL' must be defined");
   }
 
   useEffect(() => {
-    if (!socket) {
-      setSocket(io(serverURL));
-    }
+    const newSocket = io(serverURL); // Establish the socket connection
+    setSocket(newSocket);
 
     return () => {
-      if (socket !== null) {
-        socket.disconnect();
-      }
+      newSocket.disconnect(); // Clean up on unmount
     };
-  }, [socket, serverURL]);
+  }, [serverURL]); // Dependencies updated to avoid reconnecting unnecessarily
 
   return (
     <Router>
-      <FakeStackOverflow socket={socket} />
+      {socket ? (
+        <FakeStackOverflow socket={socket} />
+      ) : (
+        <div>Loading...</div> // Show a fallback if the socket hasn't connected yet
+      )}
     </Router>
   );
 };

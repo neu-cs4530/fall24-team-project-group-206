@@ -23,26 +23,38 @@ import CommunityInfo from './main/profile/community';
 
 const ProtectedRoute = ({
   user,
+  setUser,
   socket,
   children,
 }: {
-  user: User | null;
-  socket: FakeSOSocket | null;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
+  socket: FakeSOSocket;
   children: JSX.Element;
 }) => {
   if (!user || !socket) {
     return <Navigate to='/' />;
   }
 
-  return <UserContext.Provider value={{ user, socket }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, setUser, socket }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 /**
  * Represents the main component of the application.
- * It manages the state for search terms and the main title.
  */
-const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
-  const [user, setUser] = useState<User | null>(null);
+const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket }) => {
+  const [user, setUser] = useState<User>({
+    username: 'default@example.com', // Set default email as username
+    community: '', // No initial community
+    tags: [], // No tags by default
+    firstName: 'Default', // Add a meaningful default for firstName
+    lastName: 'User', // Add a meaningful default for lastName
+    status: 'high', // Default user status
+  });
 
   return (
     <LoginContext.Provider value={{ setUser }}>
@@ -55,21 +67,21 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route
           path='/new/tagselection/communityselection'
           element={
-            <ProtectedRoute user={user} socket={socket}>
+            <ProtectedRoute user={user} setUser={setUser} socket={socket}>
               <ChooseCommunityPage />
             </ProtectedRoute>
           }
-        /> 
+        />
 
         {/* Protected Routes */}
         {
           <Route
             element={
-              <ProtectedRoute user={user} socket={socket}>
+              <ProtectedRoute user={user} setUser={setUser} socket={socket}>
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='home' element={<CommunityHomePage />} />
             <Route path='chat/community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />

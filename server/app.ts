@@ -1,7 +1,3 @@
-// The server should run on localhost port 8000.
-// This is where you should start writing server-side code for this application.
-// startServer() is a function that starts the server
-// the server will listen on .env.CLIENT_URL if set, otherwise 8000
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
@@ -23,9 +19,7 @@ const MONGO_URL = `${process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017'}/fak
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 const port = parseInt(process.env.PORT || '8000');
 
-mongoose
-  .connect(MONGO_URL)
-  .catch(err => console.log('MongoDB connection error: ', err));
+mongoose.connect(MONGO_URL).catch(err => console.log('MongoDB connection error: ', err));
 
 const app = express();
 const server = http.createServer(app);
@@ -77,5 +71,4 @@ app.use('/comment', commentController(socket));
 app.use('/community', communityController(socket));
 app.use('/user', userController());
 
-// Export the app instance
 export { app, server, startServer };
