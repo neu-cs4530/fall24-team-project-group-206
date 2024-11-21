@@ -20,7 +20,7 @@ const useChat = () => {
   const [listOfUsers, setListOfUsers] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers] = useState<string[]>([]);
 
   const filteredUsers = listOfUsers
     .filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()))
