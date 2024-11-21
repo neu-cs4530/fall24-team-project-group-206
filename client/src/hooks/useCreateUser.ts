@@ -2,6 +2,7 @@
 import { ChangeEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { auth } from '../firebaseConfig';
 import { User } from '../types';
 import { addUser } from '../services/userService';
@@ -61,10 +62,17 @@ const useCreateUser = () => {
       };
       setUser(user);
       await addUser(user);
+      Cookies.set('user', JSON.stringify(user), {
+        expires: 7,
+        secure: true,
+        sameSite: 'Strict',
+        path: '/',
+      });
+      setIsLoading(false);
       navigate('/new/tagselection');
     } catch (error) {
       setErrorMessage((error as Error).message);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 

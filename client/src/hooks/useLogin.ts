@@ -63,6 +63,7 @@ const useLogin = () => {
         sameSite: 'Strict',
         path: '/',
       });
+
       console.log('User cookie set:', Cookies.get('user'));
 
       if (userData.community) {
@@ -70,22 +71,6 @@ const useLogin = () => {
       } else {
         navigate('/defaultHome');
       }
-
-      // localStorage.setItem('user', JSON.stringify(userData));
-      // const redirectPath = localStorage.getItem('redirectPath') || '/home';
-      // localStorage.removeItem('redirectPath');
-
-      // navigate('/home');
-      // navigate(redirectPath); // Redirect to the stored path
-      // Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-      // Cookies.remove('redirectPath');
-
-      // Store redirect path in cookies
-      // const redirectPath = Cookies.get('redirectPath') || '/home';
-      // Cookies.remove('redirectPath');
-
-      // Navigate to the saved path
-      // navigate(redirectPath);
     } catch (error) {
       setErrorMessage((error as Error).message);
     }
