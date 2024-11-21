@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+/* eslint-disable import/no-extraneous-dependencies */
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import Layout from './layout';
 import { FakeSOSocket, User } from '../types';
 import LoginContext from '../contexts/LoginContext';
@@ -30,7 +32,13 @@ const ProtectedRoute = ({
   socket: FakeSOSocket | null;
   children: JSX.Element;
 }) => {
+  const { pathname } = useLocation(); // Get the current path
+
   if (!user || !socket) {
+    localStorage.setItem('redirectPath', pathname);
+    // if (pathname !== '/') {
+    //   Cookies.set('redirectPath', pathname, { expires: 7 });
+    // }
     return <Navigate to='/' />;
   }
 
@@ -43,6 +51,59 @@ const ProtectedRoute = ({
  */
 const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is stored in cookies
+    const storedUser = localStorage.getItem('user');
+    console.log('Stored User:', storedUser);
+    if (storedUser) {
+      // Set the user from cookies
+      setUser(JSON.parse(storedUser));
+    }
+
+    // After the page reload, navigate the user to the previous route if it's stored
+    const redirectPath = localStorage.getItem('redirectPath');
+    if (redirectPath) {
+      // Navigate to the saved path
+      navigate(redirectPath);
+      localStorage.removeItem('redirectPath'); // Remove the path after use
+    } else if (!storedUser) {
+      // If no user is found, navigate to login page
+      navigate('/');
+    }
+  }, [navigate]);
+
+  // useEffect(() => {
+  //   const storedUser = Cookies.get('user');
+  //   const redirectPath = Cookies.get('redirectPath');
+
+  //   if (storedUser) {
+  //     // Set user from cookies if exists
+  //     setUser(JSON.parse(storedUser));
+
+  //     if (redirectPath) {
+  //       // Navigate to the stored path after successful login
+  //       navigate(redirectPath);
+  //       Cookies.remove('redirectPath'); // Remove redirectPath cookie
+  //     } else {
+  //       // If no redirectPath, navigate to default page
+  //       navigate('/home');
+  //     }
+  //   } else {
+  //     // If no user found, navigate to login
+  //     navigate('/');
+  //   }
+  // }, [navigate]);
+
+  useEffect(() => {
+    if (user) {
+      console.log('Saving user to localStorage:', user); // Debugging
+      localStorage.setItem('user', JSON.stringify(user)); // Save user data to localStorage
+      // Cookies.set('user', JSON.stringify(user), { expires: 7 }); // Save user data to cookies
+      // Cookies.remove('redirectPath');
+    }
+  }, [user]);
 
   return (
     <LoginContext.Provider value={{ setUser }}>
@@ -51,8 +112,22 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/' element={<UserSelection />} />
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
-        <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+        <Route
+          path='/new/tagselection'
+          element={
+            <ProtectedRoute user={user} socket={socket}>
+              <ChooseTagsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/new/tagselection/communityselection'
+          element={
+            <ProtectedRoute user={user} socket={socket}>
+              <ChooseCommunityPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Protected Routes */}
         {

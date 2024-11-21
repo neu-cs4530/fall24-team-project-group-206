@@ -20,18 +20,23 @@ const AccountInfo = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const firebaseUser = auth.currentUser;
-      if (firebaseUser && firebaseUser.email) {
-        try {
-          const data = await getUser(firebaseUser.email);
-          setUserData({
-            first_name: data.firstName,
-            last_name: data.lastName,
-            username: data.username,
-            status: data.status,
-          });
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUserData(JSON.parse(storedUser));
+      } else {
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser && firebaseUser.email) {
+          try {
+            const data = await getUser(firebaseUser.email);
+            setUserData({
+              first_name: data.firstName,
+              last_name: data.lastName,
+              username: data.username,
+              status: data.status,
+            });
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
         }
       }
     };
