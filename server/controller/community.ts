@@ -1,12 +1,11 @@
+/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community, communityRequest, FakeSOSocket } from '../types';
-import { usersNewCommunity } from '../models/application';
+import { Community, FakeSOSocket } from '../types';
+// import { usersNewCommunity } from '../models/application';
 // import QuestionModel from '../models/questions';
 import TagModel from '../models/tags';
-import { FakeSOSocket } from '../types';
 
-const communityController = (socket: FakeSOSocket) => {
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
@@ -24,6 +23,18 @@ const communityController = (socket: FakeSOSocket) => {
       const community = await CommunityModel.findOne({ name }).populate('questions');
       if (!community) {
         return null;
+      }
+      if (!community.questions || community.questions.length === 0) {
+        console.log('No questions available for this community.');
+        return { ...community.toObject(), questions: [] };
+      }
+      // Return the community with populated question data
+      return { ...community.toObject(), questions: community.questions };
+    } catch (error) {
+      console.error('Error fetching community by name:', error);
+      throw error;
+    }
+  };
 
   const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
@@ -146,11 +157,37 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  const getRelevantCommunities = async (req: Request, res: Response): Promise<void> => {
+    const { tags } = req.query;
+
+    if (!tags || !Array.isArray(tags)) {
+      res.status(400).json({ error: 'Invalid or missing tags' });
+      return;
+    }
+
+    try {
+      // Find matching tags in the Tag model
+      const matchingTags = await TagModel.find({ name: { $in: tags } });
+
+      if (matchingTags.length === 0) {
+        res.json([]);
+        return;
+      }
+
+      const tagNames = matchingTags.map(tag => tag.name);
+      const communities = await CommunityModel.find({ tags: { $in: tagNames } });
+      const communityNames = communities.map(community => community.name);
+      res.json(communityNames);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching relevant communities' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames);
+  router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
-  // router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
   router.get('/getRelevantCommunities', getRelevantCommunities);
-  router.patch('/addUserToCommunity', addUserToCommunity); // New route for adding user to community
+  router.patch('/addUserToCommunity', addUserToCommunity);
   router.get('getCommunityMembers/:community', getCommunityMembers);
 
   return router;

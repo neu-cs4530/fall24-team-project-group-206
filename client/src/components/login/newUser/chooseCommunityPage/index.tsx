@@ -33,11 +33,11 @@ const ChooseCommunityPage = () => {
 
   const saveCommunityToUserAccount = async (community: string) => {
     try {
-      const user = auth.currentUser;
-      if (user) {
-        console.log('Saving community for user:', user.email);
-        await updateUserCommunity(user.email!, community); // Call the backend service
-        await updatedUserInCommunity(user.email!, community);
+      const { currentUser } = auth;
+      if (currentUser) {
+        console.log('Saving community for user:', currentUser.email);
+        await updateUserCommunity(currentUser.email!, community); // Call the backend service
+        await updatedUserInCommunity(currentUser.email!, community);
         console.log('Community updated successfully');
       } else {
         console.error('No user is logged in.');

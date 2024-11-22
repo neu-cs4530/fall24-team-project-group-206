@@ -56,4 +56,10 @@ const getCommunityMembers = async (community: string): Promise<User[]> => {
   return res.data;
 };
 
-export { getCommunityNames, getCommunityQuestions, getRelevantCommunities, updatedUserInCommunity, getCommunityMembers };
+export {
+  getCommunityNames,
+  getCommunityQuestions,
+  getRelevantCommunities,
+  updatedUserInCommunity,
+  getCommunityMembers,
+};
