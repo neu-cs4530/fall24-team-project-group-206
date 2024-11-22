@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community } from '../types';
+import { Community, FakeSOSocket } from '../types';
 // import QuestionModel from '../models/questions';
 
-const communityController = () => {
+const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
   /**
@@ -28,21 +28,6 @@ const communityController = () => {
       res.status(500).json({ error: 'Failed to retrieve communities' });
     }
   };
-
-  // const getCommunityByName = async (req: Request, res: Response): Promise<void> => {
-  //   try {
-  //     const { name } = req.params;
-  //     const community = await CommunityModel.findOne({ name });
-
-  //     if (!community) {
-  //       res.status(404).send(`Community with name "${name}" not found`);
-  //     } else {
-  //       res.json(community); // Return the community as JSON
-  //     }
-  //   } catch (err) {
-  //     res.status(500).send(`Error when fetching community: ${(err as Error).message}`);
-  //   }
-  // };
 
   const getCommunityByName = async (name: string): Promise<Community | null> => {
     try {
@@ -71,20 +56,34 @@ const communityController = () => {
     const { communityName } = req.params; // Get communityId from URL parameter
 
     try {
-      const community = await CommunityModel.findById(communityName);
-
-      if (!community) {
-        res.status(404).send('Community not found');
-        return;
-      }
+      const community = await CommunityModel.findOne({ users: username });
 
       // Check if the username is already in the community's users list
-      if (community.users.includes(username)) {
+      if (community?.users.includes(username)) {
         res.status(400).send('Username is already in the community');
       }
-      // Add the username to the community's users list
-      community.users.push(username);
-      await community.save();
+
+      if (community) {
+        community.users = community.users.filter(user => user !== username);
+        await community.save();
+
+        socket.emit('communityUpdate', {
+          name: community.name,
+          tags: community.tags,
+          users: community.users,
+          questions: community.questions,
+        });
+
+        await CommunityModel.findOneAndUpdate(
+          { name: communityName },
+          { $addToSet: { users: username } },
+          { new: true },
+        );
+
+        console.log(`${communityName} + ${username}`);
+
+        res.status(200).json('successfully added to the community users list');
+      }
 
       // Return the updated community
       res.json(community);
