@@ -17,7 +17,6 @@ const getCommunityNames = async (): Promise<Community[]> => {
 };
 
 const getCommunityByName = async (name: string): Promise<Community> => {
-  console.log('got her yay');
   const res = await api.get(`${COMMUNITY_API_URL}/getCommunityByName/${name}`);
   if (res.status !== 200) {
     throw new Error('Error when fetching community by name');
@@ -29,7 +28,6 @@ const updatedUserCommunity = async (
   username: string,
   communityName: string,
 ): Promise<Community> => {
-  console.log('got here');
   const res = await api.patch(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, {
     username,
   });

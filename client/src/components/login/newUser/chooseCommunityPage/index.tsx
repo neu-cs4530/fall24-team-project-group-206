@@ -6,11 +6,13 @@ import { auth } from '../../../../firebaseConfig';
 import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
+import useUserContext from '../../../../hooks/useUserContext';
 
 /**
  * Depicts communities that the user can choose from.
  */
 const ChooseCommunityPage = () => {
+  // const { socket } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
 

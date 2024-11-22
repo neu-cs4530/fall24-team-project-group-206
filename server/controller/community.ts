@@ -56,37 +56,48 @@ const communityController = (socket: FakeSOSocket) => {
     const { communityName } = req.params; // Get communityId from URL parameter
 
     try {
-      const community = await CommunityModel.findOne({ users: username });
+      const existingCommunity = await CommunityModel.findOne({ users: username });
 
-      // Check if the username is already in the community's users list
-      if (community?.users.includes(username)) {
-        res.status(400).send('Username is already in the community');
-      }
-
-      if (community) {
-        community.users = community.users.filter(user => user !== username);
-        await community.save();
+      // removes user from existing community
+      if (existingCommunity) {
+        existingCommunity.users = existingCommunity.users.filter(user => user !== username);
+        await existingCommunity.save();
 
         socket.emit('communityUpdate', {
-          name: community.name,
-          tags: community.tags,
-          users: community.users,
-          questions: community.questions,
+          name: existingCommunity.name,
+          tags: existingCommunity.tags,
+          users: existingCommunity.users,
+          questions: existingCommunity.questions,
         });
 
-        await CommunityModel.findOneAndUpdate(
+        // adds user to new community
+        const updatedCommunity = await CommunityModel.findOneAndUpdate(
           { name: communityName },
           { $addToSet: { users: username } },
           { new: true },
         );
 
+        // Check if the username is already in the community's users list
+        if (!updatedCommunity) {
+          res.status(400).send('Username is already in the community');
+          return;
+        }
+
         console.log(`${communityName} + ${username}`);
 
+        // emit update for the new community
+        socket.emit('communityUpdate', {
+          name: updatedCommunity.name,
+          tags: updatedCommunity.tags,
+          users: updatedCommunity.users,
+          questions: updatedCommunity.questions,
+        });
+
+        console.log(`Added user ${username} to community ${updatedCommunity.name}`);
         res.status(200).json('successfully added to the community users list');
       }
-
-      // Return the updated community
-      res.json(community);
+      // // Return the updated community
+      // res.json(community);
     } catch (error) {
       console.error('Error when adding user to community:', error);
       res.status(500).json({ error: 'Failed to add user to community' });
