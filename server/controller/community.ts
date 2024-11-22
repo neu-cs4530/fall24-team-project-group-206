@@ -1,11 +1,20 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community } from '../types';
+import { Community, CommunityRequest } from '../types';
 // import QuestionModel from '../models/questions';
+import { addUserToCommunity } from '../models/application';
 
 const communityController = () => {
   const router: Router = express.Router();
+
+  const addUser = async (req: Request, res: Response): Promise<void> => {
+    addUserToCommunity(req, res, 'add');
+  };
+
+  const removeUser = async (req: Request, res: Response): Promise<void> => {
+    addUserToCommunity(req, res, 'remove');
+  };
 
   /**
    * Retrieves a list of tags along with the number of questions associated with each tag.
@@ -63,34 +72,43 @@ const communityController = () => {
   };
 
   /**
-   * Adds a user's username to the community.
-   * This function will update the community model by adding the username to the community's list of users.
+   * Helper function to handle upvoting or downvoting a question.
+   *
+   * @param req The VoteRequest object containing the question ID and the username.
+   * @param res The HTTP response object used to send back the result of the operation.
+   * @param type The type of vote to perform (upvote or downvote).
+   *
+   * @returns A Promise that resolves to void.
    */
-  const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
-    const { username } = req.body; // Expecting the userId and username in the body of the request
-    const { communityName } = req.params; // Get communityId from URL parameter
+  const addUserToCommunity = async (
+    req: CommunityRequest,
+    res: Response,
+    type: 'add' | 'remove',
+  ): Promise<void> => {
+    if (!req.body.id || !req.body.name) {
+      res.status(400).send('Invalid request');
+      return;
+    }
+
+    const { id, name } = req.body;
 
     try {
-      const community = await CommunityModel.findById(communityName);
-
-      if (!community) {
-        res.status(404).send('Community not found');
-        return;
+      let status;
+      if (type === 'add') {
+        status = await addUserToCommunity(id, name, type);
+      } else {
+        status = await addUserToCommunity(id, name, 'remove');
       }
 
-      // Check if the username is already in the community's users list
-      if (community.users.includes(username)) {
-        res.status(400).send('Username is already in the community');
+      if (status && 'error' in status) {
+        throw new Error(status.error as string);
       }
-      // Add the username to the community's users list
-      community.users.push(username);
-      await community.save();
 
-      // Return the updated community
-      res.json(community);
-    } catch (error) {
-      console.error('Error when adding user to community:', error);
-      res.status(500).json({ error: 'Failed to add user to community' });
+      // Emit the updated vote counts to all connected clients
+      socket.emit('voteUpdate', { id, users: status.users });
+      res.json({ msg: status.msg, users: status.users });
+    } catch (err) {
+      res.status(500).send(`Error when ${type}ing: ${(err as Error).message}`);
     }
   };
 

@@ -14,6 +14,7 @@ import AnswerModel from './answers';
 import QuestionModel from './questions';
 import TagModel from './tags';
 import CommentModel from './comments';
+import CommunityModel from './communities';
 
 /**
  * Parses tags from a search string.
@@ -640,5 +641,42 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return tmap;
   } catch (error) {
     return { error: 'Error when construction tag map' };
+  }
+};
+
+export const addUserToCommunity = async (
+  community: string,
+  user: string,
+  type: 'add' | 'remove',
+): Promise<{ msg: string; users: string[] } | { error: string }> => {
+  try {
+    const updateOperation =
+      type === 'add' ? { $addToSet: { users: user } } : { $pull: { users: user } };
+
+    // eslint-disable-next-line prettier/prettier
+    const result = await CommunityModel.findOneAndUpdate(
+      { name: community },
+      updateOperation,
+      // eslint-disable-next-line prettier/prettier
+      {new: true},
+    );
+
+    if (!result) {
+      return { error: 'Community not found!' };
+    }
+    const msg = type === 'add' ? 'User added successfully' : 'User removed successfully';
+
+    return {
+      msg,
+      users: result.users || [],
+    };
+  } catch (err) {
+    console.error('Error updating community:', err);
+    return {
+      error:
+        type === 'add'
+          ? 'Error when adding user to community'
+          : 'Error when removing user from community',
+    };
   }
 };

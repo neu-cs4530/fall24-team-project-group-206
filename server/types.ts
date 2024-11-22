@@ -190,6 +190,13 @@ export interface AddCommentRequest extends Request {
  */
 export type CommentResponse = Comment | { error: string };
 
+export interface CommunityRequest extends Request {
+  body: {
+    id: string;
+    name: string;
+  }
+}
+
 /**
  * Interface representing the payload for a comment update event, which contains:
  * - result - The updated question or answer.
