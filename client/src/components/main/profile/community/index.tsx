@@ -4,12 +4,13 @@ import './index.css';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
 import { getUser, updateUserCommunity } from '../../../../services/userService';
+import { updatedUserCommunity } from '../../../../services/communityService';
 
 /**
  * CommunityInfo component which displays the community (if applicable) that they are in.
  */
 const CommunityInfo = () => {
-  const { user } = useUserContext();
+  const { user, socket } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [userCommunity, setUserCommunity] = useState<string>('');
 
@@ -26,7 +27,22 @@ const CommunityInfo = () => {
     };
 
     fetchUserCommunity();
-  }, [user]);
+
+    const handleCommunityUpdate = () => {
+      console.log('Community updated:');
+      updatedUserCommunity(user?.username, userCommunity);
+    };
+
+    if (socket) {
+      socket.on('communityUpdate', handleCommunityUpdate);
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('communityUpdate', handleCommunityUpdate);
+      }
+    };
+  }, [user?.username, socket, userCommunity]);
 
   const handleCommunitySelect = (communityName: string) => {
     setUserCommunity(communityName);

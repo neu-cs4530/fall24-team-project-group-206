@@ -17,6 +17,7 @@ const getCommunityNames = async (): Promise<Community[]> => {
 };
 
 const getCommunityByName = async (name: string): Promise<Community> => {
+  console.log('got her yay');
   const res = await api.get(`${COMMUNITY_API_URL}/getCommunityByName/${name}`);
   if (res.status !== 200) {
     throw new Error('Error when fetching community by name');
@@ -24,12 +25,18 @@ const getCommunityByName = async (name: string): Promise<Community> => {
   return res.data;
 };
 
-const addUserToCommunity = async (username: string, communityName: string): Promise<Community> => {
-  const res = await api.put(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, username);
+const updatedUserCommunity = async (
+  username: string,
+  communityName: string,
+): Promise<Community> => {
+  console.log('got here');
+  const res = await api.patch(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, {
+    username,
+  });
   if (res.status !== 200) {
     throw new Error('Error when adding user to community');
   }
   return res.data;
 };
 
-export { getCommunityNames, getCommunityByName, addUserToCommunity };
+export { getCommunityNames, getCommunityByName, updatedUserCommunity };
