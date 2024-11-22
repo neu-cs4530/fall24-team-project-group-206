@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community, FakeSOSocket } from '../types';
+import { Community, communityRequest, FakeSOSocket } from '../types';
 import { usersNewCommunity } from '../models/application';
 // import QuestionModel from '../models/questions';
 
@@ -55,12 +55,34 @@ const communityController = (socket: FakeSOSocket) => {
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     // const { username } = req.body; // Expecting the userId and username in the body of the request
     // const { communityName } = req.params; // Get communityId from URL parameter
-    const { name, user } = req.body;
+    const { username, community } = req.body;
+
+    if (!username) {
+      res.status(400).json({ message: 'Username and community are required' });
+    }
 
     try {
-      const newCommunity = await usersNewCommunity(name, user);
-      console.log('newCommunity:', newCommunity);
-      socket.emit('communityUpdate', { name, users: newCommunity.users });
+      // console.log(`Adding user ${username} to community ${community}`);
+      // const newCommunity = await usersNewCommunity(username, community);
+      console.log(`Removing user ${username} from all communities`);
+      await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
+
+      console.log(`Adding user ${username} to the new community`);
+      const newCommunity = await CommunityModel.findOneAndUpdate(
+        { name: community },
+        { $addToSet: { users: username } },
+        { new: true },
+      );
+      if (!newCommunity) {
+        res.status(404).json({ message: 'Community not found' });
+      }
+      // socket.emit('communityUpdate', {
+      //   name,
+      //   users: newCommunity.users,
+      //   questions: newCommunity.questions,
+      //   tags: newCommunity.tags,
+      // });
+
       // if (newCommunity && 'error' in newCommunity ) {
       //   res.status(400).send('Username is already in the community');
       //   return;
@@ -103,19 +125,38 @@ const communityController = (socket: FakeSOSocket) => {
       // });
 
       // console.log(`Added user ${username} to community ${updatedCommunity.name}`);
+      console.log(`Added user: ${username} to new community: ${newCommunity}`);
       res.status(200).json('successfully added to the community users list');
       // }
       // // Return the updated community
-      res.json(newCommunity);
+      // res.json(newCommunity);
     } catch (error) {
       console.error('Error when adding user to community:', error);
       res.status(500).json({ error: 'Failed to add user to community' });
     }
   };
 
+  const getCommunityMembers = async (req: Request, res: Response): Promise<void> => {
+    const { community } = req.params;
+
+    try {
+      const communityData = await CommunityModel.findOne({ name: community });
+      if (!communityData) {
+        res.status(404).json({ message: 'Community not found' });
+        return;
+      }
+      console.log(`Retrieved users for community ${community}: ${communityData.users}`);
+      res.json(communityData.users);
+    } catch (error) {
+      res.status(500).json({ error: 'Error retrieving questions for the community' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
   router.get('/getCommunityByName/:name', getCommunityByName);
-  router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
+  // router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
+  router.patch('/addUserToCommunity', addUserToCommunity); // New route for adding user to community
+  router.get('getCommunityMembers/:community', getCommunityMembers);
 
   return router;
 };

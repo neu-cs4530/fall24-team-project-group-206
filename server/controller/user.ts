@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import UserModel from '../models/users';
+import { FakeSOSocket } from '../types';
 
-const userController = () => {
+const userController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
   /**

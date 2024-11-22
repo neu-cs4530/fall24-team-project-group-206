@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ObjectId } from 'mongodb';
 import { QueryOptions } from 'mongoose';
 import {
@@ -16,6 +17,7 @@ import QuestionModel from './questions';
 import TagModel from './tags';
 import CommentModel from './comments';
 import CommunityModel from './communities';
+import UserModel from './users';
 
 /**
  * Parses tags from a search string.
@@ -651,8 +653,10 @@ export const usersNewCommunity = async (
   communityName: string,
 ): Promise<Community> => {
   try {
+    console.log(`Removing user ${username} from all communities`);
     await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
 
+    console.log(`Adding user ${username} to the new community`);
     const updatedCommunity = await CommunityModel.findOneAndUpdate(
       { name: communityName },
       { $addToSet: { users: username } },
@@ -662,7 +666,8 @@ export const usersNewCommunity = async (
     if (!updatedCommunity) {
       throw new Error('Failed to update community');
     }
-
+    // await UserModel.findOneAndUpdate({ username }, { community: communityName }, { new: true });
+    console.log(`User ${username} successfully added to the community`);
     return updatedCommunity;
   } catch (error) {
     throw new Error('Failed to update user community');

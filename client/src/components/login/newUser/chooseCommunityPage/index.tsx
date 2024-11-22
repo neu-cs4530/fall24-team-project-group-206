@@ -1,23 +1,19 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import { auth } from '../../../../firebaseConfig';
 import { updateUserCommunity } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
-import useUserContext from '../../../../hooks/useUserContext';
-import { updatedUserCommunity } from '../../../../services/communityService';
-import { Community, CommunityData } from '../../../../types';
+import { updatedUserInCommunity } from '../../../../services/communityService';
 
 /**
  * Depicts communities that the user can choose from.
  */
 const ChooseCommunityPage = () => {
-  const { socket } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
-  const [communityUsers, setCommunityUsers] = useState<Community>();
 
   const handleCommunityClick = (communityName: string) => {
     setSelectedCommunity(prevCommunity => (prevCommunity === communityName ? '' : communityName));
@@ -29,7 +25,7 @@ const ChooseCommunityPage = () => {
       if (user) {
         console.log('Saving community for user:', user.email);
         await updateUserCommunity(user.email!, community); // Call the backend service
-        // await updatedUserCommunity(user.email!, community);
+        await updatedUserInCommunity(user.email!, community);
         console.log('Community updated successfully');
       } else {
         console.error('No user is logged in.');
@@ -38,18 +34,6 @@ const ChooseCommunityPage = () => {
       console.error('Error saving community:', error);
     }
   };
-
-  useEffect(() => {
-    const handleCommunityUpdate = async (communityData: CommunityData) => {
-      setCommunityUsers(communityData);
-      console.log('Community data:', communityData);
-    };
-    socket.on('communityUpdate', handleCommunityUpdate);
-
-    return () => {
-      socket.off('communityUpdate', handleCommunityUpdate);
-    };
-  }, [socket]);
 
   return (
     <div className='community-container'>

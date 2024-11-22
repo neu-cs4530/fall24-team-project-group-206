@@ -4,7 +4,7 @@ import './index.css';
 import { NavLink } from 'react-router-dom';
 import useTagNames from '../../../../hooks/useTagNames';
 import { auth } from '../../../../firebaseConfig';
-import { updateUserCommunity, updateUserTags } from '../../../../services/userService'; // Import the userService function
+import { updateUserTags } from '../../../../services/userService'; // Import the userService function
 import logo from '../../../../logo.svg';
 
 /**

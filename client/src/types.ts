@@ -144,10 +144,7 @@ export interface CommentUpdatePayload {
 }
 
 export interface CommunityUpdatePayload {
-  name: string;
-  tags: string[];
   users: string[];
-  questions: Question[];
 }
 
 export interface CommunityData {

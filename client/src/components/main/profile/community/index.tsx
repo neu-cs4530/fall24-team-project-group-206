@@ -4,13 +4,13 @@ import './index.css';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
 import { getUser, updateUserCommunity } from '../../../../services/userService';
-import { updatedUserCommunity } from '../../../../services/communityService';
+import { updatedUserInCommunity } from '../../../../services/communityService';
 
 /**
  * CommunityInfo component which displays the community (if applicable) that they are in.
  */
 const CommunityInfo = () => {
-  const { user, socket } = useUserContext();
+  const { user } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [userCommunity, setUserCommunity] = useState<string>('');
 
@@ -27,22 +27,7 @@ const CommunityInfo = () => {
     };
 
     fetchUserCommunity();
-
-    // const handleCommunityUpdate = () => {
-    //   console.log('Community updated:');
-    //   updatedUserCommunity(user?.username, userCommunity);
-    // };
-
-    // // if (socket) {
-    // //   socket.on('communityUpdate', handleCommunityUpdate);
-    // // }
-
-    // // return () => {
-    // //   if (socket) {
-    // //     socket.off('communityUpdate', handleCommunityUpdate);
-    // //   }
-    // // };
-  }, [user?.username, socket, userCommunity]);
+  }, [user]);
 
   const handleCommunitySelect = (communityName: string) => {
     setUserCommunity(communityName);
@@ -57,8 +42,9 @@ const CommunityInfo = () => {
 
     try {
       await updateUserCommunity(user.username, userCommunity);
-      await updatedUserCommunity(user.username, userCommunity);
       console.log('Community updated:', userCommunity);
+      await updatedUserInCommunity(user.username, userCommunity);
+      console.log('User updated in community:', userCommunity);
     } catch (error) {
       console.error('Error saving community:', error);
     }
