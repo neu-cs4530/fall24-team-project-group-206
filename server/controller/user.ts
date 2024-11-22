@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import UserModel from '../models/users';
 import { FakeSOSocket } from '../types';
@@ -9,7 +8,7 @@ const userController = (socket: FakeSOSocket) => {
   /**
    * Adds a new user to the database.
    */
-  router.post('/add', async (req: Request, res: Response) => {
+  const addUser = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username, firstName, lastName, tags, community, status } = req.body;
 
@@ -22,18 +21,21 @@ const userController = (socket: FakeSOSocket) => {
         status,
       });
 
-      return res.status(200).json(newUser);
+      res.status(200).json(newUser);
     } catch (error) {
-      return res.status(500).json({ error: 'Error adding user' });
+      res.status(500).json({ error: 'Error adding user' });
     }
-  });
+  };
 
-  router.put('/updateTags', async (req: Request, res: Response) => {
+  /**
+   * Updates the tags for a given user.
+   */
+  const updateUserTags = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username, tags } = req.body;
 
       if (!username || !tags) {
-        return res.status(400).json({ error: 'Username and tags are required' });
+        res.status(400).json({ error: 'Username and tags are required' });
       }
 
       const updatedUser = await UserModel.findOneAndUpdate(
@@ -43,54 +45,68 @@ const userController = (socket: FakeSOSocket) => {
       );
 
       if (!updatedUser) {
-        return res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: 'User not found' });
       }
 
-      return res.status(200).json(updatedUser);
+      res.status(200).json(updatedUser);
     } catch (error) {
-      return res.status(500).json({ error: 'Error updating tags' });
+      res.status(500).json({ error: 'Error updating tags' });
     }
-  });
+  };
 
-  router.put('/updateCommunity', async (req: Request, res: Response) => {
+  /**
+   * Updates the community for a given user.
+   */
+  const updateUserCommunity = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username, community } = req.body;
 
-      if (!username) {
-        return res.status(400).json({ message: 'Username and community are required' });
+      if (!username || !community) {
+        res.status(400).json({ error: 'Username and community are required' });
       }
 
       const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
 
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ error: 'User not found' });
       }
-
-      return res.status(200).json(user);
+      // socket.emit('communityUpdate', {
+      //   community,
+      // });
+      res.status(200).json(user);
     } catch (error) {
-      return res.status(500).json({ message: 'Error updating community' });
+      res.status(500).json({ error: 'Error updating community' });
     }
-  });
+  };
 
-  router.get('/getUser', async (req: Request, res: Response) => {
+  /**
+   * Retrieves user data based on the provided username.
+   */
+  const getUser = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username } = req.query;
 
       if (!username) {
-        return res.status(400).json({ message: 'Username is required' });
+        res.status(400).json({ error: 'Username is required' });
       }
 
       const user = await UserModel.findOne({ username });
 
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ error: 'User not found' });
       }
 
-      return res.status(200).json(user);
+      res.status(200).json(user);
     } catch (error) {
-      return res.status(500).json({ message: 'Error fetching user data' });
+      res.status(500).json({ error: 'Error fetching user data' });
     }
-  });
+  };
+
+  // Add routes to the router
+  router.post('/add', addUser);
+  router.put('/updateTags', updateUserTags);
+  router.put('/updateCommunity', updateUserCommunity);
+  router.get('/getUser', getUser);
 
   router.get('/getListOfAllUsers', async (req: Request, res: Response) => {
     try {

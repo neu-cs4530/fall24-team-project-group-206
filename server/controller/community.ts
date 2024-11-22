@@ -1,29 +1,18 @@
-/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { Community, communityRequest, FakeSOSocket } from '../types';
 import { usersNewCommunity } from '../models/application';
 // import QuestionModel from '../models/questions';
+import TagModel from '../models/tags';
+import { FakeSOSocket } from '../types';
 
+const communityController = (socket: FakeSOSocket) => {
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
-  /**
-   * Retrieves a list of tags along with the number of questions associated with each tag.
-   * If there is an error, the HTTP response's status is updated.
-   *
-   * @param _ The HTTP request object (not used in this function).
-   * @param res The HTTP response object used to send back the tag count mapping.
-   *
-   * @returns A Promise that resolves to void.
-   */
-  /**
-   * @param req The Request object containing the tag name in the URL parameters.
-   * @param res The HTTP response object used to send back the result of the operation.
-   */
   const getCommunityNames = async (req: Request, res: Response): Promise<void> => {
     try {
-      const communities = await CommunityModel.find({}); // Retrieve only necessary fields
+      const communities = await CommunityModel.find({});
       res.json(communities);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve communities' });
@@ -35,23 +24,28 @@ const communityController = (socket: FakeSOSocket) => {
       const community = await CommunityModel.findOne({ name }).populate('questions');
       if (!community) {
         return null;
+
+  const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
+    const { community } = req.params;
+
+    try {
+      const communityData = await CommunityModel.findOne({ name: community }).populate('questions');
+      if (!communityData) {
+        res.status(404).json({ error: 'Community not found' });
+        return;
       }
-      if (!community.questions || community.questions.length === 0) {
-        console.log('No questions available for this community.');
-        return { ...community.toObject(), questions: [] };
-      }
-      // Return the community with populated question data
-      return { ...community.toObject(), questions: community.questions };
+
+      res.json(communityData.questions);
+
+      // socket.emit('communityUpdate', {
+      //   community,
+      //   questions: communityData.questions,
+      // });
     } catch (error) {
-      console.error('Error fetching community by name:', error);
-      throw error;
+      res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
   };
 
-  /**
-   * Adds a user's username to the community.
-   * This function will update the community model by adding the username to the community's list of users.
-   */
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     // const { username } = req.body; // Expecting the userId and username in the body of the request
     // const { communityName } = req.params; // Get communityId from URL parameter
@@ -152,9 +146,10 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
-  router.get('/getCommunityNames', getCommunityNames); // so that we can show all tags in the frontend
-  router.get('/getCommunityByName/:name', getCommunityByName);
-  // router.patch('/addUserToCommunity/:communityName', addUserToCommunity); // New route for adding user to community
+  router.get('/getCommunityNames', getCommunityNames);
+  router.get('/getCommunityQuestions/:community', getCommunityQuestions);
+  // router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
+  router.get('/getRelevantCommunities', getRelevantCommunities);
   router.patch('/addUserToCommunity', addUserToCommunity); // New route for adding user to community
   router.get('getCommunityMembers/:community', getCommunityMembers);
 

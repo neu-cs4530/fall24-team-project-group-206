@@ -19,6 +19,7 @@ import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
 import ChatPage from './main/chat';
+import DefaultHomePage from './main/homePage/default';
 import CommunityInfo from './main/profile/community';
 
 const ProtectedRoute = ({
@@ -51,8 +52,22 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/' element={<UserSelection />} />
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
-        <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+        <Route
+          path='/new/tagselection'
+          element={
+            <ProtectedRoute user={user} socket={socket}>
+              <ChooseTagsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/new/tagselection/communityselection'
+          element={
+            <ProtectedRoute user={user} socket={socket}>
+              <ChooseCommunityPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Protected Routes */}
         {
@@ -62,7 +77,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='communityHome' element={<CommunityHomePage />} />
+            <Route path='defaultHome' element={<DefaultHomePage />} />
             <Route path='chat/community/:community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />

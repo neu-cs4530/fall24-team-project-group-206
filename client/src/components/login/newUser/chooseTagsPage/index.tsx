@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import useTagNames from '../../../../hooks/useTagNames';
-import { auth } from '../../../../firebaseConfig';
 import { updateUserTags } from '../../../../services/userService'; // Import the userService function
 import logo from '../../../../logo.svg';
+import useUserContext from '../../../../hooks/useUserContext';
 
 /**
  * Depicts tags that the user can search through and choose from.
  */
 const ChooseTagsPage = () => {
   const { tagNames } = useTagNames();
+  const { user } = useUserContext();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,11 +27,9 @@ const ChooseTagsPage = () => {
 
   const saveTagsToUserAccount = async (tags: string[]) => {
     try {
-      const user = auth.currentUser;
       if (user) {
-        console.log('Saving tags for user:', user.email);
-        await updateUserTags(user.email!, tags);
-        console.log('Tags updated successfully');
+        user.tags = tags;
+        await updateUserTags(user.username!, tags);
       } else {
         console.error('No user is logged in.');
       }
@@ -71,7 +70,6 @@ const ChooseTagsPage = () => {
         <button
           className='next-button'
           onClick={() => {
-            console.log('Saving tags:', selectedTags);
             saveTagsToUserAccount(selectedTags);
           }}>
           <NavLink className='button-text' to='/new/tagselection/communityselection'>
