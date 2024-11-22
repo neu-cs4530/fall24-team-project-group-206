@@ -143,6 +143,7 @@ const communityController = (socket: FakeSOSocket) => {
 
   const getCommunityMembers = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
+    console.log(`Received request to get members of community: ${community}`);
 
     try {
       const communityData = await CommunityModel.findOne({ name: community });
@@ -151,8 +152,9 @@ const communityController = (socket: FakeSOSocket) => {
         return;
       }
       console.log(`Retrieved users for community ${community}: ${communityData.users}`);
-      res.json(communityData.users);
+      res.status(200).json(communityData.users);
     } catch (error) {
+      console.error('Error retrieving users for the community:', error);
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
   };
@@ -186,9 +188,9 @@ const communityController = (socket: FakeSOSocket) => {
   router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
+  router.get('getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
   router.patch('/addUserToCommunity', addUserToCommunity);
-  router.get('getCommunityMembers/:community', getCommunityMembers);
 
   return router;
 };

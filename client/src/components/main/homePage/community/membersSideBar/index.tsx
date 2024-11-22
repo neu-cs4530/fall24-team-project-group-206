@@ -29,6 +29,11 @@ const MembersSidebar = () => {
 
   useEffect(() => {
     const fetchMembers = async () => {
+      if (!user.community) {
+        setError('User is not part of any community');
+        setLoading(false);
+        return;
+      }
       try {
         console.log(`Fetching members for community: ${user.community}`);
         const fetchedMembers = await getCommunityMembers(user.community);
@@ -51,6 +56,9 @@ const MembersSidebar = () => {
   //     setMembers(update.members);
   //   }
   // };
+
+  // if (loading) return <p>Loading questions...</p>;
+  // if (error) return <p>{error}</p>;
 
   return (
     <div className='members-sidebar'>
