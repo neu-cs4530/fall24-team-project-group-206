@@ -224,9 +224,15 @@ export interface AnswerUpdatePayload {
 
 export interface CommunityUpdatePayload {
   name: string;
-  tags: string[];
   users: string[];
-  questions: Question[];
+}
+
+// ADD COMMENT
+export interface communityRequest extends Request {
+  body: {
+    name: string;
+    user: string;
+  };
 }
 
 /**

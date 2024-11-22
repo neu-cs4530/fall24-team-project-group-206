@@ -28,20 +28,20 @@ const CommunityInfo = () => {
 
     fetchUserCommunity();
 
-    const handleCommunityUpdate = () => {
-      console.log('Community updated:');
-      updatedUserCommunity(user?.username, userCommunity);
-    };
+    // const handleCommunityUpdate = () => {
+    //   console.log('Community updated:');
+    //   updatedUserCommunity(user?.username, userCommunity);
+    // };
 
-    if (socket) {
-      socket.on('communityUpdate', handleCommunityUpdate);
-    }
+    // // if (socket) {
+    // //   socket.on('communityUpdate', handleCommunityUpdate);
+    // // }
 
-    return () => {
-      if (socket) {
-        socket.off('communityUpdate', handleCommunityUpdate);
-      }
-    };
+    // // return () => {
+    // //   if (socket) {
+    // //     socket.off('communityUpdate', handleCommunityUpdate);
+    // //   }
+    // // };
   }, [user?.username, socket, userCommunity]);
 
   const handleCommunitySelect = (communityName: string) => {
@@ -57,6 +57,7 @@ const CommunityInfo = () => {
 
     try {
       await updateUserCommunity(user.username, userCommunity);
+      await updatedUserCommunity(user.username, userCommunity);
       console.log('Community updated:', userCommunity);
     } catch (error) {
       console.error('Error saving community:', error);

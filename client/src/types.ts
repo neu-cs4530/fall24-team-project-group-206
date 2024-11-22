@@ -150,6 +150,13 @@ export interface CommunityUpdatePayload {
   questions: Question[];
 }
 
+export interface CommunityData {
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
