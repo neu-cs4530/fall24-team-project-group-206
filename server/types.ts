@@ -28,7 +28,7 @@ export interface User {
   lastName: string;
   tags: string[];
   community: string;
-  status: 'low' | 'high';
+  status: 'member' | 'moderator';
 }
 
 /**

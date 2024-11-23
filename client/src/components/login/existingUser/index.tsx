@@ -39,11 +39,11 @@ const Login = () => {
           id='passwordInput'
         />
         <div className='button-group'>
-          <button type='submit' className='login-button'>
-            Submit
-          </button>
           <button type='button' className='back-button' onClick={handleUserTypeSelection}>
             Back
+          </button>
+          <button type='submit' className='login-button'>
+            Submit
           </button>
         </div>
       </form>

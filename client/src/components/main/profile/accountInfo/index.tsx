@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import { auth } from '../../../../firebaseConfig';
-import { getUser } from '../../../../services/userService';
+import { getUser, increaseUserStatus } from '../../../../services/userService';
+import { getQuestionsByFilter } from '../../../../services/questionService';
+import { Question } from '../../../../types';
 
 /**
  * AccountInfo component which displays the user's username and status.
@@ -17,6 +19,16 @@ const AccountInfo = () => {
     status: '',
   });
   const [creationTime, setCreationTime] = useState<string | null>(null);
+  const [qualifyModerator, setQualifyModerator] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+
+  const updateUserStatus = async () => {
+    setUserData(prevData => {
+      if (prevData.status === 'moderator') return prevData;
+      return { ...prevData, status: 'moderator' };
+    });
+    await increaseUserStatus(username);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -24,6 +36,9 @@ const AccountInfo = () => {
       if (firebaseUser && firebaseUser.email) {
         try {
           const data = await getUser(firebaseUser.email);
+
+          setUsername(data.username);
+
           setUserData({
             first_name: data.firstName,
             last_name: data.lastName,
@@ -45,6 +60,23 @@ const AccountInfo = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchAndCalculate = async () => {
+      try {
+        if (userData.status !== 'moderator') {
+          const res = await getQuestionsByFilter('newest', '', username);
+          console.log(`Fetched questions: ${res.length}`);
+          const qualifyingQuestions = res.filter((q: Question) => q.upVotes.length >= 3);
+          setQualifyModerator(res.length >= 10 && qualifyingQuestions.length >= 5);
+        }
+      } catch (error) {
+        console.error('Error fetching questions or calculating eligibility:', error);
+      }
+    };
+
+    fetchAndCalculate();
+  }, [userData.status, username]);
+
   const initials =
     `${userData.first_name?.[0] ?? ''}${userData.last_name?.[0] ?? ''}`.toUpperCase();
 
@@ -63,6 +95,9 @@ const AccountInfo = () => {
             <h4 className='username'>status:</h4>
             <p className='username-info'>{userData.status}</p>
           </div>
+          {qualifyModerator && userData.status !== 'moderator' && (
+            <button onClick={updateUserStatus}>become a moderator</button>
+          )}
         </div>
       </div>
       <div className='button-container'>
