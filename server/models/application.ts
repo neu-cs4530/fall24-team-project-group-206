@@ -644,21 +644,3 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return { error: 'Error when construction tag map' };
   }
 };
-
-// ADD COMMENTS
-export const updateUserStatus = async (user: string): Promise<User | { error: string }> => {
-  try {
-    const result = await UserModel.findOneAndUpdate(
-      { username: user },
-      { $push: { status: 'moderator' } },
-      { new: true },
-    );
-    console.log(result);
-    if (!result) {
-      throw new Error('No user found');
-    }
-    return result;
-  } catch (error) {
-    return { error: 'Error when updating user status' };
-  }
-};

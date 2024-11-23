@@ -7,7 +7,6 @@ import { auth } from '../../../../firebaseConfig';
 import { getUser, increaseUserStatus } from '../../../../services/userService';
 import { getQuestionsByFilter } from '../../../../services/questionService';
 import { Question } from '../../../../types';
-import useVoteStatus from '../../../../hooks/useVoteStatus';
 
 /**
  * AccountInfo component which displays the user's username and status.

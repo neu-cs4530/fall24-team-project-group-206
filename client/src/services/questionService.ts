@@ -15,7 +15,6 @@ const getQuestionsByFilter = async (
   search: string = '',
   askedBy: string = '',
 ): Promise<Question[]> => {
-  console.log(askedBy);
   const res = await api.get(
     `${QUESTION_API_URL}/getQuestion?order=${order}&search=${search}&askedBy=${askedBy}`,
   );
