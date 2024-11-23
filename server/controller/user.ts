@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import UserModel from '../models/users';
-import { updateUserStatus } from '../models/application';
 
 const userController = () => {
   const router: Router = express.Router();
