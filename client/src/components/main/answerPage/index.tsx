@@ -8,17 +8,23 @@ import QuestionBody from './questionBody';
 import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
 import useAnswerPage from '../../../hooks/useAnswerPage';
+import useUserContext from '../../../hooks/useUserContext';
 
 /**
  * AnswerPage component that displays the full content of a question along with its answers.
  * It also includes the functionality to vote, ask a new question, and post a new answer.
  */
 const AnswerPage = () => {
+  const { user } = useUserContext();
   const { questionID, question, handleNewComment, handleNewAnswer } = useAnswerPage();
 
   if (!question) {
     return null;
   }
+
+  const deleteQuestion = () => {
+    console.log('delete');
+  };
 
   return (
     <>
@@ -51,6 +57,11 @@ const AnswerPage = () => {
         }}>
         Answer Question
       </button>
+      {user.status === 'moderator' && (
+        <button className='btn-trash' onClick={deleteQuestion}>
+          trash{' '}
+        </button>
+      )}
     </>
   );
 };

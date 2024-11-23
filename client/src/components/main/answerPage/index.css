@@ -21,3 +21,9 @@
   background-color: #466694;
   transform: translateY(0);
 }
+
+.btn-trash {
+  width: 180px;
+  height: 55px;
+  color: red;
+}
