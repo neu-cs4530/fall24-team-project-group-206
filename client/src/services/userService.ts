@@ -56,4 +56,18 @@ const getListOfAllUsers = async (): Promise<User[]> => {
   return [];
 };
 
-export { addUser, updateUserTags, updateUserCommunity, getUser, getListOfAllUsers };
+const increaseUserStatus = async (username: string): Promise<void> => {
+  const res = await api.put(`${USER_API_URL}/increaseUserStatus`, { username });
+  if (res.status !== 200) {
+    throw new Error('Failed to fetch user data');
+  }
+};
+
+export {
+  addUser,
+  updateUserTags,
+  updateUserCommunity,
+  getUser,
+  getListOfAllUsers,
+  increaseUserStatus,
+};

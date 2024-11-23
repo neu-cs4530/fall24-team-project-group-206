@@ -57,7 +57,7 @@ const useCreateUser = () => {
         lastName,
         tags: [],
         community: '',
-        status: 'low',
+        status: 'member',
       };
       setUser(user);
       await addUser(user);
