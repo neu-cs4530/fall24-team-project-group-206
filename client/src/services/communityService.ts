@@ -25,7 +25,6 @@ const getCommunityQuestions = async (community: string): Promise<Question[]> => 
 };
 
 const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
-  console.log('made it to the service');
   try {
     const res = await api.get(`${COMMUNITY_API_URL}/getRelevantCommunities`, {
       params: { tags },
