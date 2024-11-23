@@ -11,23 +11,16 @@ import useUserContext from '../../../../../hooks/useUserContext';
 const CommunityQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
   const { user, socket } = useUserContext();
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      if (!user.community) {
-        setError('User is not part of any community');
-        setLoading(false);
-        return;
-      }
-
       try {
         console.log(`Fetching questions for community: ${user.community}`);
         const fetchedQuestions = await getCommunityQuestions(user.community);
         setQuestions(fetchedQuestions);
       } catch (err) {
-        setError('Failed to fetch questions');
+        console.error('Failed to fetch questions');
       } finally {
         setLoading(false);
       }
@@ -40,15 +33,6 @@ const CommunityQuestions = () => {
 
   useEffect(() => {
     if (!socket || !user.community) return;
-
-    // Listener for community updates
-    const handleCommunityUpdate = (update: { community: string; questions: Question[] }) => {
-      if (update.community === user.community) {
-        console.log(`Received update for community: ${update.community}`);
-        setQuestions(update.questions);
-      }
-    };
-
     // socket.on('communityUpdate', handleCommunityUpdate);
 
     // eslint-disable-next-line consistent-return
@@ -58,7 +42,6 @@ const CommunityQuestions = () => {
   }, [socket, user.community]);
 
   if (loading) return <p>Loading questions...</p>;
-  if (error) return <p>{error}</p>;
 
   return (
     <div>

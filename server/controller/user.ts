@@ -61,8 +61,8 @@ const userController = (socket: FakeSOSocket) => {
     try {
       const { username, community } = req.body;
 
-      if (!username || !community) {
-        res.status(400).json({ error: 'Username and community are required' });
+      if (!username) {
+        res.status(400).json({ error: 'Username required' });
       }
 
       const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
