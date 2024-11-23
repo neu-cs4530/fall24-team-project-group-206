@@ -37,7 +37,9 @@ const ChooseCommunityPage = () => {
       if (currentUser) {
         console.log('Saving community for user:', currentUser.email);
         await updateUserCommunity(currentUser.email!, community); // Call the backend service
+        user.community = community;
         await updatedUserInCommunity(currentUser.email!, community);
+
         console.log('Community updated successfully');
       } else {
         console.error('No user is logged in.');
