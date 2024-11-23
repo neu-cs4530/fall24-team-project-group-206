@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community, FakeSOSocket } from '../types';
+import { Community, FakeSOSocket, User } from '../types';
 // import { usersNewCommunity } from '../models/application';
 // import QuestionModel from '../models/questions';
 import TagModel from '../models/tags';
@@ -38,6 +38,7 @@ const communityController = (socket: FakeSOSocket) => {
 
   const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
+    console.log(`Received request to get questions of community: ${community}`);
 
     try {
       const communityData = await CommunityModel.findOne({ name: community }).populate('questions');
@@ -62,11 +63,17 @@ const communityController = (socket: FakeSOSocket) => {
     // const { communityName } = req.params; // Get communityId from URL parameter
     const { username, community } = req.body;
 
-    if (!username) {
+    if (!username || !community) {
       res.status(400).json({ message: 'Username and community are required' });
     }
 
     try {
+      if (!community) {
+        console.log(`No community selected. Removing user ${username} from all communities.`);
+        await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
+        // res.status(200).json({ message: 'User removed from all communities successfully' });
+        return;
+      }
       // console.log(`Adding user ${username} to community ${community}`);
       // const newCommunity = await usersNewCommunity(username, community);
       console.log(`Removing user ${username} from all communities`);
@@ -148,6 +155,7 @@ const communityController = (socket: FakeSOSocket) => {
     try {
       const communityData = await CommunityModel.findOne({ name: community });
       if (!communityData) {
+        console.log(`Community not found: ${community}`);
         res.status(404).json({ message: 'Community not found' });
         return;
       }
@@ -188,7 +196,7 @@ const communityController = (socket: FakeSOSocket) => {
   router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
-  router.get('getCommunityMembers/:community', getCommunityMembers);
+  router.get('/getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
   router.patch('/addUserToCommunity', addUserToCommunity);
 

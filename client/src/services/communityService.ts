@@ -48,7 +48,7 @@ const updatedUserInCommunity = async (username: string, community: string): Prom
   return res.data;
 };
 
-const getCommunityMembers = async (community: string): Promise<User[]> => {
+const getCommunityMembers = async (community: string): Promise<string[]> => {
   const res = await api.get(`${COMMUNITY_API_URL}/getCommunityMembers/${community}`);
   if (res.status !== 200) {
     throw new Error('Error when fetching community members');

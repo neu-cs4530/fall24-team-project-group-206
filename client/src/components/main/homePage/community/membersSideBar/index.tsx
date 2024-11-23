@@ -7,7 +7,7 @@ import { User } from '../../../../../types';
 
 const MembersSidebar = () => {
   const { user, socket } = useUserContext();
-  const [members, setMembers] = useState<User[]>([]);
+  const [members, setMembers] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -70,7 +70,7 @@ const MembersSidebar = () => {
         {members.length > 0 ? (
           members.map((member, index) => (
             <div key={index} className='member-item'>
-              {member.username}
+              {member}
             </div>
           ))
         ) : (

@@ -1,5 +1,5 @@
 .members-sidebar {
-    background-color: #D9D9D9;
+    background-color: #eee1e1;
     padding: 5px;
     height: 370px;
     width: 170px;
@@ -39,7 +39,7 @@
     margin-bottom: 5px;
   }
   .chat-button {
-    background-color: #466694;
+    background-color: #d4a5a5;
     text-decoration: none !important;
     color: white;
     text-align: center;
