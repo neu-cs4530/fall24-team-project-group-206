@@ -9,7 +9,7 @@ import { getUser, updateUserCommunity } from '../../../../services/userService';
  * CommunityInfo component which displays the community (if applicable) that they are in.
  */
 const CommunityInfo = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { communityNames } = useCommunityNames();
   const [userCommunity, setUserCommunity] = useState<string>('');
 
@@ -41,8 +41,10 @@ const CommunityInfo = () => {
 
     try {
       await updateUserCommunity(user.username, userCommunity);
-      user.community = userCommunity;
-      // console.log('Community updated:', userCommunity);
+      setUser({
+        ...user,
+        community: userCommunity,
+      });
       console.log(user);
     } catch (error) {
       console.error('Error saving community:', error);

@@ -12,7 +12,7 @@ import useUserContext from '../../../../hooks/useUserContext';
  */
 const ChooseTagsPage = () => {
   const { tagNames } = useTagNames();
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -28,7 +28,10 @@ const ChooseTagsPage = () => {
   const saveTagsToUserAccount = async (tags: string[]) => {
     try {
       if (user) {
-        user.tags = tags;
+        setUser({
+          ...user,
+          tags,
+        });
         await updateUserTags(user.username!, tags);
       } else {
         console.error('No user is logged in.');

@@ -12,7 +12,7 @@ import useCommunityNames from '../../../../hooks/useCommunityNames';
  * Depicts communities that the user can choose from.
  */
 const ChooseCommunityPage = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { relevantCommunities, loading, error } = useRelevantCommunities(user.tags);
   const { communityNames, loading: loadingAll, error: errorAll } = useCommunityNames();
 
@@ -35,7 +35,10 @@ const ChooseCommunityPage = () => {
       const { currentUser } = auth;
       if (currentUser) {
         await updateUserCommunity(currentUser.email!, community);
-        user.community = community;
+        setUser({
+          ...user,
+          community,
+        });
       } else {
         console.error('No user is logged in.');
       }

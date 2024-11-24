@@ -9,7 +9,7 @@ import { updateUserTags, getUser } from '../../../../services/userService';
  * TagsInfo component which displays and allows the user to manage their chosen tags.
  */
 const TagsInfo = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { tagNames } = useTagNames();
   const [chosenTags, setChosenTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,7 +45,10 @@ const TagsInfo = () => {
 
     try {
       await updateUserTags(user.username, chosenTags);
-      user.tags = chosenTags;
+      setUser({
+        ...user,
+        tags: chosenTags,
+      });
     } catch (error) {
       console.error('Error saving tags:', error);
     }
