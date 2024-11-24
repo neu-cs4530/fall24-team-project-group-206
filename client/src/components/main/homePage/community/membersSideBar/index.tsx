@@ -48,7 +48,19 @@ const MembersSidebar = () => {
     if (user.community) {
       fetchMembers();
     }
-  }, [user.community]);
+
+    const handleCommunityUpdate = (community: { name: string; users: string[] }) => {
+      if (community.name === user.community) {
+        console.log(`Received update for community: ${community.name}`);
+        setMembers(community.users);
+      }
+    };
+
+    socket.on('communityUpdate', handleCommunityUpdate);
+    return () => {
+      socket.off('communityUpdate');
+    };
+  }, [user.community, socket]);
 
   // const handleCommunityUpdate = (update: { community: string; members: User[] }) => {
   //   if (update.community === user.community) {

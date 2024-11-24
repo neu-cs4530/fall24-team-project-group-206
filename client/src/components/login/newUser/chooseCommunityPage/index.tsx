@@ -8,6 +8,7 @@ import useRelevantCommunities from '../../../../hooks/useRelevantCommunities';
 import useUserContext from '../../../../hooks/useUserContext';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import { updatedUserInCommunity } from '../../../../services/communityService';
+import { Community } from '../../../../types';
 
 /**
  * Depicts communities that the user can choose from.
@@ -18,6 +19,7 @@ const ChooseCommunityPage = () => {
   const { communityNames, loading: loadingAll, error: errorAll } = useCommunityNames();
 
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+  // const [updayedCommunity, setUpdatedCommunity] = useState<Community>();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -26,6 +28,19 @@ const ChooseCommunityPage = () => {
       setSelectedCommunity(relevantCommunities[0]);
     }
   }, [relevantCommunities]);
+
+  // useEffect(() => {
+  //   const handleCommunityUpdate = (updatedCommunity: Community) => {
+  //     setUpdatedCommunity(updatedCommunity);
+  //   };
+
+  //   socket.on('communityUpdate', handleCommunityUpdate);
+  //   console.log('Community updated:', handleCommunityUpdate);
+
+  //   return () => {
+  //     socket.off('communityUpdate'); // Clean up the socket event listener
+  //   };
+  // }, [socket, user.community]);
 
   const handleCommunityClick = (communityName: string) => {
     setSelectedCommunity(prevCommunity => (prevCommunity === communityName ? '' : communityName));
