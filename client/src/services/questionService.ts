@@ -87,4 +87,19 @@ const downvoteQuestion = async (qid: string, username: string) => {
   return res.data;
 };
 
-export { getQuestionsByFilter, getQuestionById, addQuestion, upvoteQuestion, downvoteQuestion };
+const removeQuestion = async (qid: string) => {
+  const res = await api.delete(`${QUESTION_API_URL}/removeQuestion/${qid}`);
+  if (res.status !== 200) {
+    throw new Error('Error while removing the question');
+  }
+  return res.data;
+};
+
+export {
+  getQuestionsByFilter,
+  getQuestionById,
+  addQuestion,
+  upvoteQuestion,
+  downvoteQuestion,
+  removeQuestion,
+};

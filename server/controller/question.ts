@@ -18,6 +18,7 @@ import {
   populateDocument,
   saveQuestion,
 } from '../models/application';
+import QuestionModel from '../models/questions';
 
 const questionController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -228,12 +229,32 @@ const questionController = (socket: FakeSOSocket) => {
     voteQuestion(req, res, 'downvote');
   };
 
+  const removeQuestion = async (req: FindQuestionByIdRequest, res: Response): Promise<void> => {
+    try {
+      console.log('Received request to remove question');
+      const { qid } = req.params;
+      console.log(qid);
+      if (!qid) {
+        res.status(400).json({ error: 'Question ID is required' });
+      }
+      const deletedQuestion = await QuestionModel.findByIdAndDelete(qid);
+      if (!deletedQuestion) {
+        res.status(404).json({ error: 'Question not found' });
+      }
+      res.status(200).json({ message: 'Question successfully deleted', question: deletedQuestion });
+    } catch (error) {
+      console.error('Error removing question:', error);
+      res.status(500).json({ error: 'Error removing question' });
+    }
+  };
+
   // add appropriate HTTP verbs and their endpoints to the router
   router.get('/getQuestion', getQuestionsByFilter);
   router.get('/getQuestionById/:qid', getQuestionById);
   router.post('/addQuestion', addQuestion);
   router.post('/upvoteQuestion', upvoteQuestion);
   router.post('/downvoteQuestion', downvoteQuestion);
+  router.delete('/removeQuestion/:qid', removeQuestion);
 
   return router;
 };

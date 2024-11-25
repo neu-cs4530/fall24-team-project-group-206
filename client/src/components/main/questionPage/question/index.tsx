@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
+import { FaRegTrashCan } from 'react-icons/fa6';
 import { getMetaData } from '../../../../tool';
 import { Question } from '../../../../types';
+import useUserContext from '../../../../hooks/useUserContext';
+import { removeQuestion } from '../../../../services/questionService';
 
 /**
  * Interface representing the props for the Question component.
@@ -22,6 +25,7 @@ interface QuestionProps {
  */
 const QuestionView = ({ q }: QuestionProps) => {
   const navigate = useNavigate();
+  const { user } = useUserContext();
 
   /**
    * Function to navigate to the home page with the specified tag as a search parameter.
@@ -33,6 +37,16 @@ const QuestionView = ({ q }: QuestionProps) => {
     searchParams.set('tag', tagName);
 
     navigate(`/home?${searchParams.toString()}`);
+  };
+
+  const deleteQuestion = async (question: Question) => {
+    try {
+      if (question._id) {
+        await removeQuestion(question._id);
+      }
+    } catch (error) {
+      // Handle error
+    }
   };
 
   /**
@@ -70,6 +84,17 @@ const QuestionView = ({ q }: QuestionProps) => {
               {tag.name}
             </button>
           ))}
+          {user.status === 'moderator' && (
+            <>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteQuestion(q);
+                }}>
+                <FaRegTrashCan />
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className='lastActivity'>
