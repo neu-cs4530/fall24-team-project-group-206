@@ -157,6 +157,14 @@ export interface CommunityData {
   questions: Question[];
 }
 
+export interface EditQuestionPayload {
+  text: string;
+}
+
+export interface NewQuestionData {
+  text: string;
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
@@ -167,6 +175,7 @@ export interface ServerToClientEvents {
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (update: CommentUpdatePayload) => void;
   communityUpdate: (update: CommunityUpdatePayload) => void;
+  editQuestionUpdate: (update: EditQuestionPayload) => void;
 }
 
 /**

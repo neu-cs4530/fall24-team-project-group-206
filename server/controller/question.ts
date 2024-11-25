@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import express, { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import {
@@ -7,6 +8,7 @@ import {
   AddQuestionRequest,
   VoteRequest,
   FakeSOSocket,
+  EditQuestionRequest,
 } from '../types';
 import {
   addVoteToQuestion,
@@ -18,6 +20,8 @@ import {
   populateDocument,
   saveQuestion,
 } from '../models/application';
+import UserModel from '../models/users';
+import QuestionModel from '../models/questions';
 
 const questionController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -227,12 +231,41 @@ const questionController = (socket: FakeSOSocket) => {
     voteQuestion(req, res, 'downvote');
   };
 
+  const editQuestion = async (req: EditQuestionRequest, res: Response): Promise<void> => {
+    const { qid, username } = req.params;
+    const { newText } = req.body;
+
+    try {
+      const user = await UserModel.findOne({ username });
+      if (!user || user.status !== 'low') {
+        res.status(404).json({ error: 'Permission denied to edit question' });
+        return;
+      }
+      const question = await QuestionModel.findByIdAndUpdate(qid, { text: newText }, { new: true });
+      if (!question) {
+        res.status(404).json({ error: 'Question not found' });
+        return;
+      }
+      socket.emit('editQuestionUpdate', {
+        qid: question._id,
+        text: question.text,
+      });
+
+      res.status(200).json({ message: 'Question updated successfully', question });
+    } catch (error) {
+      console.error('Error updating question:', error);
+      res.status(500).json({ error: 'Error updating question' });
+    }
+  };
+
   // add appropriate HTTP verbs and their endpoints to the router
   router.get('/getQuestion', getQuestionsByFilter);
   router.get('/getQuestionById/:qid', getQuestionById);
   router.post('/addQuestion', addQuestion);
   router.post('/upvoteQuestion', upvoteQuestion);
   router.post('/downvoteQuestion', downvoteQuestion);
+  // patch for partial updates - only updating the text of the question
+  router.patch('/editQuestion/:qid/:newText/:username', editQuestion);
 
   return router;
 };

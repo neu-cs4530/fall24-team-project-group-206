@@ -237,6 +237,21 @@ export interface communityRequest extends Request {
   };
 }
 
+export interface EditQuestionPayload {
+  qid: ObjectId;
+  text: string;
+}
+
+export interface EditQuestionRequest {
+  params: {
+    qid: ObjectId;
+    username: string;
+  }
+  body: {
+    newText: string;
+  }
+}
+
 /**
  * Interface representing the possible events that the server can emit to the client.
  */
@@ -247,4 +262,5 @@ export interface ServerToClientEvents {
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
   communityUpdate: (community: CommunityUpdatePayload) => void;
+  editQuestionUpdate: (update: EditQuestionPayload) => void;
 }

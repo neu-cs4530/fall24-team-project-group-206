@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Comment, Answer, Question, VoteData } from '../types';
+import { Comment, Answer, Question, VoteData, NewQuestionData } from '../types';
 import useUserContext from './useUserContext';
 import addComment from '../services/commentService';
 import { getQuestionById } from '../services/questionService';
@@ -20,6 +20,7 @@ const useAnswerPage = () => {
   const { user, socket } = useUserContext();
   const [questionID, setQuestionID] = useState<string>(qid || '');
   const [question, setQuestion] = useState<Question | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   /**
    * Function to handle navigation to the "New Answer" page.
@@ -160,16 +161,29 @@ const useAnswerPage = () => {
       }
     };
 
+    const handleEditQuestion = (newText: NewQuestionData) => {
+      setQuestion(prevQuestion =>
+        prevQuestion
+          ? {
+              ...prevQuestion,
+              text: newText.text,
+            }
+          : prevQuestion,
+      );
+    };
+
     socket.on('answerUpdate', handleAnswerUpdate);
     socket.on('viewsUpdate', handleViewsUpdate);
     socket.on('commentUpdate', handleCommentUpdate);
     socket.on('voteUpdate', handleVoteUpdate);
+    socket.on('editQuestionUpdate', handleEditQuestion);
 
     return () => {
       socket.off('answerUpdate', handleAnswerUpdate);
       socket.off('viewsUpdate', handleViewsUpdate);
       socket.off('commentUpdate', handleCommentUpdate);
       socket.off('voteUpdate', handleVoteUpdate);
+      socket.on('editQuestionUpdate', handleEditQuestion);
     };
   }, [questionID, socket]);
 
