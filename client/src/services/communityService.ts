@@ -40,11 +40,40 @@ const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
 };
 
 const addUserToCommunity = async (username: string, communityName: string): Promise<Community> => {
-  const res = await api.put(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, username);
+  const res = await api.patch(`${COMMUNITY_API_URL}/addUserToCommunity/${communityName}`, username);
   if (res.status !== 200) {
     throw new Error('Error when adding user to community');
   }
   return res.data;
 };
 
-export { getCommunityNames, getCommunityQuestions, getRelevantCommunities, addUserToCommunity };
+/**
+ * Updates the list of questions for a specific community.
+ *
+ * @param communityName - The name of the community for which questions will be updated.
+ * @param newQuestion - The new question to add to the community.
+ * @returns A Promise containing the updated community with the new question.
+ * @throws An error if the request fails or the status is not 200.
+ */
+const updateCommunityQuestions = async (
+  communityName: string,
+  newQuestion: Question,
+): Promise<Community> => {
+  const res = await api.patch(`${COMMUNITY_API_URL}/updateCommunityQuestions/${communityName}`, {
+    question: newQuestion,
+  });
+
+  if (res.status !== 200) {
+    throw new Error('Error when updating community questions');
+  }
+
+  return res.data;
+};
+
+export {
+  getCommunityNames,
+  getCommunityQuestions,
+  getRelevantCommunities,
+  addUserToCommunity,
+  updateCommunityQuestions,
+};

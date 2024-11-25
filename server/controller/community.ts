@@ -1,7 +1,8 @@
 import express, { Request, Response, Router } from 'express';
+import { ObjectId } from 'mongodb';
 import CommunityModel from '../models/communities';
 import TagModel from '../models/tags';
-import { FakeSOSocket } from '../types';
+import { FakeSOSocket, Question } from '../types';
 
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
@@ -17,9 +18,17 @@ const communityController = (socket: FakeSOSocket) => {
 
   const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
+    // console.log(community);
 
     try {
-      const communityData = await CommunityModel.findOne({ name: community }).populate('questions');
+      const communityData = await CommunityModel.findOne({ name: community }).populate({
+        path: 'questions',
+        populate: [
+          { path: 'tags', model: 'Tag' },
+          { path: 'answers', model: 'Answer' },
+        ],
+      });
+      // console.log(communityData);
       if (!communityData) {
         res.status(404).json({ error: 'Community not found' });
         return;
@@ -93,10 +102,52 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  const updateCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
+    const { communityName } = req.params;
+    const { question } = req.body;
+
+    if (!question || !question.title || !question.text || !question.askedBy) {
+      res.status(400).json({ error: 'Invalid question data' });
+      return;
+    }
+
+    const questionToPush = {
+      title: question.title,
+      text: question.text,
+      tags: question.tags,
+      askedBy: question.askedBy,
+      askDateTime: question.askDateTime,
+      answers: question.answers,
+      upVotes: question.upVotes,
+      downVotes: question.downVotes,
+      views: question.views,
+      comments: question.comments,
+    };
+
+    try {
+      const updatedCommunity = await CommunityModel.findOneAndUpdate(
+        { name: communityName },
+        { $push: { questions: questionToPush } },
+        { new: true, runValidators: true },
+      );
+
+      if (!updatedCommunity) {
+        res.status(404).json({ error: 'Community not found' });
+        return;
+      }
+
+      res.json(updatedCommunity);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error updating community questions' });
+    }
+  };
+
   router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
   router.get('/getRelevantCommunities', getRelevantCommunities);
+  router.patch('/updateCommunityQuestions/:communityName', updateCommunityQuestions);
 
   return router;
 };

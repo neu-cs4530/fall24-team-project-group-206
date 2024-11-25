@@ -11,13 +11,13 @@ import useUserContext from '../../../../../hooks/useUserContext';
 const CommunityQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { user, socket } = useUserContext();
+  const { user } = useUserContext();
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        console.log(`Fetching questions for community: ${user.community}`);
         const fetchedQuestions = await getCommunityQuestions(user.community);
+        // console.log(fetchedQuestions);
         setQuestions(fetchedQuestions);
       } catch (err) {
         console.error('Failed to fetch questions');
@@ -30,16 +30,6 @@ const CommunityQuestions = () => {
       fetchQuestions();
     }
   }, [user.community]);
-
-  useEffect(() => {
-    if (!socket || !user.community) return;
-    // socket.on('communityUpdate', handleCommunityUpdate);
-
-    // eslint-disable-next-line consistent-return
-    return () => {
-      // socket.off('communityUpdate', handleCommunityUpdate);
-    };
-  }, [socket, user.community]);
 
   if (loading) return <p>Loading questions...</p>;
 

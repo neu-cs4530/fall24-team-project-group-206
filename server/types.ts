@@ -16,7 +16,7 @@ export interface Community {
   name: string;
   tags: string[];
   users: string[];
-  questions: Question[];
+  questions: Question[] | ObjectId[];
 }
 
 /**

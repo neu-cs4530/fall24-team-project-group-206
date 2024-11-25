@@ -44,6 +44,8 @@ const QuestionView = ({ q }: QuestionProps) => {
     navigate(`/question/${questionID}`);
   };
 
+  // console.log(`tags: ${q.tags}`);
+
   return (
     <div
       className='question right_padding'
