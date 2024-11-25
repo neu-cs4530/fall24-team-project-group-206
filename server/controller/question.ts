@@ -232,15 +232,15 @@ const questionController = (socket: FakeSOSocket) => {
   };
 
   const editQuestion = async (req: EditQuestionRequest, res: Response): Promise<void> => {
-    const { qid, username } = req.params;
+    const { qid } = req.params;
     const { newText } = req.body;
 
     try {
-      const user = await UserModel.findOne({ username });
-      if (!user || user.status !== 'low') {
-        res.status(404).json({ error: 'Permission denied to edit question' });
-        return;
-      }
+      // const user = await UserModel.findOne({ username });
+      // // if (!user || user.status !== 'low') {
+      // //   res.status(404).json({ error: 'Permission denied to edit question' });
+      // //   return;
+      // // }
       const question = await QuestionModel.findByIdAndUpdate(qid, { text: newText }, { new: true });
       if (!question) {
         res.status(404).json({ error: 'Question not found' });
@@ -265,7 +265,7 @@ const questionController = (socket: FakeSOSocket) => {
   router.post('/upvoteQuestion', upvoteQuestion);
   router.post('/downvoteQuestion', downvoteQuestion);
   // patch for partial updates - only updating the text of the question
-  router.patch('/editQuestion/:qid/:newText/:username', editQuestion);
+  router.patch('/editQuestion/:qid/:username', editQuestion);
 
   return router;
 };

@@ -86,7 +86,7 @@ const downvoteQuestion = async (qid: string, username: string) => {
 
 // ADD COMMENT
 const editQuestion = async (qid: string, newText: string, username: string) => {
-  const res = await api.patch(`${QUESTION_API_URL}/editQuestion/${qid}/${newText}/${username}`);
+  const res = await api.patch(`${QUESTION_API_URL}/editQuestion/${qid}/${username}`, { newText });
   if (res.status !== 200) {
     throw new Error('Error while editing the question');
   }

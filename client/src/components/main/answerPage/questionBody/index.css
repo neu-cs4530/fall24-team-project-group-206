@@ -6,6 +6,19 @@
   border-bottom: #000000 1px dashed;
 }
 
+.edit-icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.edit-icon-button:hover {
+  color: #000;
+}
+
 .answer_question_view {
   width: 15%;
 }
