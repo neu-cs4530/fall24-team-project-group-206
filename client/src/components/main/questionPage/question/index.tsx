@@ -14,6 +14,7 @@ import { removeQuestion } from '../../../../services/questionService';
  */
 interface QuestionProps {
   q: Question;
+  inCommunity?: boolean;
 }
 
 /**
@@ -23,7 +24,7 @@ interface QuestionProps {
  *
  * @param q - The question object containing question details.
  */
-const QuestionView = ({ q }: QuestionProps) => {
+const QuestionView = ({ q, inCommunity }: QuestionProps) => {
   const navigate = useNavigate();
   const { user } = useUserContext();
 
@@ -85,7 +86,7 @@ const QuestionView = ({ q }: QuestionProps) => {
               {tag.name}
             </button>
           ))}
-          {user.status === 'moderator' && (
+          {user.status === 'moderator' && inCommunity && (
             <>
               <button
                 onClick={e => {
