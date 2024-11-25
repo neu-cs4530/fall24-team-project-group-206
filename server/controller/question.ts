@@ -231,9 +231,7 @@ const questionController = (socket: FakeSOSocket) => {
 
   const removeQuestion = async (req: FindQuestionByIdRequest, res: Response): Promise<void> => {
     try {
-      console.log('Received request to remove question');
       const { qid } = req.params;
-      console.log(qid);
       if (!qid) {
         res.status(400).json({ error: 'Question ID is required' });
       }

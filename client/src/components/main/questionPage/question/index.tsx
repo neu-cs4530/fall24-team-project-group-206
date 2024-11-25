@@ -45,7 +45,8 @@ const QuestionView = ({ q }: QuestionProps) => {
         await removeQuestion(question._id);
       }
     } catch (error) {
-      // Handle error
+      // eslint-disable-next-line no-console
+      console.log('error removing');
     }
   };
 
@@ -90,7 +91,8 @@ const QuestionView = ({ q }: QuestionProps) => {
                 onClick={e => {
                   e.stopPropagation();
                   deleteQuestion(q);
-                }}>
+                }}
+                className='trashcan'>
                 <FaRegTrashCan />
               </button>
             </>
