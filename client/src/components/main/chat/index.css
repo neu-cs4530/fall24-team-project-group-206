@@ -110,7 +110,7 @@
   font-size: 18px;
 }
 
-.username {
+.username-chat {
   background: #6D89B0;
   color: white;
   font-size: 24px;
@@ -118,7 +118,7 @@
   font-weight: bold;
 }
 
-.username::placeholder {
+.username-chat::placeholder {
   color: white;
 }
 

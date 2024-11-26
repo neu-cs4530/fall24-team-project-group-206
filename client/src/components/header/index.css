@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  /* background-color: #F5F5F5; */
+  background-color: #F5F5F5;
   box-sizing: border-box; 
   background: #e9cdcd;
   height: 100px;
@@ -39,6 +39,6 @@
 }
 
 .icon-here.selected {
-  color: #6f4046;
+  color: #895159;
 }
 

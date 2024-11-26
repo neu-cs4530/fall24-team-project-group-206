@@ -22,3 +22,6 @@
     transform: translateY(0);
   }
   
+  .mandatory_indicator {
+    color: red;
+  }

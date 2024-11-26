@@ -35,7 +35,7 @@ const ChatPage = () => {
             <div className='search-container'>
               <span className='chat-title'>chatting now: </span>
               <input
-                className='username'
+                className='username-chat'
                 id='searchBar'
                 placeholder='Search username...'
                 type='text'

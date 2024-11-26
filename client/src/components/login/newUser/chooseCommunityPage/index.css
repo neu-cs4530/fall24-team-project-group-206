@@ -28,7 +28,7 @@
 }
 
 .community-pill {
-  background-color: #6f4046;
+  background-color: #895159;
   color: white;
   border-radius: 50px;
   margin: 5px;
@@ -52,8 +52,8 @@
 
 .community-pill.selected {
   background-color: #ffffff;
-  color: #6f4046;
-  border: 2px solid #6f4046;
+  color: #895159;
+  border: 2px solid #895159;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
