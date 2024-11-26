@@ -5,6 +5,7 @@ import { FiEdit } from 'react-icons/fi';
 import { handleHyperlink } from '../../../../tool';
 import { editQuestion } from '../../../../services/questionService';
 import useUserContext from '../../../../hooks/useUserContext';
+import { Tag } from '../../../../types';
 
 /**
  * Interface representing the props for the QuestionBody component.
@@ -20,7 +21,6 @@ interface QuestionBodyProps {
   askby: string;
   meta: string;
   questionId: string;
-  inCommunity?: boolean;
 }
 
 /**
@@ -33,7 +33,7 @@ interface QuestionBodyProps {
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
  */
-const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: QuestionBodyProps) => {
+const QuestionBody = ({ views, text, askby, meta, questionId }: QuestionBodyProps) => {
   const { user } = useUserContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
@@ -83,7 +83,7 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
       <div className='answer_question_right'>
         <div className='question_author'>{askby}</div>
         <div className='answer_question_meta'>asked {meta}</div>
-        {user.status === 'low' && inCommunity && (
+        {user.status === 'low' && (
           <>
             {!isEditing && (
               <button onClick={handleEditClick} className='edit-icon-button'>
