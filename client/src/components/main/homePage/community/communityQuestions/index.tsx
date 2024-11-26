@@ -46,7 +46,7 @@ const CommunityQuestions = () => {
   return (
     <div>
       {questions.length > 0 ? (
-        questions.map(q => <QuestionView key={q._id} q={q} />)
+        questions.map(q => <QuestionView key={q._id} q={q} inCommunity={true} />)
       ) : (
         <p>No questions available for this community.</p>
       )}

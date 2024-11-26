@@ -21,6 +21,7 @@ interface QuestionBodyProps {
   askby: string;
   meta: string;
   questionId: string;
+  inCommunity?: boolean;
 }
 
 /**
@@ -33,7 +34,7 @@ interface QuestionBodyProps {
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
  */
-const QuestionBody = ({ views, text, askby, meta, questionId }: QuestionBodyProps) => {
+const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: QuestionBodyProps) => {
   const { user } = useUserContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
@@ -83,7 +84,7 @@ const QuestionBody = ({ views, text, askby, meta, questionId }: QuestionBodyProp
       <div className='answer_question_right'>
         <div className='question_author'>{askby}</div>
         <div className='answer_question_meta'>asked {meta}</div>
-        {user.status === 'low' && (
+        {user.status === 'low' && inCommunity && (
           <>
             {!isEditing && (
               <button onClick={handleEditClick} className='edit-icon-button'>

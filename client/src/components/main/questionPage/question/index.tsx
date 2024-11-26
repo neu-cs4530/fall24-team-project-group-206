@@ -11,6 +11,7 @@ import { Question } from '../../../../types';
  */
 interface QuestionProps {
   q: Question;
+  inCommunity?: boolean;
 }
 
 /**
@@ -20,7 +21,7 @@ interface QuestionProps {
  *
  * @param q - The question object containing question details.
  */
-const QuestionView = ({ q }: QuestionProps) => {
+const QuestionView = ({ q, inCommunity }: QuestionProps) => {
   const navigate = useNavigate();
 
   /**
@@ -41,7 +42,11 @@ const QuestionView = ({ q }: QuestionProps) => {
    * @param questionID - The ID of the question to navigate to.
    */
   const handleAnswer = (questionID: string) => {
-    navigate(`/question/${questionID}`);
+    if (inCommunity) {
+      navigate(`/communityHome/question/${questionID}`);
+    } else {
+      navigate(`/question/${questionID}`);
+    }
   };
 
   return (
