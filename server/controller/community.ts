@@ -1,5 +1,4 @@
 import express, { Request, Response, Router } from 'express';
-import { ObjectId } from 'mongodb';
 import CommunityModel from '../models/communities';
 import TagModel from '../models/tags';
 import { FakeSOSocket, Question } from '../types';
