@@ -15,12 +15,12 @@
 }
 
 .vote-button-upvoted {
-  background-color: #38a169;
+  background-color: #63a88a;
   color: white;
 }
 
 .vote-button-downvoted {
-  background-color: #e53e3e;
+  background-color: #be5362;
   color: white;
 }
 
