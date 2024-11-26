@@ -27,7 +27,6 @@ describe('Community Controller - getCommunityNames', () => {
 
     const response = await request(app).get('/community/getCommunityNames');
 
-    // Assert the response
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockCommunities);
     expect(CommunityModel.find).toHaveBeenCalledTimes(1); 
