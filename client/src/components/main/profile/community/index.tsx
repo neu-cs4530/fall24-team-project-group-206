@@ -42,15 +42,14 @@ const CommunityInfo = () => {
 
     try {
       await updateUserCommunity(user.username, userCommunity);
+      console.log('successful 1');
       setUser({
         ...user,
         community: userCommunity,
       });
-      console.log(user);
-      user.community = userCommunity;
       console.log('Community updated:', userCommunity);
       await updatedUserInCommunity(user.username, userCommunity);
-      console.log('User updated in community:', userCommunity);
+      console.log('successful 2');
     } catch (error) {
       console.error('Error saving community:', error);
     }

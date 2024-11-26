@@ -8,6 +8,7 @@ import logo from '../../../../logo.svg';
 import useRelevantCommunities from '../../../../hooks/useRelevantCommunities';
 import useUserContext from '../../../../hooks/useUserContext';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
+import { updatedUserInCommunity } from '../../../../services/communityService';
 
 /**
  * Depicts communities that the user can choose from.
@@ -36,7 +37,10 @@ const ChooseCommunityPage = () => {
     try {
       const { currentUser } = auth;
       if (currentUser) {
-        await updateUserCommunity(currentUser.email!, community); // Call the backend service
+        await updateUserCommunity(currentUser.email!, community);
+        console.log('successful 1');
+        await updatedUserInCommunity(currentUser.email!, community);
+        console.log('successful 2');
         setUser({
           ...user,
           community,

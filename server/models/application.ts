@@ -6,19 +6,15 @@ import {
   AnswerResponse,
   Comment,
   CommentResponse,
-  Community,
   OrderType,
   Question,
   QuestionResponse,
   Tag,
-  User,
 } from '../types';
 import AnswerModel from './answers';
 import QuestionModel from './questions';
 import TagModel from './tags';
 import CommentModel from './comments';
-import CommunityModel from './communities';
-import UserModel from './users';
 
 /**
  * Parses tags from a search string.
