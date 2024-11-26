@@ -203,7 +203,6 @@ const communityController = (socket: FakeSOSocket) => {
   router.get('/getRelevantCommunities', getRelevantCommunities);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
   router.patch('/updateCommunityQuestions/:communityName', updateCommunityQuestions);
-  router.get('/getCommunityMembers/:community', getCommunityMembers);
 
   return router;
 };
