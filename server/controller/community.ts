@@ -3,7 +3,6 @@ import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { Community, FakeSOSocket } from '../types';
 import TagModel from '../models/tags';
-import { FakeSOSocket, Question } from '../types';
 import QuestionModel from '../models/questions';
 
 const communityController = (socket: FakeSOSocket) => {
@@ -79,7 +78,6 @@ const communityController = (socket: FakeSOSocket) => {
             name: comm.name,
             users: comm.users.filter(user => user !== username),
             tags: comm.tags,
-            questions: comm.questions,
           });
         });
         res.status(200).json({ message: 'User removed from all communities successfully' });
@@ -94,7 +92,6 @@ const communityController = (socket: FakeSOSocket) => {
           name: comm.name,
           users: comm.users.filter(user => user !== username),
           tags: comm.tags,
-          questions: comm.questions,
         });
       });
 
@@ -112,7 +109,6 @@ const communityController = (socket: FakeSOSocket) => {
         name: newCommunity.name,
         tags: newCommunity.tags,
         users: newCommunity.users,
-        questions: newCommunity.questions,
       });
       console.log(`Added user: ${username} to new community: ${newCommunity}`);
       res.status(200).json('successfully added to the community users list');
@@ -204,6 +200,8 @@ const communityController = (socket: FakeSOSocket) => {
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.get('/getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
+  router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
+  router.patch('/updateCommunityQuestions/:communityName', updateCommunityQuestions);
 
   return router;
 };

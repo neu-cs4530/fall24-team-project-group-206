@@ -226,7 +226,6 @@ export interface CommunityUpdatePayload {
   name: string;
   tags: string[];
   users: string[];
-  questions: Question[];
 }
 
 // ADD COMMENT

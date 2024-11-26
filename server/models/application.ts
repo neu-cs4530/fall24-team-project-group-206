@@ -647,30 +647,3 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return { error: 'Error when construction tag map' };
   }
 };
-
-// ADD COMMENT LATER
-export const usersNewCommunity = async (
-  username: string,
-  communityName: string,
-): Promise<Community> => {
-  try {
-    console.log(`Removing user ${username} from all communities`);
-    await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
-
-    console.log(`Adding user ${username} to the new community`);
-    const updatedCommunity = await CommunityModel.findOneAndUpdate(
-      { name: communityName },
-      { $addToSet: { users: username } },
-      { new: true },
-    );
-
-    if (!updatedCommunity) {
-      throw new Error('Failed to update community');
-    }
-    // await UserModel.findOneAndUpdate({ username }, { community: communityName }, { new: true });
-    console.log(`User ${username} successfully added to the community`);
-    return updatedCommunity;
-  } catch (error) {
-    throw new Error('Failed to update user community');
-  }
-};
