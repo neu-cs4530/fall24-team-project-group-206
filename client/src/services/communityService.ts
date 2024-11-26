@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import api from './config';
-import { Community, Question, User } from '../types';
+import { Community, Question } from '../types';
 
 const COMMUNITY_API_URL = `${process.env.REACT_APP_SERVER_URL}/community`;
 

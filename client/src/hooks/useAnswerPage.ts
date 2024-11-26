@@ -20,7 +20,6 @@ const useAnswerPage = () => {
   const { user, socket } = useUserContext();
   const [questionID, setQuestionID] = useState<string>(qid || '');
   const [question, setQuestion] = useState<Question | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   /**
    * Function to handle navigation to the "New Answer" page.

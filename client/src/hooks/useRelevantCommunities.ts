@@ -27,7 +27,6 @@ const useRelevantCommunities = (tags: string[]) => {
         }
       } catch (e) {
         setError('Failed to fetch relevant communities.');
-        console.error(e);
       } finally {
         setLoading(false);
       }

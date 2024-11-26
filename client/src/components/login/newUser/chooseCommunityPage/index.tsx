@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,6 @@ import useRelevantCommunities from '../../../../hooks/useRelevantCommunities';
 import useUserContext from '../../../../hooks/useUserContext';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import { updatedUserInCommunity } from '../../../../services/communityService';
-import { Community } from '../../../../types';
 
 /**
  * Depicts communities that the user can choose from.
@@ -29,19 +29,6 @@ const ChooseCommunityPage = () => {
     }
   }, [relevantCommunities]);
 
-  // useEffect(() => {
-  //   const handleCommunityUpdate = (updatedCommunity: Community) => {
-  //     setUpdatedCommunity(updatedCommunity);
-  //   };
-
-  //   socket.on('communityUpdate', handleCommunityUpdate);
-  //   console.log('Community updated:', handleCommunityUpdate);
-
-  //   return () => {
-  //     socket.off('communityUpdate'); // Clean up the socket event listener
-  //   };
-  // }, [socket, user.community]);
-
   const handleCommunityClick = (communityName: string) => {
     setSelectedCommunity(prevCommunity => (prevCommunity === communityName ? '' : communityName));
   };
@@ -50,12 +37,9 @@ const ChooseCommunityPage = () => {
     try {
       const { currentUser } = auth;
       if (currentUser) {
-        console.log('Saving community for user:', currentUser.email);
         await updateUserCommunity(currentUser.email!, community); // Call the backend service
         user.community = community;
         await updatedUserInCommunity(currentUser.email!, community);
-
-        console.log('Community updated successfully');
       } else {
         console.error('No user is logged in.');
       }

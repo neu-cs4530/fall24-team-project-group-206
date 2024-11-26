@@ -16,10 +16,10 @@ const CommunityQuestions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        console.log(`Fetching questions for community: ${user.community}`);
         const fetchedQuestions = await getCommunityQuestions(user.community);
         setQuestions(fetchedQuestions);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch questions');
       } finally {
         setLoading(false);
