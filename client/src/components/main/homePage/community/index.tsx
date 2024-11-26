@@ -1,41 +1,30 @@
 import './index.css';
-import React from 'react';
-// import { Link } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import MembersSidebar from './membersSideBar';
-import useQuestionPage from '../../../../hooks/useQuestionPage';
-import QuestionView from './questions';
+import CommunityQuestions from './communityQuestions';
+import useUserContext from '../../../../hooks/useUserContext';
 
 /**
  * CommunityHomePage component renders a page displaying the user's community
- * and questions related to that community based on filters such as order and search terms.
+ * and questions related to that community.
  */
 const CommunityHomePage = () => {
-  // Use the custom hook to manage the state and fetch community-specific questions
-  const { titleText, qlist, userCommunity } = useQuestionPage();
+  const { user } = useUserContext();
 
   return (
     <div className='home-page-container'>
-      {/* Display the dynamic title for the community */}
-      <h2 className='home-page-title'>{titleText}</h2>
+      <h2 className='home-page-title'>{user.community}</h2>
       <hr />
-
-      {/* Sidebar for members */}
-      <MembersSidebar />
-      {/* Button to chat with the community */}
-      <Link className='chat-button' to={`/chat/community/${userCommunity}`}>
-        Chat with Community
-      </Link>
-
-      {/* Display questions related to the community */}
-      <div>
-        {qlist.length > 0 ? (
-          qlist.map(q => (
-            <QuestionView key={q._id} q={q} /> // Directly pass q to QuestionView
-          ))
-        ) : (
-          <p>No questions available for this community.</p>
-        )}
+      <div className='home-content'>
+        <div className='sidebar-container'>
+          <MembersSidebar />
+          <Link className='chat-button' to={`/chat/community/${user.community}`}>
+            Chat with Community
+          </Link>
+        </div>
+        <div className='questions-container'>
+          <CommunityQuestions />
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,8 @@ import { addQuestion } from '../services/questionService';
 import useUserContext from './useUserContext';
 import { Question } from '../types';
 
+import { getRelevantCommunities, updateCommunityQuestions } from '../services/communityService';
+
 /**
  * Custom hook to handle question submission and form validation
  *
@@ -27,6 +29,7 @@ const useNewQuestion = () => {
   const [textErr, setTextErr] = useState<string>('');
   const [tagErr, setTagErr] = useState<string>('');
 
+  const chosenTags = tagNames.split(' ').filter(tagName => tagName.trim() !== '');
   /**
    * Function to validate the form before submitting the question.
    *
@@ -55,18 +58,17 @@ const useNewQuestion = () => {
       setTextErr('');
     }
 
-    const tagnames = tagNames.split(' ').filter(tagName => tagName.trim() !== '');
-    if (tagnames.length === 0) {
+    if (chosenTags.length === 0) {
       setTagErr('Should have at least 1 tag');
       isValid = false;
-    } else if (tagnames.length > 5) {
+    } else if (chosenTags.length > 5) {
       setTagErr('Cannot have more than 5 tags');
       isValid = false;
     } else {
       setTagErr('');
     }
 
-    for (const tagName of tagnames) {
+    for (const tagName of chosenTags) {
       if (tagName.length > 20) {
         setTagErr('New tag length cannot be more than 20');
         isValid = false;
@@ -85,8 +87,7 @@ const useNewQuestion = () => {
   const postQuestion = async () => {
     if (!validateForm()) return;
 
-    const tagnames = tagNames.split(' ').filter(tagName => tagName.trim() !== '');
-    const tags = tagnames.map(tagName => ({
+    const tags = chosenTags.map(tagName => ({
       name: tagName,
       description: 'user added tag',
     }));
@@ -105,9 +106,22 @@ const useNewQuestion = () => {
     };
 
     const res = await addQuestion(question);
+    const relevantCommunities = await getRelevantCommunities(chosenTags);
 
     if (res && res._id) {
-      navigate('/home');
+      const questionId = res._id;
+
+      await Promise.all(
+        relevantCommunities.map(async community => {
+          try {
+            await updateCommunityQuestions(community, questionId);
+          } catch (error) {
+            console.error(`Failed to update community ${community}:`, error);
+          }
+        }),
+      );
+
+      navigate('/questions');
     }
   };
 

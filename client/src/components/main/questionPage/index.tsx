@@ -11,6 +11,7 @@ import useQuestionPage from '../../../hooks/useQuestionPage';
  */
 const QuestionPage = () => {
   const { titleText, qlist, setQuestionOrder } = useQuestionPage();
+  // console.log(qlist);
 
   return (
     <>

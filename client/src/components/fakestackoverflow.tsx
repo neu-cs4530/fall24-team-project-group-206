@@ -19,22 +19,25 @@ import ChooseTagsPage from './login/newUser/chooseTagsPage/index';
 import ChooseCommunityPage from './login/newUser/chooseCommunityPage';
 import CommunityHomePage from './main/homePage/community';
 import ChatPage from './main/chat';
+import DefaultHomePage from './main/homePage/default';
 import CommunityInfo from './main/profile/community';
 
 const ProtectedRoute = ({
   user,
   socket,
+  setUser,
   children,
 }: {
   user: User | null;
   socket: FakeSOSocket | null;
+  setUser: (user: User | null) => void;
   children: JSX.Element;
 }) => {
   if (!user || !socket) {
     return <Navigate to='/' />;
   }
 
-  return <UserContext.Provider value={{ user, socket }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, socket, setUser }}>{children}</UserContext.Provider>;
 };
 
 /**
@@ -51,18 +54,33 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
         <Route path='/' element={<UserSelection />} />
         <Route path='/existing' element={<Login />} />
         <Route path='/new' element={<CreateUser />} />
-        <Route path='/new/tagselection' element={<ChooseTagsPage />} />
-        <Route path='/new/tagselection/communityselection' element={<ChooseCommunityPage />} />
+        <Route
+          path='/new/tagselection'
+          element={
+            <ProtectedRoute user={user} socket={socket} setUser={setUser}>
+              <ChooseTagsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/new/tagselection/communityselection'
+          element={
+            <ProtectedRoute user={user} socket={socket} setUser={setUser}>
+              <ChooseCommunityPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Protected Routes */}
         {
           <Route
             element={
-              <ProtectedRoute user={user} socket={socket}>
+              <ProtectedRoute user={user} socket={socket} setUser={setUser}>
                 <Layout />
               </ProtectedRoute>
             }>
-            <Route path='home' element={<CommunityHomePage />} /> {/* should become community */}
+            <Route path='communityHome' element={<CommunityHomePage />} />
+            <Route path='defaultHome' element={<DefaultHomePage />} />
             <Route path='chat/community/:community' element={<ChatPage />} />
             <Route path='tags' element={<TagPage />} />
             <Route path='questions' element={<QuestionPage />} />

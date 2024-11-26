@@ -37,6 +37,7 @@ const questionController = (socket: FakeSOSocket) => {
     const { askedBy } = req.query;
     try {
       let qlist: Question[] = await getQuestionsByOrder(order);
+      // console.log(qlist);
       // Filter by askedBy if provided
       if (askedBy) {
         qlist = filterQuestionsByAskedBy(qlist, askedBy);
