@@ -37,7 +37,7 @@ const QuestionView = ({ q, inCommunity }: QuestionProps) => {
     const searchParams = new URLSearchParams();
     searchParams.set('tag', tagName);
 
-    navigate(`/home?${searchParams.toString()}`);
+    navigate(`/tags`);
   };
 
   const deleteQuestion = async (question: Question) => {
