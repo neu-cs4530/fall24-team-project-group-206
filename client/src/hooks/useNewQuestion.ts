@@ -109,11 +109,12 @@ const useNewQuestion = () => {
     const relevantCommunities = await getRelevantCommunities(chosenTags);
 
     if (res && res._id) {
-      console.log(relevantCommunities);
+      const questionId = res._id;
+
       await Promise.all(
         relevantCommunities.map(async community => {
           try {
-            await updateCommunityQuestions(community, question);
+            await updateCommunityQuestions(community, questionId);
           } catch (error) {
             console.error(`Failed to update community ${community}:`, error);
           }

@@ -57,10 +57,10 @@ const addUserToCommunity = async (username: string, communityName: string): Prom
  */
 const updateCommunityQuestions = async (
   communityName: string,
-  newQuestion: Question,
+  questionId: string,
 ): Promise<Community> => {
   const res = await api.patch(`${COMMUNITY_API_URL}/updateCommunityQuestions/${communityName}`, {
-    question: newQuestion,
+    questionId,
   });
 
   if (res.status !== 200) {

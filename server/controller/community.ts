@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import CommunityModel from '../models/communities';
 import TagModel from '../models/tags';
 import { FakeSOSocket, Question } from '../types';
+import QuestionModel from '../models/questions';
 
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
@@ -104,45 +105,37 @@ const communityController = (socket: FakeSOSocket) => {
 
   const updateCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { communityName } = req.params;
-    const { question } = req.body;
+    const { questionId } = req.body;
 
-    if (!question || !question.title || !question.text || !question.askedBy) {
-      res.status(400).json({ error: 'Invalid question data' });
+    if (!questionId) {
+      res.status(400).json({ error: 'Question ID is required.' });
       return;
     }
 
-    const questionToPush = {
-      title: question.title,
-      text: question.text,
-      tags: question.tags,
-      askedBy: question.askedBy,
-      askDateTime: question.askDateTime,
-      answers: question.answers,
-      upVotes: question.upVotes,
-      downVotes: question.downVotes,
-      views: question.views,
-      comments: question.comments,
-    };
-
     try {
+      const existingQuestion = await QuestionModel.findById(questionId);
+
+      if (!existingQuestion) {
+        res.status(404).json({ error: 'Question not found.' });
+        return;
+      }
+
       const updatedCommunity = await CommunityModel.findOneAndUpdate(
         { name: communityName },
-        { $push: { questions: questionToPush } },
+        { $addToSet: { questions: questionId } },
         { new: true, runValidators: true },
       );
 
       if (!updatedCommunity) {
-        res.status(404).json({ error: 'Community not found' });
+        res.status(404).json({ error: 'Community not found.' });
         return;
       }
 
       res.json(updatedCommunity);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error updating community questions' });
+    } catch (error: unknown) {
+      res.status(500).json({ error: 'Error updating community questions.' });
     }
   };
-
   router.get('/getCommunityNames', getCommunityNames);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.patch('/addUserToCommunity/:communityName', addUserToCommunity);
