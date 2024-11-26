@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import express, { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import {
@@ -7,6 +8,7 @@ import {
   AddQuestionRequest,
   VoteRequest,
   FakeSOSocket,
+  EditQuestionRequest,
 } from '../types';
 import {
   addVoteToQuestion,
@@ -18,6 +20,8 @@ import {
   populateDocument,
   saveQuestion,
 } from '../models/application';
+import UserModel from '../models/users';
+import QuestionModel from '../models/questions';
 
 const questionController = (socket: FakeSOSocket) => {
   const router = express.Router();

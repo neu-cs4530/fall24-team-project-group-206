@@ -7,11 +7,13 @@ import { auth } from '../../../../firebaseConfig';
 import { getUser, increaseUserStatus } from '../../../../services/userService';
 import { getQuestionsByFilter } from '../../../../services/questionService';
 import { Question } from '../../../../types';
+import useUserContext from '../../../../hooks/useUserContext';
 
 /**
  * AccountInfo component which displays the user's username and status.
  */
 const AccountInfo = () => {
+  const { user } = useUserContext();
   const [userData, setUserData] = useState({
     first_name: '',
     last_name: '',
@@ -28,6 +30,7 @@ const AccountInfo = () => {
       return { ...prevData, status: 'moderator' };
     });
     await increaseUserStatus(username);
+    user.status = 'moderator';
   };
 
   useEffect(() => {

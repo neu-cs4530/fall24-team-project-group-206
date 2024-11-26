@@ -4,6 +4,7 @@ import './index.css';
 import useCommunityNames from '../../../../hooks/useCommunityNames';
 import useUserContext from '../../../../hooks/useUserContext';
 import { getUser, updateUserCommunity } from '../../../../services/userService';
+import { updatedUserInCommunity } from '../../../../services/communityService';
 
 /**
  * CommunityInfo component which displays the community (if applicable) that they are in.
@@ -46,6 +47,10 @@ const CommunityInfo = () => {
         community: userCommunity,
       });
       console.log(user);
+      user.community = userCommunity;
+      console.log('Community updated:', userCommunity);
+      await updatedUserInCommunity(user.username, userCommunity);
+      console.log('User updated in community:', userCommunity);
     } catch (error) {
       console.error('Error saving community:', error);
     }

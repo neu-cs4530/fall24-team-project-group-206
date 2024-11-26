@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
+import { FaRegTrashCan } from 'react-icons/fa6';
 import { getMetaData } from '../../../../tool';
 import { Question } from '../../../../types';
+import useUserContext from '../../../../hooks/useUserContext';
+import { removeQuestion } from '../../../../services/questionService';
 
 /**
  * Interface representing the props for the Question component.
@@ -11,6 +14,7 @@ import { Question } from '../../../../types';
  */
 interface QuestionProps {
   q: Question;
+  inCommunity?: boolean;
 }
 
 /**
@@ -20,8 +24,9 @@ interface QuestionProps {
  *
  * @param q - The question object containing question details.
  */
-const QuestionView = ({ q }: QuestionProps) => {
+const QuestionView = ({ q, inCommunity }: QuestionProps) => {
   const navigate = useNavigate();
+  const { user } = useUserContext();
 
   /**
    * Function to navigate to the home page with the specified tag as a search parameter.
@@ -35,13 +40,28 @@ const QuestionView = ({ q }: QuestionProps) => {
     navigate(`/home?${searchParams.toString()}`);
   };
 
+  const deleteQuestion = async (question: Question) => {
+    try {
+      if (question._id) {
+        await removeQuestion(question._id);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('error removing');
+    }
+  };
+
   /**
    * Function to navigate to the specified question page based on the question ID.
    *
    * @param questionID - The ID of the question to navigate to.
    */
   const handleAnswer = (questionID: string) => {
-    navigate(`/question/${questionID}`);
+    if (inCommunity) {
+      navigate(`/communityHome/question/${questionID}`);
+    } else {
+      navigate(`/question/${questionID}`);
+    }
   };
 
   // console.log(`tags: ${q.tags}`);
@@ -72,6 +92,18 @@ const QuestionView = ({ q }: QuestionProps) => {
               {tag.name}
             </button>
           ))}
+          {user.status === 'moderator' && inCommunity && (
+            <>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteQuestion(q);
+                }}
+                className='trashcan'>
+                <FaRegTrashCan />
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className='lastActivity'>

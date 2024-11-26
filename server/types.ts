@@ -223,7 +223,33 @@ export interface AnswerUpdatePayload {
 }
 
 export interface CommunityUpdatePayload {
-  community: string;
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
+}
+
+// ADD COMMENT
+export interface communityRequest extends Request {
+  body: {
+    name: string;
+    user: string;
+  };
+}
+
+export interface EditQuestionPayload {
+  qid: ObjectId;
+  text: string;
+}
+
+export interface EditQuestionRequest {
+  params: {
+    qid: ObjectId;
+    username: string;
+  }
+  body: {
+    newText: string;
+  }
 }
 
 /**
@@ -235,5 +261,6 @@ export interface ServerToClientEvents {
   viewsUpdate: (question: QuestionResponse) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
-  communityUpdate: (update: CommunityUpdatePayload) => void;
+  communityUpdate: (community: CommunityUpdatePayload) => void;
+  editQuestionUpdate: (update: EditQuestionPayload) => void;
 }

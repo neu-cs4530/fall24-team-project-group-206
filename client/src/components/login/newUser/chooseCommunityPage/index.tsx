@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +18,7 @@ const ChooseCommunityPage = () => {
   const { communityNames, loading: loadingAll, error: errorAll } = useCommunityNames();
 
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
+  // const [updayedCommunity, setUpdatedCommunity] = useState<Community>();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ const ChooseCommunityPage = () => {
     try {
       const { currentUser } = auth;
       if (currentUser) {
-        await updateUserCommunity(currentUser.email!, community);
+        await updateUserCommunity(currentUser.email!, community); // Call the backend service
         setUser({
           ...user,
           community,

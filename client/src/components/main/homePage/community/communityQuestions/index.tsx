@@ -20,6 +20,7 @@ const CommunityQuestions = () => {
         // console.log(fetchedQuestions);
         setQuestions(fetchedQuestions);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch questions');
       } finally {
         setLoading(false);
@@ -36,7 +37,7 @@ const CommunityQuestions = () => {
   return (
     <div>
       {questions.length > 0 ? (
-        questions.map(q => <QuestionView key={q._id} q={q} />)
+        questions.map(q => <QuestionView key={q._id} q={q} inCommunity={true} />)
       ) : (
         <p>No questions available for this community.</p>
       )}

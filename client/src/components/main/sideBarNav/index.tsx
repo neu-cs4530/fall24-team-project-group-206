@@ -13,7 +13,6 @@ const SideBarNav = () => {
   const { user } = useUserContext();
 
   // Dynamically set the navigation path based on user.community
-  console.log(`side bar: ${user.community}`);
   const homePath = useMemo(
     () => (user.community ? '/communityHome' : '/defaultHome'),
     [user?.community],

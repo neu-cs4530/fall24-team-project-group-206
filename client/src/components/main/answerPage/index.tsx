@@ -9,11 +9,15 @@ import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
 import useAnswerPage from '../../../hooks/useAnswerPage';
 
+interface AnswerPageProps {
+  inCommunity?: boolean;
+}
+
 /**
  * AnswerPage component that displays the full content of a question along with its answers.
  * It also includes the functionality to vote, ask a new question, and post a new answer.
  */
-const AnswerPage = () => {
+const AnswerPage = ({ inCommunity }: AnswerPageProps) => {
   const { questionID, question, handleNewComment, handleNewAnswer } = useAnswerPage();
 
   if (!question) {
@@ -29,6 +33,8 @@ const AnswerPage = () => {
         text={question.text}
         askby={question.askedBy}
         meta={getMetaData(new Date(question.askDateTime))}
+        questionId={questionID}
+        inCommunity={inCommunity}
       />
       <CommentSection
         comments={question.comments}

@@ -1,6 +1,10 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useState } from 'react';
 import './index.css';
+import { FiEdit } from 'react-icons/fi';
 import { handleHyperlink } from '../../../../tool';
+import { editQuestion } from '../../../../services/questionService';
+import useUserContext from '../../../../hooks/useUserContext';
 
 /**
  * Interface representing the props for the QuestionBody component.
@@ -15,6 +19,8 @@ interface QuestionBodyProps {
   text: string;
   askby: string;
   meta: string;
+  questionId: string;
+  inCommunity?: boolean;
 }
 
 /**
@@ -27,15 +33,55 @@ interface QuestionBodyProps {
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
  */
-const QuestionBody = ({ views, text, askby, meta }: QuestionBodyProps) => (
-  <div id='questionBody' className='questionBody right_padding'>
-    <div className='bold_title answer_question_view'>{views} views</div>
-    <div className='answer_question_text'>{handleHyperlink(text)}</div>
-    <div className='answer_question_right'>
-      <div className='question_author'>{askby}</div>
-      <div className='answer_question_meta'>asked {meta}</div>
+const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: QuestionBodyProps) => {
+  const { user } = useUserContext();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(text);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await editQuestion(questionId, editedText, user.username);
+      setIsEditing(false);
+      setEditedText(response.text);
+    } catch (error) {
+      console.error('Error editing question:', error);
+    }
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedText(e.target.value);
+  };
+
+  return (
+    <div id='questionBody' className='questionBody right_padding'>
+      <div className='bold_title answer_question_view'>{views} views</div>
+      {isEditing ? (
+        <div>
+          <textarea value={editedText} onChange={handleTextChange} />
+          <button onClick={handleSave}>Save</button>
+        </div>
+      ) : (
+        <div className='answer_question_text'>{handleHyperlink(text)}</div>
+      )}
+      <div className='answer_question_right'>
+        <div className='question_author'>{askby}</div>
+        <div className='answer_question_meta'>asked {meta}</div>
+        {user.status === 'moderator' && inCommunity && (
+          <>
+            {!isEditing && (
+              <button onClick={handleEditClick} className='edit-icon-button'>
+                <FiEdit size={20} />
+              </button>
+            )}
+          </>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default QuestionBody;

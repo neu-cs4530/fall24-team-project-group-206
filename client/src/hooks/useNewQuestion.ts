@@ -116,6 +116,7 @@ const useNewQuestion = () => {
           try {
             await updateCommunityQuestions(community, questionId);
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(`Failed to update community ${community}:`, error);
           }
         }),

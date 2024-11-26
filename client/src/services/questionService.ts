@@ -87,4 +87,29 @@ const downvoteQuestion = async (qid: string, username: string) => {
   return res.data;
 };
 
-export { getQuestionsByFilter, getQuestionById, addQuestion, upvoteQuestion, downvoteQuestion };
+// ADD COMMENT
+const editQuestion = async (qid: string, newText: string, username: string) => {
+  const res = await api.patch(`${QUESTION_API_URL}/editQuestion/${qid}/${username}`, { newText });
+  if (res.status !== 200) {
+    throw new Error('Error while editing the question');
+  }
+  return res.data;
+};
+
+const removeQuestion = async (qid: string) => {
+  const res = await api.delete(`${QUESTION_API_URL}/removeQuestion/${qid}`);
+  if (res.status !== 200) {
+    throw new Error('Error while removing the question');
+  }
+  return res.data;
+};
+
+export {
+  getQuestionsByFilter,
+  getQuestionById,
+  addQuestion,
+  upvoteQuestion,
+  downvoteQuestion,
+  removeQuestion,
+  editQuestion,
+};

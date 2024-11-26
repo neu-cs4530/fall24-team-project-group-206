@@ -1,22 +1,43 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useEffect, useState } from 'react';
 import './index.css';
+import useUserContext from '../../../../../hooks/useUserContext';
+import { getCommunityMembers } from '../../../../../services/communityService';
 
 const MembersSidebar = () => {
-  // placeholder for now:
-  const members = [
-    'Member 1',
-    'Member 2',
-    'Member 3',
-    'Member 4',
-    'Member 5',
-    'Member 6',
-    'Member 7',
-    'Member 8',
-    'Member 9',
-    'Member 10',
-    'Member 11',
-    'Member 12',
-  ];
+  const { user, socket } = useUserContext();
+  const [members, setMembers] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (!user.community) {
+        return;
+      }
+      try {
+        console.log(`Fetching members for community: ${user.community}`);
+        const fetchedMembers = await getCommunityMembers(user.community);
+        setMembers(fetchedMembers);
+      } catch (err) {
+        console.log('Failed to fetch members');
+      }
+    };
+
+    if (user.community) {
+      fetchMembers();
+    }
+
+    const handleCommunityUpdate = (community: { name: string; users: string[] }) => {
+      if (community.name === user.community) {
+        console.log(`Received update for community: ${community.name}`);
+        setMembers(community.users);
+      }
+    };
+
+    socket.on('communityUpdate', handleCommunityUpdate);
+    return () => {
+      socket.off('communityUpdate');
+    };
+  }, [user.community, socket]);
 
   return (
     <div className='members-sidebar'>
@@ -25,11 +46,15 @@ const MembersSidebar = () => {
         <hr className='title-line' />
       </div>
       <div className='members-list'>
-        {members.map((member, index) => (
-          <div key={index} className='member-item'>
-            {member}
-          </div>
-        ))}
+        {members.length > 0 ? (
+          members.map((member, index) => (
+            <div key={index} className='member-item'>
+              {member}
+            </div>
+          ))
+        ) : (
+          <div>No members found</div>
+        )}
       </div>
     </div>
   );

@@ -26,7 +26,6 @@ const useCommunityNames = () => {
         }
       } catch (e) {
         setError('Failed to fetch community names.');
-        console.error(e);
       } finally {
         setLoading(false);
       }
