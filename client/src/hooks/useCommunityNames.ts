@@ -14,6 +14,9 @@ const useCommunityNames = () => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
+    /**
+     * Function to fetch community names from the server and update the community list.
+     */
     const fetchCommunityNames = async () => {
       setLoading(true);
       setError('');

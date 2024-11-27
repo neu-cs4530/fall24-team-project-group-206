@@ -26,6 +26,9 @@ const useTagPage = () => {
   };
 
   useEffect(() => {
+    /**
+     * Function to fetch tag data from the server and update the tag list.
+     */
     const fetchData = async () => {
       try {
         const res = await getTagsWithQuestionNumber();

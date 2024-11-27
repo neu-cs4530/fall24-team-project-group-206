@@ -16,6 +16,8 @@ import useLoginContext from './useLoginContext';
  * @returns isLoading - The current loading state.
  * @returns handleEmailChange - Function to handle changes in the email input field.
  * @returns handlePasswordChange - Function to handle changes in the password input field.
+ * @returns handleFirstNameChange - Function to handle changes in the first name input field.
+ * @returns handleLastNameChange - Function to handle changes in the last name input field.
  * @returns handleSubmit - Function to handle user creation submission
  */
 const useCreateUser = () => {
@@ -29,22 +31,42 @@ const useCreateUser = () => {
   const { setUser } = useLoginContext();
   const navigate = useNavigate();
 
+  /**
+   * Function to handle the email inputchange event.
+   * @param e - the event object.
+   */
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
+  /**
+   * Function to handle the password input change event.
+   * @param e - the event object.
+   */
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
+  /**
+   * Function to handle the first name input change event.
+   * @param e - the event object.
+   */
   const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFirstName(e.target.value);
   };
 
+  /**
+   * Function to handle the last name input change event.
+   * @param e - the event object.
+   */
   const handleLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value);
   };
 
+  /**
+   * Function to handle the submit input change event.
+   * @param e - the event object.
+   */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);

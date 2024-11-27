@@ -12,6 +12,7 @@ import { getUser } from '../services/userService';
  * @returns titleText - The current title of the question page
  * @returns qlist - The list of questions to display
  * @returns setQuestionOrder - Function to set the sorting order of questions (e.g., newest, oldest).
+ * @returns userCommunity - The community of the current user.
  */
 const useQuestionPage = () => {
   const { socket, user } = useUserContext();

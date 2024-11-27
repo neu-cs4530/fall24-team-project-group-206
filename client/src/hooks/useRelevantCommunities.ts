@@ -8,6 +8,8 @@ import { getRelevantCommunities } from '../services/communityService';
  *
  * @returns relevantCommunities - The current list of relevant communities.
  * @returns setRelevantCommunities - Setter to manually update the relevant communities state if needed.
+ * @returns loading - The current loading state.
+ * @returns error - The current error message.
  */
 const useRelevantCommunities = (tags: string[]) => {
   const [relevantCommunities, setRelevantCommunities] = useState<string[]>([]);
@@ -15,6 +17,9 @@ const useRelevantCommunities = (tags: string[]) => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
+    /**
+     * Function to fetch relevant communities based on the provided tags.
+     */
     const fetchRelevantCommunities = async () => {
       setLoading(true);
       setError('');

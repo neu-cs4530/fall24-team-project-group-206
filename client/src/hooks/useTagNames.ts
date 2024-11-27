@@ -7,13 +7,15 @@ import { Tag } from '../types';
  *
  * @param t - The tag object to fetch data for
  *
- * @returns tag - The current tag details (name and description).
- * @returns setTag - Setter to manually update the tag state if needed.
+ * @returns tagnames - The current list of tag names.
  */
 const useTagNames = () => {
   const [tagNames, setTagNames] = useState<Tag[]>([]);
 
   useEffect(() => {
+    /**
+     * Function to fetch tag names from the server and update the tag list.
+     */
     const fetchData = async () => {
       try {
         const res = await getTagNames();
