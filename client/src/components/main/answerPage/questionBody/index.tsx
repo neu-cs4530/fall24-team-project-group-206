@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './index.css';
-import { FiEdit } from 'react-icons/fi';
+import { FaPencilAlt } from 'react-icons/fa';
 import { handleHyperlink } from '../../../../tool';
 import { editQuestion } from '../../../../services/questionService';
 import useUserContext from '../../../../hooks/useUserContext';
@@ -62,7 +62,9 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
       {isEditing ? (
         <div>
           <textarea value={editedText} onChange={handleTextChange} />
-          <button onClick={handleSave}>Save</button>
+          <button className='save-button' onClick={handleSave}>
+            Save
+          </button>
         </div>
       ) : (
         <div className='answer_question_text'>{handleHyperlink(text)}</div>
@@ -74,7 +76,7 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
           <>
             {!isEditing && (
               <button onClick={handleEditClick} className='edit-icon-button'>
-                <FiEdit size={20} />
+                <FaPencilAlt size={20} />
               </button>
             )}
           </>
