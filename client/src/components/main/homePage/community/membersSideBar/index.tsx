@@ -29,6 +29,10 @@ const MembersSidebar = () => {
       fetchMembers();
     }
 
+    /**
+     * Handles the update of members for the community that the user is part of.
+     * @param community - The community that the member update is for.
+     */
     const handleCommunityUpdate = (community: { name: string; users: string[] }) => {
       if (community.name === user.community) {
         console.log(`Received update for community: ${community.name}`);

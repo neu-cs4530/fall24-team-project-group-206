@@ -24,6 +24,9 @@ const AccountInfo = () => {
   const [qualifyModerator, setQualifyModerator] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
 
+  /**
+   * Increases the user's status to moderator.
+   */
   const updateUserStatus = async () => {
     setUserData(prevData => {
       if (prevData.status === 'moderator') return prevData;

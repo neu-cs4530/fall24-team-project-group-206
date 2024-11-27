@@ -44,7 +44,6 @@ const useAnswerForm = () => {
       isValid = false;
     }
 
-    // Hyperlink validation
     if (!validateHyperlink(text)) {
       setTextErr('Invalid hyperlink format.');
       isValid = false;
@@ -64,7 +63,6 @@ const useAnswerForm = () => {
     const res = await addAnswer(questionID, answer);
 
     if (res && res._id) {
-      // navigate to the question that was answered
       navigate(`/question/${questionID}`);
     }
   };

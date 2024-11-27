@@ -40,10 +40,16 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
 
+  /**
+   * Function to handle the click event when the user wants to edit the question.
+   */
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
+  /**
+   * Function to handle the save event when the user wants to save the edited question.
+   */
   const handleSave = async () => {
     try {
       const response = await editQuestion(questionId, editedText, user.username);
@@ -54,6 +60,10 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
     }
   };
 
+  /**
+   * Handles the change event when the user edits the text area.
+   * @param e - The event object representing the change in the text area.
+   */
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedText(e.target.value);
   };

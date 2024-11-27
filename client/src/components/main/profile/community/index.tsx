@@ -8,6 +8,7 @@ import { updatedUserInCommunity } from '../../../../services/communityService';
 
 /**
  * CommunityInfo component which displays the community (if applicable) that they are in.
+ * The user can select a new community from the list of available communities.
  */
 const CommunityInfo = () => {
   const { user, setUser } = useUserContext();
@@ -29,14 +30,24 @@ const CommunityInfo = () => {
     fetchUserCommunity();
   }, [user]);
 
+  /**
+   * Allows the user to select a new community.
+   * @param communityName - The name of the community to be selected.
+   */
   const handleCommunitySelect = (communityName: string) => {
     setUserCommunity(communityName);
   };
 
+  /**
+   * Removes the community from the user's account.
+   */
   const handleCommunityRemove = () => {
     setUserCommunity('');
   };
 
+  /**
+   * Saves the chosen community to the user's account.
+   */
   const saveCommunityToUserAccount = async () => {
     if (!user?.username) return;
 
@@ -55,6 +66,9 @@ const CommunityInfo = () => {
     }
   };
 
+  /**
+   * Filters out the user's current community from the list of available communities.
+   */
   const filteredCommunities = communityNames.filter(community => community !== userCommunity);
 
   return (

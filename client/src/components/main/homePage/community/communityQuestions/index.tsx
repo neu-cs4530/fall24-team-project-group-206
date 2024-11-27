@@ -30,6 +30,10 @@ const CommunityQuestions = () => {
 
     fetchQuestions();
 
+    /**
+     * Handles the update of questions for the community that the user is part of.
+     * @param community - The community that the question update is for.
+     */
     const handleCommunityQuestionUpdate = (community: { name: string; questions: Question[] }) => {
       if (community.name === user.community) {
         console.log(community.name);
