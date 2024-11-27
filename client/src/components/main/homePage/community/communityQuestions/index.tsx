@@ -6,8 +6,8 @@ import QuestionView from '../../../questionPage/question';
 import useUserContext from '../../../../../hooks/useUserContext';
 
 /**
- * CommunityQuestions component fetches and displays the list of questions
- * for the community that the current user is part of.
+ * Component that fetches and displays the list of questions for the community that the
+ * current user is part of.
  */
 const CommunityQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);

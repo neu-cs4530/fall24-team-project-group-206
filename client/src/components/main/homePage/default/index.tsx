@@ -2,7 +2,7 @@ import QuestionPage from '../../questionPage';
 import './index.css';
 
 /**
- * DefaultHomePage component renders a page displaying questions from the QuestionPage component
+ * Component that renders a page displaying questions from the QuestionPage component
  * with a title indicating that no community is selected.
  */
 const DefaultHomePage = () => (

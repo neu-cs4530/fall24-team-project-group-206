@@ -19,7 +19,6 @@ const ChooseCommunityPage = () => {
   const { communityNames, loading: loadingAll, error: errorAll } = useCommunityNames();
 
   const [selectedCommunity, setSelectedCommunity] = useState<string>('');
-  // const [updayedCommunity, setUpdatedCommunity] = useState<Community>();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 

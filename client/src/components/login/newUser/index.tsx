@@ -1,9 +1,12 @@
-import React from 'react';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
 import useCreateUser from '../../../hooks/useCreateUser';
 import logo from '../../../logo.svg';
 
+/**
+ * Component to support login for new users. Will prompt them for their first and last name,
+ * email, and password.
+ */
 const CreateUser = () => {
   const navigate = useNavigate();
   const handleUserTypeSelection = () => {

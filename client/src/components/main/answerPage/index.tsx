@@ -1,4 +1,3 @@
-import React from 'react';
 import { getMetaData } from '../../../tool';
 import AnswerView from './answer';
 import AnswerHeader from './header';
@@ -9,6 +8,11 @@ import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
 import useAnswerPage from '../../../hooks/useAnswerPage';
 
+/**
+ * Interface representing the props for the AnswerPageProps component.
+ *
+ * - inCommunity - Optional, Whether this is a community question for the user or not
+ */
 interface AnswerPageProps {
   inCommunity?: boolean;
 }
@@ -16,6 +20,8 @@ interface AnswerPageProps {
 /**
  * AnswerPage component that displays the full content of a question along with its answers.
  * It also includes the functionality to vote, ask a new question, and post a new answer.
+ *
+ * @param inCommunity Whether this is a community question for the user or not
  */
 const AnswerPage = ({ inCommunity }: AnswerPageProps) => {
   const { questionID, question, handleNewComment, handleNewAnswer } = useAnswerPage();

@@ -5,7 +5,7 @@ import CommunityQuestions from './communityQuestions';
 import useUserContext from '../../../../hooks/useUserContext';
 
 /**
- * CommunityHomePage component renders a page displaying the user's community
+ * Component that renders a page displaying the user's community members
  * and questions related to that community.
  */
 const CommunityHomePage = () => {

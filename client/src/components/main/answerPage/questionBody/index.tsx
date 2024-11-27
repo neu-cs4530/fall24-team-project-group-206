@@ -13,6 +13,7 @@ import useUserContext from '../../../../hooks/useUserContext';
  * - text - The content of the question, which may contain hyperlinks.
  * - askby - The username of the user who asked the question.
  * - meta - Additional metadata related to the question, such as the date and time it was asked.
+ * - inCommunity - Optional, Whether this is a community question for the user or not
  */
 interface QuestionBodyProps {
   views: number;
@@ -32,6 +33,7 @@ interface QuestionBodyProps {
  * @param text The content of the question.
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
+ * @param inCommunity  Whether this is a community question for the user or not.
  */
 const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: QuestionBodyProps) => {
   const { user } = useUserContext();

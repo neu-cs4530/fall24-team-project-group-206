@@ -4,6 +4,9 @@ import './index.css';
 import useUserContext from '../../../../../hooks/useUserContext';
 import { getCommunityMembers } from '../../../../../services/communityService';
 
+/**
+ * Component to display all members in a community.
+ */
 const MembersSidebar = () => {
   const { user, socket } = useUserContext();
   const [members, setMembers] = useState<string[]>([]);

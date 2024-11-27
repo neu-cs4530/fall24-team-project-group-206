@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './index.css';
 import { NavLink } from 'react-router-dom';
 import useTagNames from '../../../../hooks/useTagNames';
-import { updateUserTags } from '../../../../services/userService'; // Import the userService function
+import { updateUserTags } from '../../../../services/userService';
 import logo from '../../../../logo.svg';
 import useUserContext from '../../../../hooks/useUserContext';
 
