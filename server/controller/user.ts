@@ -88,12 +88,14 @@ const userController = (socket: FakeSOSocket) => {
 
       if (!username) {
         res.status(400).json({ error: 'Username is required' });
+        return;
       }
 
       const user = await UserModel.findOne({ username });
 
       if (!user) {
         res.status(404).json({ error: 'User not found' });
+        return;
       }
 
       res.status(200).json(user);

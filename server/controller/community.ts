@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community, FakeSOSocket } from '../types';
+import { Community, FakeSOSocket, Question } from '../types';
 import TagModel from '../models/tags';
 import QuestionModel from '../models/questions';
+import { sortQuestionsByNewest } from '../models/application';
 
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
@@ -52,7 +53,7 @@ const communityController = (socket: FakeSOSocket) => {
         return;
       }
 
-      res.json(communityData.questions);
+      res.json(sortQuestionsByNewest(communityData.questions as Question[]));
     } catch (error) {
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
@@ -77,7 +78,6 @@ const communityController = (socket: FakeSOSocket) => {
           socket.emit('communityUpdate', {
             name: comm.name,
             users: comm.users.filter(user => user !== username),
-            tags: comm.tags,
           });
         });
         res.status(200).json({ message: 'User removed from all communities successfully' });
@@ -91,7 +91,6 @@ const communityController = (socket: FakeSOSocket) => {
         socket.emit('communityUpdate', {
           name: comm.name,
           users: comm.users.filter(user => user !== username),
-          tags: comm.tags,
         });
       });
 
@@ -107,7 +106,6 @@ const communityController = (socket: FakeSOSocket) => {
       }
       socket.emit('communityUpdate', {
         name: newCommunity.name,
-        tags: newCommunity.tags,
         users: newCommunity.users,
       });
       console.log(`Added user: ${username} to new community: ${newCommunity}`);
@@ -162,9 +160,26 @@ const communityController = (socket: FakeSOSocket) => {
 
       const updatedCommunity = await CommunityModel.findOneAndUpdate(
         { name: communityName },
-        { $addToSet: { questions: questionId } },
+        { $addToSet: { questions: existingQuestion as Question } },
         { new: true, runValidators: true },
       );
+
+      const populatedCommunity = await CommunityModel.findOne({ name: communityName }).populate({
+        path: 'questions',
+        populate: [
+          { path: 'tags', model: 'Tag' },
+          { path: 'answers', model: 'Answer' },
+        ],
+      });
+
+      // console.log(populatedCommunity);
+      if (populatedCommunity) {
+        console.log(populatedCommunity.questions);
+        socket.emit('communityQuestionUpdate', {
+          name: communityName,
+          questions: populatedCommunity.questions as Question[],
+        });
+      }
 
       if (!updatedCommunity) {
         res.status(404).json({ error: 'Community not found.' });

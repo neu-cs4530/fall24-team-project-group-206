@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { getCommunityQuestions } from '../../../../../services/communityService';
 import { Question } from '../../../../../types';
@@ -11,26 +12,39 @@ import useUserContext from '../../../../../hooks/useUserContext';
 const CommunityQuestions = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { user } = useUserContext();
+  const { user, socket } = useUserContext();
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const fetchedQuestions = await getCommunityQuestions(user.community);
-        // console.log(fetchedQuestions);
-        setQuestions(fetchedQuestions);
+        if (user.community) {
+          const fetchedQuestions = await getCommunityQuestions(user.community);
+          setQuestions(fetchedQuestions);
+        }
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error('Failed to fetch questions');
       } finally {
         setLoading(false);
       }
     };
 
-    if (user.community) {
-      fetchQuestions();
-    }
-  }, [user.community]);
+    fetchQuestions();
+
+    const handleCommunityQuestionUpdate = (community: { name: string; questions: Question[] }) => {
+      if (community.name === user.community) {
+        console.log(community.name);
+        console.log(community.questions);
+        console.log(`Received question update for community: ${community.name}`);
+        setQuestions(community.questions);
+      }
+    };
+
+    socket.on('communityQuestionUpdate', handleCommunityQuestionUpdate);
+
+    return () => {
+      socket.off('communityQuestionUpdate', handleCommunityQuestionUpdate);
+    };
+  }, [user.community, socket]);
 
   if (loading) return <p>Loading questions...</p>;
 

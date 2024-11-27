@@ -224,8 +224,12 @@ export interface AnswerUpdatePayload {
 
 export interface CommunityUpdatePayload {
   name: string;
-  tags: string[];
   users: string[];
+}
+
+export interface CommunityQuestionUpdatePayload {
+  name: string;
+  questions: Question[];
 }
 
 // ADD COMMENT
@@ -261,5 +265,6 @@ export interface ServerToClientEvents {
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
   communityUpdate: (community: CommunityUpdatePayload) => void;
+  communityQuestionUpdate: (community: CommunityQuestionUpdatePayload) => void;
   editQuestionUpdate: (update: EditQuestionPayload) => void;
 }

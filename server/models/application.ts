@@ -81,7 +81,7 @@ const checkKeywordInQuestion = (q: Question, keywordlist: string[]): boolean => 
  *
  * @returns {Question[]} - The sorted list of questions
  */
-const sortQuestionsByNewest = (qlist: Question[]): Question[] =>
+export const sortQuestionsByNewest = (qlist: Question[]): Question[] =>
   qlist.sort((a, b) => {
     if (a.askDateTime > b.askDateTime) {
       return -1;

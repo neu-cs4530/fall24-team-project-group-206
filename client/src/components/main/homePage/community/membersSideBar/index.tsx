@@ -35,7 +35,7 @@ const MembersSidebar = () => {
 
     socket.on('communityUpdate', handleCommunityUpdate);
     return () => {
-      socket.off('communityUpdate');
+      socket.off('communityUpdate', handleCommunityUpdate);
     };
   }, [user.community, socket]);
 

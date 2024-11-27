@@ -150,6 +150,13 @@ export interface CommunityUpdatePayload {
   questions: Question[];
 }
 
+export interface CommunityQuestionUpdatePayload {
+  name: string;
+  tags: string[];
+  users: string[];
+  questions: Question[];
+}
+
 export interface CommunityData {
   name: string;
   tags: string[];
@@ -175,6 +182,7 @@ export interface ServerToClientEvents {
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (update: CommentUpdatePayload) => void;
   communityUpdate: (update: CommunityUpdatePayload) => void;
+  communityQuestionUpdate: (update: CommunityQuestionUpdatePayload) => void;
   editQuestionUpdate: (update: EditQuestionPayload) => void;
 }
 
