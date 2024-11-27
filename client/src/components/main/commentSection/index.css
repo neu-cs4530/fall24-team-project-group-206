@@ -89,11 +89,13 @@
 }
 
 .comment-textarea:focus {
-  border-color: #007bff;
+  border-color: #d4a5a5;
   outline: none;
 }
 
 .add-comment-button {
+  width: 20px;
+  height: 40px;
   flex: 1;
   background-color: #BABDE2;
   color: white;
@@ -102,6 +104,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
+  margin-top: 38.5px;
 }
 
 .add-comment-button:hover {
