@@ -24,6 +24,7 @@ const userController = (socket: FakeSOSocket) => {
       res.status(200).json(newUser);
     } catch (error) {
       res.status(500).json({ error: 'Error adding user' });
+      return;
     }
   };
 
@@ -36,6 +37,7 @@ const userController = (socket: FakeSOSocket) => {
 
       if (!username || !tags) {
         res.status(400).json({ error: 'Username and tags are required' });
+        return;
       }
 
       const updatedUser = await UserModel.findOneAndUpdate(
@@ -46,11 +48,13 @@ const userController = (socket: FakeSOSocket) => {
 
       if (!updatedUser) {
         res.status(404).json({ error: 'User not found' });
+        return;
       }
 
       res.status(200).json(updatedUser);
     } catch (error) {
       res.status(500).json({ error: 'Error updating tags' });
+      return;
     }
   };
 
@@ -63,19 +67,20 @@ const userController = (socket: FakeSOSocket) => {
 
       if (!username) {
         res.status(400).json({ error: 'Username required' });
+        return;
       }
 
       const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
 
       if (!user) {
         res.status(404).json({ error: 'User not found' });
+        return;
       }
-      // socket.emit('communityUpdate', {
-      //   community,
-      // });
+
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ error: 'Error updating community' });
+      return;
     }
   };
 
@@ -101,6 +106,7 @@ const userController = (socket: FakeSOSocket) => {
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching user data' });
+      return;
     }
   };
 
@@ -113,16 +119,20 @@ const userController = (socket: FakeSOSocket) => {
   router.get('/getListOfAllUsers', async (req: Request, res: Response) => {
     try {
       const users = await UserModel.find();
-
-      if (!users) {
-        return res.status(404).json({ message: 'No users not found' });
+  
+      if (!users || users.length === 0) {
+        res.status(404).json({ message: 'No users found' });
+        return;
       }
-
-      return res.status(200).json(users);
+  
+      res.status(200).json(users);
     } catch (error) {
-      return res.status(500).json({ message: 'Error fetching user data' });
+      console.error('Error fetching users:', error);
+      res.status(500).json({ error: 'Error fetching user data' }); // Added `error` key
+      return;
     }
   });
+  
 
   router.put('/increaseUserStatus', async (req: Request, res: Response) => {
     try {
@@ -132,12 +142,14 @@ const userController = (socket: FakeSOSocket) => {
       const user = await UserModel.findOneAndUpdate({ username }, { status }, { new: true });
 
       if (!user) {
-        return res.status(404).json({ message: 'No users not found' });
+        res.status(404).json({ message: 'User not found' });
+        return;
       }
 
-      return res.status(200).json(user);
+      res.status(200).json(user);
     } catch (error) {
-      return res.status(500).json({ message: 'Error fetching user data' });
+      res.status(500).json({ message: 'Error updating user status' });
+      return;
     }
   });
 
