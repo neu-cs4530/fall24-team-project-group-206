@@ -28,7 +28,6 @@ const communityController = (socket: FakeSOSocket) => {
         console.log('No questions available for this community.');
         return { ...community.toObject(), questions: [] };
       }
-      // Return the community with populated question data
       return { ...community.toObject(), questions: community.questions };
     } catch (error) {
       console.error('Error fetching community by name:', error);
@@ -38,7 +37,7 @@ const communityController = (socket: FakeSOSocket) => {
 
   const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
-
+  
     try {
       const communityData = await CommunityModel.findOne({ name: community }).populate({
         path: 'questions',
@@ -47,17 +46,18 @@ const communityController = (socket: FakeSOSocket) => {
           { path: 'answers', model: 'Answer' },
         ],
       });
-      // console.log(communityData);
+  
       if (!communityData) {
         res.status(404).json({ error: 'Community not found' });
         return;
       }
-
-      res.json(sortQuestionsByNewest(communityData.questions as Question[]));
+  
+      res.json(communityData.questions);
     } catch (error) {
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
   };
+  
 
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     const { username, community } = req.body;
@@ -69,10 +69,8 @@ const communityController = (socket: FakeSOSocket) => {
 
     try {
       if (!community) {
-        console.log(`No community selected. Removing user ${username} from all communities.`);
         const communitiesAffectedByRemoval = await CommunityModel.find({ users: username });
         await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
-        console.log(`${username} removed from all communities.`);
 
         communitiesAffectedByRemoval.forEach(comm => {
           socket.emit('communityUpdate', {
@@ -83,7 +81,7 @@ const communityController = (socket: FakeSOSocket) => {
         res.status(200).json({ message: 'User removed from all communities successfully' });
         return;
       }
-      console.log(`Removing user ${username} from all communities`);
+
       const communitiesAffected = await CommunityModel.find({ users: username });
       await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
 
@@ -94,7 +92,6 @@ const communityController = (socket: FakeSOSocket) => {
         });
       });
 
-      console.log(`Adding user ${username} to the new community`);
       const newCommunity = await CommunityModel.findOneAndUpdate(
         { name: community },
         { $addToSet: { users: username } },
@@ -108,10 +105,8 @@ const communityController = (socket: FakeSOSocket) => {
         name: newCommunity.name,
         users: newCommunity.users,
       });
-      console.log(`Added user: ${username} to new community: ${newCommunity}`);
       res.status(200).json('successfully added to the community users list');
     } catch (error) {
-      console.error('Error when adding user to community:', error);
       res.status(500).json({ error: 'Failed to add user to community' });
     }
   };
@@ -151,18 +146,23 @@ const communityController = (socket: FakeSOSocket) => {
     }
 
     try {
-      const existingQuestion = await QuestionModel.findById(questionId);
+      const question = await QuestionModel.findById(questionId);
 
-      if (!existingQuestion) {
+      if (!question) {
         res.status(404).json({ error: 'Question not found.' });
         return;
       }
 
       const updatedCommunity = await CommunityModel.findOneAndUpdate(
         { name: communityName },
-        { $addToSet: { questions: existingQuestion as Question } },
-        { new: true, runValidators: true },
+        { $addToSet: { questions: question._id } },
+        { new: true }
       );
+
+      if (!updatedCommunity) {
+        res.status(404).json({ error: 'Community not found.' });
+        return;
+      }
 
       const populatedCommunity = await CommunityModel.findOne({ name: communityName }).populate({
         path: 'questions',
@@ -172,18 +172,11 @@ const communityController = (socket: FakeSOSocket) => {
         ],
       });
 
-      // console.log(populatedCommunity);
-      if (populatedCommunity) {
-        console.log(populatedCommunity.questions);
+      if (populatedCommunity && Array.isArray(populatedCommunity.questions)) {
         socket.emit('communityQuestionUpdate', {
           name: communityName,
           questions: populatedCommunity.questions as Question[],
         });
-      }
-
-      if (!updatedCommunity) {
-        res.status(404).json({ error: 'Community not found.' });
-        return;
       }
 
       res.json(updatedCommunity);
@@ -194,32 +187,17 @@ const communityController = (socket: FakeSOSocket) => {
 
   const getCommunityMembers = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
-    console.log(`Received request to get members of community: ${community}`);
 
     try {
       const communityData = await CommunityModel.findOne({ name: community });
       if (!communityData) {
-        console.log(`Community not found: ${community}`);
         res.status(404).json({ message: 'Community not found' });
         return;
       }
-      console.log(`Retrieved users for community ${community}: ${communityData.users}`);
       res.status(200).json(communityData.users);
     } catch (error) {
-      console.error('Error retrieving users for the community:', error);
       res.status(500).json({ error: 'Error retrieving questions for the community' });
-    }
-  };
 
-  router.get('/getCommunityNames', getCommunityNames);
-  router.get('/getCommunityByName/:name', getCommunityByName);
-  router.get('/getCommunityQuestions/:community', getCommunityQuestions);
-  router.get('/getCommunityMembers/:community', getCommunityMembers);
-  router.get('/getRelevantCommunities', getRelevantCommunities);
-  router.patch('/addUserToCommunity', addUserToCommunity);
-  router.patch('/updateCommunityQuestions/:communityName', updateCommunityQuestions);
-
-  return router;
 };
 
 export default communityController;
