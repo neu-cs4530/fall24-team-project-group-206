@@ -46,6 +46,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  margin-bottom: -25px;
 }
 
 .user-details .username {
@@ -66,8 +67,8 @@
   width: auto; 
   align-self: flex-start; 
   align-items: flex-start;
+  justify-content: flex-start;
   margin-left: 250px;
-  justify-content: center;
   padding: 10px 20px;
   font-size: 16px;
   background-color: #BABDE2;

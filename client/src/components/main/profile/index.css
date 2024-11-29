@@ -4,7 +4,6 @@
   align-items: left;
   height: 70vh;
   width: calc(100% - 10px);
-  /* background-color: #F5F5F5; */
 }
 
 .sideBarHome {
@@ -41,18 +40,15 @@
   }
   
   .profile-content {
-    /* background-color: #F5F5F5; */
     flex-grow: 1;
     padding: 20px;
   }
 
   .profile-title {
-    /* background-color: #F5F5F5; */
     margin: 3%;
   }
 
   .title-text {
-    /* background-color: #F5F5F5; */
     flex-grow: 1;
     padding: 20px;
   }

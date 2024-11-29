@@ -1,9 +1,11 @@
-import React from 'react';
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
 import useLogin from '../../../hooks/useLogin';
 import logo from '../../../logo.svg';
 
+/**
+ * Component to support login with email and password for users that already have an account.
+ */
 const Login = () => {
   const navigate = useNavigate();
   const handleUserTypeSelection = () => {

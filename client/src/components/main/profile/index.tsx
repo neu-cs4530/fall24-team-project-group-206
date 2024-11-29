@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
 import './index.css';
 import { Outlet, useLocation } from 'react-router-dom';
 import SideBarHome from './sideBarHome';
 
 /**
  * Profile Page contains the user's profile information including account info, tags, community,
- * and status
+ * and status.
  */
 const ProfilePage = () => {
   const location = useLocation();

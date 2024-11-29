@@ -31,8 +31,8 @@ const getTagByName = async (name: string): Promise<Tag> => {
 };
 
 /**
- * ADD TESTS??????
- * @returns names of tags
+ * Function to get tag names.
+ * @returns A Promise containing the names of tags.
  */
 const getTagNames = async (): Promise<Tag[]> => {
   const res = await api.get(`${TAG_API_URL}/getTagNames`);

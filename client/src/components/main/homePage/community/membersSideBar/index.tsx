@@ -4,6 +4,9 @@ import './index.css';
 import useUserContext from '../../../../../hooks/useUserContext';
 import { getCommunityMembers } from '../../../../../services/communityService';
 
+/**
+ * Component to display all members in a community.
+ */
 const MembersSidebar = () => {
   const { user, socket } = useUserContext();
   const [members, setMembers] = useState<string[]>([]);
@@ -26,6 +29,10 @@ const MembersSidebar = () => {
       fetchMembers();
     }
 
+    /**
+     * Handles the update of members for the community that the user is part of.
+     * @param community - The community that the member update is for.
+     */
     const handleCommunityUpdate = (community: { name: string; users: string[] }) => {
       if (community.name === user.community) {
         console.log(`Received update for community: ${community.name}`);

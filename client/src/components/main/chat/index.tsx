@@ -3,8 +3,8 @@ import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
-/*
- *  The chat page with all messages between users or communities.
+/**
+ * Supports a view for a user chat page.
  */
 const ChatPage = () => {
   const {
@@ -44,8 +44,8 @@ const ChatPage = () => {
                 type='text'
                 value={searchTerm}
                 onChange={handleSearchChange}
-                onBlur={() => setTimeout(() => setDropdownOpen(false), 200)} // Close dropdown after clicking outside
-                onFocus={() => setDropdownOpen(true)} // Open dropdown on focus
+                onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
+                onFocus={() => setDropdownOpen(true)}
               />
               {dropdownOpen && filteredUsers.length > 0 && (
                 <div className='dropdown-list'>

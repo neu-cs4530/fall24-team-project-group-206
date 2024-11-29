@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
@@ -7,6 +8,27 @@ import { getListOfAllUsers } from '../services/userService';
 import { db } from '../firebaseConfig';
 import { User } from '../types';
 
+/**
+ * Custom hook to handle chat functionality.
+ *
+ * @returns pathname - The current URL pathname.
+ * @returns community - The current community name retrieved from the URL parameters.
+ * @returns user - The current user object.
+ * @returns currentMessage - The current message being typed by the user.
+ * @returns messages - The list of messages between the current user and the selected user.
+ * @returns send - The username of the user to send the message to.
+ * @returns handleInputChange - Function to handle changes to the current message input.
+ * @returns scrollUp - Function to scroll up in the chat window.
+ * @returns saveMessagesToUserAccount - Function to save the current message to the user's account.
+ * @returns scrollDown - Function to scroll down in the chat window.
+ * @returns handleUserClick - Function to handle the selection of a user from the dropdown.
+ * @returns dropdownOpen - The current state of the dropdown menu.
+ * @returns selectedUsers - The list of selected users.
+ * @returns handleSearchChange - Function to handle changes to the search input.
+ * @returns filteredUsers - The list of users filtered by the search term.
+ * @returns setDropdownOpen - Function to set the state of the dropdown menu.
+ * @returns searchTerm - The current search term.
+ */
 const useChat = () => {
   const { pathname } = useLocation();
   const { community } = useParams();
@@ -26,18 +48,29 @@ const useChat = () => {
     .filter(u => u.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter(curr => curr.toLowerCase() !== user.username);
 
+  /**
+   * Function to handle changes to the search input.
+   * @param e - The event object.
+   */
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
     setSearchTerm(e.target.value);
     setDropdownOpen(true); // Open the dropdown when typing
   };
 
+  /**
+   * Function to handle the selection of a user from the dropdown.
+   * @param username - The username of the selected user.
+   */
   const handleUserClick = (username: string) => {
     setSend(username);
     setSearchTerm(username);
     setDropdownOpen(false); // Close the dropdown after selection
   };
 
+  /**
+   * Function to fetch the list of all users from the database.
+   */
   const fetchUsers = async () => {
     try {
       const result = await getListOfAllUsers();
@@ -49,7 +82,7 @@ const useChat = () => {
   };
 
   useEffect(() => {
-    fetchUsers(); // Fetch users on mount
+    fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -59,10 +92,19 @@ const useChat = () => {
     }
   }, [community, pathname, setSend, setSearchTerm]);
 
+  /**
+   * Function to handle changes to the current message input.
+   * @param e - The event object.
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentMessage(e.target.value);
   };
 
+  /**
+   * Function to save the current message to the user's account.
+   * @param message - The message to save.
+   * @param sendTo - The username of the user to send the message to.
+   */
   const saveMessagesToUserAccount = async (message: string, sendTo: string) => {
     try {
       if (
@@ -86,13 +128,14 @@ const useChat = () => {
   useEffect(() => {
     if (!user?.username) return;
 
-    // Query to retrieve messages where the current user is either the sender (username) or receiver (sendTo)
     const q = query(collection(db, 'messages'), orderBy('timestamp', 'asc'));
 
     if (pathname.includes('community') && community) {
+      /**
+       * Function to fetch messages between the current user and the selected user.
+       */
       const unsubscribe = onSnapshot(q, querySnapshot => {
         const loadedMessages = querySnapshot.docs
-          // eslint-disable-next-line @typescript-eslint/no-shadow
           .map(doc => ({
             message: doc.data().message,
             username: doc.data().username,
@@ -103,13 +146,14 @@ const useChat = () => {
         setMessages(loadedMessages);
       });
 
-      // eslint-disable-next-line consistent-return
       return () => unsubscribe();
     }
 
+    /**
+     * Function to fetch messages between the current user and the selected user.
+     */
     const unsubscribe = onSnapshot(q, querySnapshot => {
       const loadedMessages = querySnapshot.docs
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         .map(doc => ({
           message: doc.data().message,
           username: doc.data().username,
@@ -124,14 +168,19 @@ const useChat = () => {
       setMessages(loadedMessages);
     });
 
-    // eslint-disable-next-line consistent-return
     return () => unsubscribe();
   }, [user, send, pathname, community]);
 
+  /**
+   * Function to scroll up in the chat window.
+   */
   const scrollUp = () => {
     messageContainer?.scrollBy(0, -100);
   };
 
+  /**
+   * Function to scroll down in the chat window.
+   */
   const scrollDown = () => {
     messageContainer?.scrollBy(0, 100);
   };

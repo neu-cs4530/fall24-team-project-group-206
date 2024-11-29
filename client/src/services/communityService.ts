@@ -5,7 +5,7 @@ import { Community, Question } from '../types';
 const COMMUNITY_API_URL = `${process.env.REACT_APP_SERVER_URL}/community`;
 
 /**
- * ADD TESTS??????
+ * Fetches the names of all communities.
  * @returns names of communities
  */
 const getCommunityNames = async (): Promise<Community[]> => {
@@ -16,6 +16,11 @@ const getCommunityNames = async (): Promise<Community[]> => {
   return res.data;
 };
 
+/**
+ * Fetches the questions for a specific community.
+ * @param community - The name of the community for which questions will be fetched.
+ * @returns A Promise containing the questions for the community.
+ */
 const getCommunityQuestions = async (community: string): Promise<Question[]> => {
   const res = await api.get(`${COMMUNITY_API_URL}/getCommunityQuestions/${community}`);
   if (res.status !== 200) {
@@ -24,6 +29,11 @@ const getCommunityQuestions = async (community: string): Promise<Question[]> => 
   return res.data;
 };
 
+/**
+ * Fetches the names of relevant communities based on the provided tags.
+ * @param tags - The tags to search for relevant communities
+ * @returns A Promise containing the names of relevant communities.
+ */
 const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
   try {
     const res = await api.get(`${COMMUNITY_API_URL}/getRelevantCommunities`, {
@@ -39,6 +49,12 @@ const getRelevantCommunities = async (tags: string[]): Promise<string[]> => {
   }
 };
 
+/**
+ * Updates the user in a community.
+ * @param username - The username of the user to update.
+ * @param community - The community to update the user in.
+ * @returns A Promise containing the updated community.
+ */
 const updatedUserInCommunity = async (username: string, community: string): Promise<Community> => {
   const res = await api.patch(`${COMMUNITY_API_URL}/addUserToCommunity`, { username, community });
   if (res.status !== 200) {
@@ -70,6 +86,11 @@ const updateCommunityQuestions = async (
   return res.data;
 };
 
+/**
+ * Fetches the members of a specific community.
+ * @param community - The name of the community for which members will be fetched.
+ * @returns A Promise containing the members of the community.
+ */
 const getCommunityMembers = async (community: string): Promise<string[]> => {
   const res = await api.get(`${COMMUNITY_API_URL}/getCommunityMembers/${community}`);
   if (res.status !== 200) {

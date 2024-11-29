@@ -87,7 +87,13 @@ const downvoteQuestion = async (qid: string, username: string) => {
   return res.data;
 };
 
-// ADD COMMENT
+/**
+ * Function to edit a question.
+ * @param qid - The ID of the question to edit.
+ * @param newText - The new text of the question.
+ * @param username - The username of the person editing the question.
+ * @returns The updated question.
+ */
 const editQuestion = async (qid: string, newText: string, username: string) => {
   const res = await api.patch(`${QUESTION_API_URL}/editQuestion/${qid}/${username}`, { newText });
   if (res.status !== 200) {
@@ -96,6 +102,11 @@ const editQuestion = async (qid: string, newText: string, username: string) => {
   return res.data;
 };
 
+/**
+ * Function to remove a question.
+ * @param qid - The ID of the question to remove.
+ * @returns The removed question.
+ */
 const removeQuestion = async (qid: string) => {
   const res = await api.delete(`${QUESTION_API_URL}/removeQuestion/${qid}`);
   if (res.status !== 200) {

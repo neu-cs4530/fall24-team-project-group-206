@@ -11,6 +11,7 @@ import { removeQuestion } from '../../../../services/questionService';
  * Interface representing the props for the Question component.
  *
  * q - The question object containing details about the question.
+ * inCommunity - Optional, whether the question is in the user's community questions.
  */
 interface QuestionProps {
   q: Question;
@@ -23,6 +24,7 @@ interface QuestionProps {
  * and clicking on a tag triggers the clickTag function.
  *
  * @param q - The question object containing question details.
+ * @param inCommunity - Optional, whether the question is in the user's community questions.
  */
 const QuestionView = ({ q, inCommunity }: QuestionProps) => {
   const navigate = useNavigate();
@@ -40,6 +42,11 @@ const QuestionView = ({ q, inCommunity }: QuestionProps) => {
     navigate(`/tags`);
   };
 
+  /**
+   * Function to delete the specified question.
+   *
+   * @param question - The question to be deleted
+   * */
   const deleteQuestion = async (question: Question) => {
     try {
       if (question._id) {
@@ -63,8 +70,6 @@ const QuestionView = ({ q, inCommunity }: QuestionProps) => {
       navigate(`/question/${questionID}`);
     }
   };
-
-  // console.log(`tags: ${q.tags}`);
 
   return (
     <div

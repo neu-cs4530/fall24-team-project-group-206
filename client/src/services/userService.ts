@@ -22,6 +22,12 @@ const addUser = async (user: User): Promise<User> => {
   }
 };
 
+/**
+ * Updates the tags of a user.
+ * @param username - The username of the user to update.
+ * @param tags - The tags to update for the user.
+ * @returns - The updated user object from the server response.
+ */
 const updateUserTags = async (username: string, tags: string[]): Promise<User> => {
   const res = await api.put(`${USER_API_URL}/updateTags`, { username, tags });
   if (res.status !== 200) {
@@ -29,6 +35,13 @@ const updateUserTags = async (username: string, tags: string[]): Promise<User> =
   }
   return res.data;
 };
+
+/**
+ * Updates the community of a user.
+ * @param username - The username of the user to update.
+ * @param community - The community to update for the user.
+ * @returns - The updated user object from the server response.
+ */
 const updateUserCommunity = async (username: string, community: string): Promise<User> => {
   const res = await api.put(`${USER_API_URL}/updateCommunity`, { username, community });
   if (res.status !== 200) {
@@ -37,6 +50,11 @@ const updateUserCommunity = async (username: string, community: string): Promise
   return res.data;
 };
 
+/**
+ * Fetches the user object from the server.
+ * @param username - The username of the user to fetch.
+ * @returns - The user object from the server response.
+ */
 const getUser = async (username: string): Promise<User> => {
   const res = await api.get(`${USER_API_URL}/getUser`, { params: { username } });
   if (res.status !== 200) {
@@ -45,6 +63,10 @@ const getUser = async (username: string): Promise<User> => {
   return res.data;
 };
 
+/**
+ * Fetches a list of all users from the server.
+ * @returns - A list of all users from the server response.
+ */
 const getListOfAllUsers = async (): Promise<User[]> => {
   const res = await api.get(`${USER_API_URL}/getListOfAllUsers`);
   if (Array.isArray(res.data)) {
@@ -56,6 +78,10 @@ const getListOfAllUsers = async (): Promise<User[]> => {
   return [];
 };
 
+/**
+ * Increases the status of a user.
+ * @param username - The username of the user to update.
+ */
 const increaseUserStatus = async (username: string): Promise<void> => {
   const res = await api.put(`${USER_API_URL}/increaseUserStatus`, { username });
   if (res.status !== 200) {

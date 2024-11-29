@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './index.css';
@@ -10,7 +9,8 @@ import { Question } from '../../../../types';
 import useUserContext from '../../../../hooks/useUserContext';
 
 /**
- * AccountInfo component which displays the user's username and status.
+ * AccountInfo component which displays general account information, like the user's first and
+ * last name, and their username and status.
  */
 const AccountInfo = () => {
   const { user } = useUserContext();
@@ -24,6 +24,9 @@ const AccountInfo = () => {
   const [qualifyModerator, setQualifyModerator] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
 
+  /**
+   * Increases the user's status to moderator.
+   */
   const updateUserStatus = async () => {
     setUserData(prevData => {
       if (prevData.status === 'moderator') return prevData;
@@ -56,7 +59,6 @@ const AccountInfo = () => {
 
     fetchUserData();
 
-    // Get account creation time from firebase metadata
     const firebaseUser = auth.currentUser;
     if (firebaseUser && firebaseUser.metadata.creationTime) {
       setCreationTime(new Date(firebaseUser.metadata.creationTime).toLocaleDateString());

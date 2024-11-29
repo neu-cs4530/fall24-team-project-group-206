@@ -2,9 +2,9 @@ import { useLocation } from 'react-router-dom';
 import useUserContext from '../../../hooks/useUserContext';
 
 /**
- * The message bubbles that differ in color and position depending on the user.
- * @param param0 takes in the message and username to style and show on the page.
- * @returns The message bubbles.
+ * How a message is stored.
+ * @param message Message being sent
+ * @param username Username of current user
  */
 const Message = ({ message, username }: { message: string; username: string }) => {
   const { user } = useUserContext();

@@ -14,13 +14,12 @@ const TagsInfo = () => {
   const [chosenTags, setChosenTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch tags from MongoDB when the component is mounted
   useEffect(() => {
     const fetchTags = async () => {
       if (!user?.username) return;
 
       try {
-        const data = await getUser(user.username); // Fetch user data from MongoDB
+        const data = await getUser(user.username);
         setChosenTags(data.tags || []);
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -30,16 +29,25 @@ const TagsInfo = () => {
     fetchTags();
   }, [user]);
 
-  // Handle adding a tag to the chosen list
+  /**
+   * Adds tags to the chosen tags. If the tag is already chosen, it will not be added.
+   * @param tagName - The name of the tag to be added to the chosen tags.
+   */
   const handleTagAdd = (tagName: string) => {
     setChosenTags(prevTags => [...prevTags, tagName]);
   };
 
-  // Handle removing a tag from the chosen list
+  /**
+   * Removes tags from the chosen tags. If the tag is not chosen, it will not be removed.
+   * @param tagName - The name of the tag to be removed from the chosen tags.
+   */
   const handleTagRemove = (tagName: string) => {
     setChosenTags(prevTags => prevTags.filter(tag => tag !== tagName));
   };
 
+  /**
+   * Saves the chosen tags to the user's account.
+   */
   const saveTagsToUserAccount = async () => {
     if (!user?.username) return;
 
@@ -54,6 +62,9 @@ const TagsInfo = () => {
     }
   };
 
+  /**
+   * Filters the tags based on the search term and the chosen tags.
+   */
   const filteredTags = tagNames
     .filter(tag => !chosenTags.includes(tag.name))
     .filter(tag => tag.name.toLowerCase().includes(searchTerm.toLowerCase()));

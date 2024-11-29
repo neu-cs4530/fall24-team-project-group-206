@@ -160,6 +160,10 @@ const useAnswerPage = () => {
       }
     };
 
+    /**
+     * Function to handle editing of a question.
+     * @param newText New question data.
+     */
     const handleEditQuestion = (newText: NewQuestionData) => {
       setQuestion(prevQuestion =>
         prevQuestion

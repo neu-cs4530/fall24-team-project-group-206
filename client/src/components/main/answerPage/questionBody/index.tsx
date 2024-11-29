@@ -13,6 +13,7 @@ import useUserContext from '../../../../hooks/useUserContext';
  * - text - The content of the question, which may contain hyperlinks.
  * - askby - The username of the user who asked the question.
  * - meta - Additional metadata related to the question, such as the date and time it was asked.
+ * - inCommunity - Optional, Whether this is a community question for the user or not
  */
 interface QuestionBodyProps {
   views: number;
@@ -32,16 +33,23 @@ interface QuestionBodyProps {
  * @param text The content of the question.
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
+ * @param inCommunity  Whether this is a community question for the user or not.
  */
 const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: QuestionBodyProps) => {
   const { user } = useUserContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
 
+  /**
+   * Function to handle the click event when the user wants to edit the question.
+   */
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
+  /**
+   * Function to handle the save event when the user wants to save the edited question.
+   */
   const handleSave = async () => {
     try {
       const response = await editQuestion(questionId, editedText, user.username);
@@ -52,6 +60,10 @@ const QuestionBody = ({ views, text, askby, meta, questionId, inCommunity }: Que
     }
   };
 
+  /**
+   * Handles the change event when the user edits the text area.
+   * @param e - The event object representing the change in the text area.
+   */
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedText(e.target.value);
   };
