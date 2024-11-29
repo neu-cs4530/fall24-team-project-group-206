@@ -7,6 +7,10 @@ const userController = (socket: FakeSOSocket) => {
 
   /**
    * Adds a new user to the database.
+   * @param req The Request object that contains the all the information of users.
+   * @param res The HTTP response object used to add users.
+   *
+   * @returns A Promise that resolves to void.
    */
   const addUser = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -29,6 +33,10 @@ const userController = (socket: FakeSOSocket) => {
 
   /**
    * Updates the tags for a given user.
+   * @param req The Request object that contains the username and tags of a user.
+   * @param res The HTTP response object used to update the user tag list.
+   *
+   * @returns A Promise that resolves to void.
    */
   const updateUserTags = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -55,7 +63,11 @@ const userController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Updates the community for a given user.
+   * Updates the users community.
+   * @param req The Request object that contains the community name and username.
+   * @param res The HTTP response object used to update the users community.
+   *
+   * @returns A Promise that resolves to void.
    */
   const updateUserCommunity = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -81,6 +93,10 @@ const userController = (socket: FakeSOSocket) => {
 
   /**
    * Retrieves user data based on the provided username.
+   * @param req The Request object that a username.
+   * @param res The HTTP response object used to retreive user data.
+   *
+   * @returns A Promise that resolves to void.
    */
   const getUser = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -110,6 +126,11 @@ const userController = (socket: FakeSOSocket) => {
   router.put('/updateCommunity', updateUserCommunity);
   router.get('/getUser', getUser);
 
+  /**
+   * Returns all the users.
+   * @param req The Request object that contains all the users.
+   * @param res The HTTP response object used to get all the users.
+   */
   router.get('/getListOfAllUsers', async (req: Request, res: Response) => {
     try {
       const users = await UserModel.find();
@@ -124,6 +145,11 @@ const userController = (socket: FakeSOSocket) => {
     }
   });
 
+  /**
+   * Increases a users status to moderator.
+   * @param req The Request object that contains the username.
+   * @param res The HTTP response object used to incerase user status.
+   */
   router.put('/increaseUserStatus', async (req: Request, res: Response) => {
     try {
       const { username } = req.body;

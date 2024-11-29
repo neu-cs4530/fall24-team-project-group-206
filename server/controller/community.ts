@@ -9,6 +9,13 @@ import { sortQuestionsByNewest } from '../models/application';
 const communityController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
 
+  /**
+   * Returns all the communities from the Database.
+   * @param req The Request object that contains the communities.
+   * @param res The HTTP response object used to send back the filtered list of questions.
+   *
+   * @returns A Promise that resolves to void.
+   */
   const getCommunityNames = async (req: Request, res: Response): Promise<void> => {
     try {
       const communities = await CommunityModel.find({});
@@ -18,6 +25,13 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Finds a Community by Name.
+   * @param name The Request object with the community name.
+   * @returns The HTTP response object used to send back the filtered list of questions.
+   *
+   * @returns A Promise that resolves to Community or null if not found.
+   */
   const getCommunityByName = async (name: string): Promise<Community | null> => {
     try {
       const community = await CommunityModel.findOne({ name }).populate('questions');
@@ -36,6 +50,14 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Gets the questionss of a Commubnity.
+   *
+   * @param req The Request object that contains the Community.
+   * @param res The HTTP response object used to send back the filtered list of questions.
+   *
+   * @returns A Promise that resolves to a void.
+   */
   const getCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
 
@@ -59,6 +81,13 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Adds the username to the Community.
+   * @param req The Request object that contains a username and a community name.
+   * @param res The HTTP response object used to add the username to the community.
+   *
+   * @returns A Promise that resolves to a void.
+   */
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     const { username, community } = req.body;
 
@@ -116,6 +145,13 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Finds the relavant communities based on the tags.
+   * @param req The Request object that contains tags.
+   * @param res The HTTP response object used to find the relevant communties based on the tags.
+   *
+   * @returns A Promise that resolves to a void.
+   */
   const getRelevantCommunities = async (req: Request, res: Response): Promise<void> => {
     const { tags } = req.query;
 
@@ -141,6 +177,12 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Updates the Questions in a Community.
+   * @param req The Request object that updates the Community with a new Question.
+   * @param res The HTTP response object used to add questions to communities.
+   * @returns A Promise that resolves to a void.
+   */
   const updateCommunityQuestions = async (req: Request, res: Response): Promise<void> => {
     const { communityName } = req.params;
     const { questionId } = req.body;
@@ -192,6 +234,13 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Finds all the members in a community.
+   * @param req The Request object containinng the community name.
+   * @param res The HTTP response object used to find the members of a community.
+   *
+   * @returns A Promise that resolves to a void.
+   */
   const getCommunityMembers = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
     console.log(`Received request to get members of community: ${community}`);

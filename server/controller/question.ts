@@ -253,6 +253,13 @@ const questionController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Handles deleting a question from the database.
+   *
+   * @param req The FindQuestionByIdRequest object containing the question ID .
+   * @param res The HTTP response object used to send back the result of the operation.
+   *
+   */
   const removeQuestion = async (req: FindQuestionByIdRequest, res: Response): Promise<void> => {
     try {
       const { qid } = req.params;

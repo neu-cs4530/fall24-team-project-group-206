@@ -57,7 +57,7 @@ const tagController = () => {
   };
 
   /**
-   * MAKE TESTS***************
+   * Finds all the tags.
    * @param req The Request object containing the tag name in the URL parameters.
    * @param res The HTTP response object used to send back the result of the operation.
    */
