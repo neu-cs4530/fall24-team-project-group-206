@@ -3,6 +3,9 @@ import { FaCaretUp, FaCaretDown } from 'react-icons/fa';
 import Message from './Message';
 import useChat from '../../../hooks/useChat';
 
+/*
+ *  The chat page with all messages between users or communities.
+ */
 const ChatPage = () => {
   const {
     pathname,
@@ -64,7 +67,6 @@ const ChatPage = () => {
         {messages.map((m, index) => (
           <>
             <Message key={index} message={m.message} username={m.username} />
-            <br />
           </>
         ))}
       </div>

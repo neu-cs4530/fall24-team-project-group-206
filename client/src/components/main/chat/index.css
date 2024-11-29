@@ -85,29 +85,26 @@
   font-size: 24px;
   max-width: 100%;
   white-space: nowrap;
-  margin-bottom: 5px;
+  font-size: 18px;
+  padding: 3px 15px;
+  margin-bottom: 10px;
+  clear: both;
 }
 
 .chat-text-user {
   text-align: left !important;
-  padding: 3px 15px;
   background: #f1f1f1;
   color: #000 !important;
   border-radius: 20px 20px 20px 3px;
   margin-left: 10px;
-  font-size: 18px;
 }
 
 .chat-text-me {
   float: right;
-  padding: 3px 15px;
   background: #DFAEA1;
   color: #fff !important;
-  border-radius: 30px 20px 3px 30px;
-  margin-bottom: 10px;
-  clear: both;
+  border-radius: 20px 20px 3px 20px;
   margin-right: 10px;
-  font-size: 18px;
 }
 
 .username-chat {
