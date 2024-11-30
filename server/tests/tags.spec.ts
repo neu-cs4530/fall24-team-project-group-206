@@ -45,3 +45,27 @@ describe('GET /getTagsWithQuestionNumber', () => {
     expect(response.status).toBe(500);
   });
 });
+
+describe('GET /getTagNames', () => {
+  afterEach(async () => {
+    await mongoose.connection.close(); // Ensure the connection is properly closed
+  });
+
+  afterAll(async () => {
+    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
+  });
+  it('should return error 500 if getTagNames throws an error', async () => {
+    getTagCountMapSpy.mockRejectedValueOnce(new Error('Error fetching tags'));
+
+    const response = await supertest(app).get('/tag/getTagsWithQuestionNumber');
+
+    expect(response.status).toBe(500);
+  });
+  it('should return error 200 if getTagCountMap throws an error', async () => {
+    getTagCountMapSpy.mockRejectedValueOnce(new Error('Error fetching tags'));
+
+    const response = await supertest(app).get('/tag/getTagsWithQuestionNumber');
+
+    expect(response.status).toBe(500);
+  });
+});
