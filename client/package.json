@@ -5,6 +5,8 @@
   "dependencies": {
     "@cypress/instrument-cra": "^1.4.0",
     "axios": "^1.7.2",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "firebase": "^11.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -44,6 +46,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^8.57.0",
+    "@types/express-session": "^1.18.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
