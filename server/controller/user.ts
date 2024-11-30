@@ -42,8 +42,8 @@ const userController = (socket: FakeSOSocket) => {
     try {
       const { username, tags } = req.body;
 
-      if (!username || !tags) {
-        res.status(400).json({ error: 'Username and tags are required' });
+      if (!username) {
+        res.status(400).json({ error: 'Username is required' });
       }
 
       const updatedUser = await UserModel.findOneAndUpdate(
