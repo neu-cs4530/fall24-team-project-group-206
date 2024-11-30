@@ -8,55 +8,58 @@ const userController = (socket: FakeSOSocket) => {
   /**
    * Adds a new user to the database.
    */
-  const addUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { username, firstName, lastName, tags, community, status } = req.body;
+const addUser = async (req: Request, res: Response): Promise<void> => {
+  const { username, firstName, lastName } = req.body;
 
-      const newUser = await UserModel.create({
-        username,
-        firstName,
-        lastName,
-        tags: tags || [],
-        community: community || '',
-        status,
-      });
+  if (!username) {
+    res.status(400).json({ error: 'Username is required' });
+    return;
+  }
 
-      res.status(200).json(newUser);
-    } catch (error) {
-      res.status(500).json({ error: 'Error adding user' });
+  if (!firstName || !lastName) {
+    res.status(400).json({ error: 'Required fields are missing' });
+    return;
+  }
+
+  try {
+    const newUser = await UserModel.create(req.body);
+    res.status(200).json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Error adding user' });
+  }
+};
+
+
+const updateUserTags = async (req: Request, res: Response): Promise<void> => {
+  const { username, tags } = req.body;
+
+  if (!username) {
+    res.status(400).json({ error: 'Username is required' });
+    return;
+  }
+
+  if (!Array.isArray(tags)) {
+    res.status(400).json({ error: 'Tags must be an array' });
+    return;
+  }
+
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username },
+      { tags },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      res.status(404).json({ error: 'User not found' });
       return;
     }
-  };
 
-  /**
-   * Updates the tags for a given user.
-   */
-  const updateUserTags = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { username, tags } = req.body;
-
-      if (!username || !tags) {
-        res.status(400).json({ error: 'Username and tags are required' });
-        return;
-      }
-
-      const updatedUser = await UserModel.findOneAndUpdate(
-        { username },
-        { $set: { tags } },
-        { new: true },
-      );
-
-      if (!updatedUser) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      res.status(500).json({ error: 'Error updating tags' });
-      return;
-    }
-  };
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating tags' });
+  }
+};
 
   /**
    * Updates the community for a given user.
@@ -84,32 +87,33 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  
+
   /**
    * Retrieves user data based on the provided username.
    */
   const getUser = async (req: Request, res: Response): Promise<void> => {
+    const { username } = req.query;
+  
+    if (!username || typeof username !== 'string') {
+      res.status(400).json({ error: 'Invalid username format' });
+      return;
+    }
+  
     try {
-      const { username } = req.query;
-
-      if (!username) {
-        res.status(400).json({ error: 'Username is required' });
-        return;
-      }
-
       const user = await UserModel.findOne({ username });
-
+  
       if (!user) {
         res.status(404).json({ error: 'User not found' });
         return;
       }
-
+  
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching user data' });
-      return;
     }
   };
-
+  
   // Add routes to the router
   router.post('/add', addUser);
   router.put('/updateTags', updateUserTags);

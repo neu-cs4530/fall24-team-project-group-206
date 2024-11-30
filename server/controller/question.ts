@@ -43,7 +43,7 @@ const questionController = (socket: FakeSOSocket) => {
       // console.log(qlist);
       // Filter by askedBy if provided
       if (askedBy) {
-        qlist = filterQuestionsByAskedBy(qlist, askedBy);
+        qlist = filterQuestionsByAskedBy(qlist, askedBy); //line 46
       }
       // Filter by search keyword and tags
       const resqlist: Question[] = await filterQuestionsBySearch(qlist, search);
@@ -52,7 +52,7 @@ const questionController = (socket: FakeSOSocket) => {
       if (err instanceof Error) {
         res.status(500).send(`Error when fetching questions by filter: ${err.message}`);
       } else {
-        res.status(500).send(`Error when fetching questions by filter`);
+        res.status(500).send(`Error when fetching questions by filter`); //line55
       }
     }
   };
@@ -94,7 +94,7 @@ const questionController = (socket: FakeSOSocket) => {
       if (err instanceof Error) {
         res.status(500).send(`Error when fetching question by id: ${err.message}`);
       } else {
-        res.status(500).send(`Error when fetching question by id`);
+        res.status(500).send(`Error when fetching question by id`); //line 97
       }
     }
   };
@@ -159,7 +159,7 @@ const questionController = (socket: FakeSOSocket) => {
       if (err instanceof Error) {
         res.status(500).send(`Error when saving question: ${err.message}`);
       } else {
-        res.status(500).send(`Error when saving question`);
+        res.status(500).send(`Error when saving question`); //line 162
       }
     }
   };
@@ -232,7 +232,7 @@ const questionController = (socket: FakeSOSocket) => {
   };
 
   const editQuestion = async (req: EditQuestionRequest, res: Response): Promise<void> => {
-    const { qid } = req.params;
+    const { qid } = req.params; //line 235
     const { newText } = req.body;
 
     try {
@@ -249,7 +249,7 @@ const questionController = (socket: FakeSOSocket) => {
       res.status(200).json({ message: 'Question updated successfully', question });
     } catch (error) {
       console.error('Error updating question:', error);
-      res.status(500).json({ error: 'Error updating question' });
+      res.status(500).json({ error: 'Error updating question' }); //line 252
     }
   };
 
@@ -266,7 +266,7 @@ const questionController = (socket: FakeSOSocket) => {
       res.status(200).json({ message: 'Question successfully deleted', question: deletedQuestion });
     } catch (error) {
       console.error('Error removing question:', error);
-      res.status(500).json({ error: 'Error removing question' });
+      res.status(500).json({ error: 'Error removing question' }); //line 269
     }
   };
 
