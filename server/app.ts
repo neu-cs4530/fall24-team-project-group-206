@@ -16,6 +16,7 @@ import commentController from './controller/comment';
 import communityController from './controller/community';
 import { FakeSOSocket } from './types';
 import userController from './controller/user';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req: Request, res: Response) => {
   res.send('hello world');
