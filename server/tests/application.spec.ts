@@ -15,6 +15,7 @@ import {
   saveComment,
   addComment,
   addVoteToQuestion,
+  sortQuestionsByNewest,
 } from '../models/application';
 import { Answer, Question, Tag, Comment } from '../types';
 import { T1_DESC, T2_DESC, T3_DESC } from '../data/posts_strings';
@@ -210,6 +211,22 @@ describe('application module', () => {
     });
 
     describe('getQuestionsByOrder', () => {
+      test('Sort questions by newest', async () => {
+        const result = await sortQuestionsByNewest(QUESTIONS);
+
+        expect(result.length).toEqual(4);
+        expect(result[0]._id?.toString()).toEqual('65e9b716ff0e892116b2de09');
+        expect(result[1]._id?.toString()).toEqual('65e9b9b44c052f0a08ecade0');
+        expect(result[2]._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
+        expect(result[3]._id?.toString()).toEqual('65e9b58910afe6e94fc6e6dc');
+      });
+      test('Sort questions by newest', async () => {
+        const result = await sortQuestionsByNewest([QUESTIONS[1], QUESTIONS[0]]);
+
+        expect(result.length).toEqual(2);
+        expect(result[0]._id?.toString()).toEqual('65e9b716ff0e892116b2de09');
+        expect(result[1]._id?.toString()).toEqual('65e9b9b44c052f0a08ecade0');
+      });
       test('get active questions, newest questions sorted by most recently answered 1', async () => {
         mockingoose(QuestionModel).toReturn(QUESTIONS.slice(0, 3), 'find');
         QuestionModel.schema.path('answers', Object);
@@ -219,7 +236,7 @@ describe('application module', () => {
 
         expect(result.length).toEqual(3);
         expect(result[0]._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
-        expect(result[1]._id?.toString()).toEqual('65e9b58910afe6e94fc6e6dc');
+        expect(result[1]._id?.toString()).toEqual('65e9b716ff0e892116b2de09');
         expect(result[2]._id?.toString()).toEqual('65e9b9b44c052f0a08ecade0');
       });
 

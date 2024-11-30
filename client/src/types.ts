@@ -195,6 +195,7 @@ export interface ServerToClientEvents {
  * - questions - An array of references to `Question` documents associated with the community.
  */
 export interface Community {
+  _id?: string; // Optional _id property
   name: string;
   tags: string[];
   users: string[];

@@ -13,6 +13,7 @@ export type OrderType = 'newest' | 'unanswered' | 'active' | 'mostViewed';
  * Interface representing Community
  */
 export interface Community {
+  _id?: ObjectId;
   name: string;
   tags: string[];
   users: string[];

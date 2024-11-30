@@ -32,23 +32,23 @@ const communityController = (socket: FakeSOSocket) => {
    *
    * @returns A Promise that resolves to Community or null if not found.
    */
-  const getCommunityByName = async (name: string): Promise<Community | null> => {
-    try {
-      const community = await CommunityModel.findOne({ name }).populate('questions');
-      if (!community) {
-        return null;
-      }
-      if (!community.questions || community.questions.length === 0) {
-        console.log('No questions available for this community.');
-        return { ...community.toObject(), questions: [] };
-      }
-      // Return the community with populated question data
-      return { ...community.toObject(), questions: community.questions };
-    } catch (error) {
-      console.error('Error fetching community by name:', error);
-      throw error;
-    }
-  };
+  // const getCommunityByName = async (name: string): Promise<Community | null> => {
+  //   try {
+  //     const community = await CommunityModel.findOne({ name }).populate('questions');
+  //     if (!community) {
+  //       return null;
+  //     }
+  //     if (!community.questions || community.questions.length === 0) {
+  //       console.log('No questions available for this community.');
+  //       return { ...community.toObject(), questions: [] };
+  //     }
+  //     // Return the community with populated question data
+  //     return { ...community.toObject(), questions: community.questions };
+  //   } catch (error) {
+  //     console.error('Error fetching community by name:', error);
+  //     throw error;
+  //   }
+  // };
 
   /**
    * Gets the questionss of a Commubnity.
@@ -261,7 +261,7 @@ const communityController = (socket: FakeSOSocket) => {
   };
 
   router.get('/getCommunityNames', getCommunityNames);
-  router.get('/getCommunityByName/:name', getCommunityByName);
+  // router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.get('/getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
