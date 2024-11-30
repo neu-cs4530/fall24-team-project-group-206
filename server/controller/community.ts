@@ -18,20 +18,23 @@ const communityController = (socket: FakeSOSocket) => {
     }
   };
 
-  const getCommunityByName = async (name: string): Promise<Community | null> => {
+  const getCommunityByName = async (req: Request, res: Response): Promise<void> => {
+    const { name } = req.params;
     try {
       const community = await CommunityModel.findOne({ name }).populate('questions');
       if (!community) {
-        return null;
+        res.status(404).json({ error: 'Community not found' });
+        return;
       }
       if (!community.questions || community.questions.length === 0) {
         console.log('No questions available for this community.');
-        return { ...community.toObject(), questions: [] };
+        res.json({ ...community.toObject(), questions: [] });
+        return;
       }
-      return { ...community.toObject(), questions: community.questions };
+      res.json({ ...community.toObject(), questions: community.questions });
     } catch (error) {
       console.error('Error fetching community by name:', error);
-      throw error;
+      res.status(500).json({ error: 'Error fetching community by name' });
     }
   };
 
@@ -48,17 +51,19 @@ const communityController = (socket: FakeSOSocket) => {
       });
   
       if (!communityData) {
-        res.status(404).json({ error: 'Community not found' });
-        return;
+       res.status(404).json({ error: 'Community not found' });
+       return;
       }
   
-      res.json(communityData.questions);
+      res.status(200).json(communityData.questions);
+      return;
     } catch (error) {
-      res.status(500).json({ error: 'Error retrieving questions for the community' });
+      console.error('Error retrieving questions for the community:', error);
+      res.status(500).json({ error: 'Error retrieving questions for the community' })
+      return;
     }
   };
   
-
   const addUserToCommunity = async (req: Request, res: Response): Promise<void> => {
     const { username, community } = req.body;
 
@@ -72,10 +77,10 @@ const communityController = (socket: FakeSOSocket) => {
         const communitiesAffectedByRemoval = await CommunityModel.find({ users: username });
         await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
 
-        communitiesAffectedByRemoval.forEach(comm => {
+        communitiesAffectedByRemoval.forEach((comm) => {
           socket.emit('communityUpdate', {
             name: comm.name,
-            users: comm.users.filter(user => user !== username),
+            users: comm.users.filter((user) => user !== username),
           });
         });
         res.status(200).json({ message: 'User removed from all communities successfully' });
@@ -85,17 +90,17 @@ const communityController = (socket: FakeSOSocket) => {
       const communitiesAffected = await CommunityModel.find({ users: username });
       await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
 
-      communitiesAffected.forEach(comm => {
+      communitiesAffected.forEach((comm) => {
         socket.emit('communityUpdate', {
           name: comm.name,
-          users: comm.users.filter(user => user !== username),
+          users: comm.users.filter((user) => user !== username),
         });
       });
 
       const newCommunity = await CommunityModel.findOneAndUpdate(
         { name: community },
         { $addToSet: { users: username } },
-        { new: true },
+        { new: true }
       );
       if (!newCommunity) {
         res.status(404).json({ message: 'Community not found' });
@@ -127,9 +132,9 @@ const communityController = (socket: FakeSOSocket) => {
         return;
       }
 
-      const tagNames = matchingTags.map(tag => tag.name);
+      const tagNames = matchingTags.map((tag) => tag.name);
       const communities = await CommunityModel.find({ tags: { $in: tagNames } });
-      const communityNames = communities.map(community => community.name);
+      const communityNames = communities.map((community) => community.name);
       res.json(communityNames);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching relevant communities' });
@@ -180,7 +185,7 @@ const communityController = (socket: FakeSOSocket) => {
       }
 
       res.json(updatedCommunity);
-    } catch (error: unknown) {
+    } catch (error) {
       res.status(500).json({ error: 'Error updating community questions.' });
     }
   };
@@ -196,8 +201,19 @@ const communityController = (socket: FakeSOSocket) => {
       }
       res.status(200).json(communityData.users);
     } catch (error) {
-      res.status(500).json({ error: 'Error retrieving questions for the community' });
+      res.status(500).json({ error: 'Error retrieving community members' });
+    }
+  };
 
+  router.get('/getCommunityNames', getCommunityNames);
+  router.get('/getCommunityQuestions/:community', getCommunityQuestions);
+  router.get('/getCommunityByName/:name', getCommunityByName);
+  router.get('/getCommunityMembers/:community', getCommunityMembers);
+  router.get('/getRelevantCommunities', getRelevantCommunities);
+  router.patch('/addUserToCommunity', addUserToCommunity);
+  router.patch('/updateCommunityQuestions/:communityName', updateCommunityQuestions);
+
+  return router;
 };
 
 export default communityController;
