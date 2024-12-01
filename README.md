@@ -12,3 +12,8 @@ The schemas for the database are documented in the directory `server/models/sche
 A class diagram for the schema definition is shown below:
 
 ![Class Diagram](class-diagram.png)
+
+### Final Project
+Our program, CodeQuest, is a software question site. The baseline functionality including asking and answering questions, in addition to support for adding comments. We expanded on this, first with a login process for the application. Here, user data is stored and authenticated with Firebase. Moreover, when thinking about users on software question site, they will often have specific languages or systems they want to learn about. Thus, we support a feature for a user to choose tags that interest them (which they can also update later). We take this information and then suggest a community for the user to join, which they can accept, choose their own, or omit. Using this information, we have a homepage which displays different questions that might be relevant to the user, based on their community if specified. In addition, users will have a status based on a threshold of reliability that will define them as either a member or moderator. Moderators can edit or delete posts in their community. We implemented a chat feature so we can talk to other users in real time, as well as a chat feature built into the communities.
+
+To run a working version of CodeQuest, run the command npx ts-node server.ts in the server directory and npm run start in the client directory. Ensure that the database is populated in MongoDB using the following command: npx ts-node populate_db.ts mongodb://127.0.0.1:27017/fake_so . Additionally, install firebase with: npm install firebase. To build the project, use the command npm run build in the root directory.
