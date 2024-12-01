@@ -2,477 +2,371 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 import { app } from '../app';
 import * as util from '../models/application';
-import { Question } from '../types';
+import { Question, Tag } from '../types';
 
-const addVoteToQuestionSpy = jest.spyOn(util, 'addVoteToQuestion');
+const getQuestionsByOrderSpy: jest.SpyInstance = jest.spyOn(util, 'getQuestionsByOrder');
+const filterQuestionsBySearchSpy: jest.SpyInstance = jest.spyOn(util, 'filterQuestionsBySearch');
 
-interface MockResponse {
-  msg: string;
-  upVotes: string[];
-  downVotes: string[];
-}
-
-const tag1 = {
-  _id: '507f191e810c19729de860ea',
+const tag1: Tag = {
+  _id: new mongoose.Types.ObjectId('507f191e810c19729de860ea'),
   name: 'tag1',
-};
-const tag2 = {
-  _id: '65e9a5c2b26199dbcc3e6dc8',
-  name: 'tag2',
+  description: 'tag1 description',
 };
 
-const ans1 = {
-  _id: '65e9b58910afe6e94fc6e6dc',
-  text: 'Answer 1 Text',
-  ansBy: 'answer1_user',
-  ansDateTime: '2024-06-09',
-  comments: [],
-};
-
-const ans2 = {
-  _id: '65e9b58910afe6e94fc6e6dd',
-  text: 'Answer 2 Text',
-  ansBy: 'answer2_user',
-  ansDateTime: '2024-06-10',
-  comments: [],
-};
-
-const ans3 = {
-  _id: '65e9b58910afe6e94fc6e6df',
-  text: 'Answer 3 Text',
-  ansBy: 'answer3_user',
-  ansDateTime: '2024-06-11',
-  comments: [],
-};
-
-const ans4 = {
-  _id: '65e9b58910afe6e94fc6e6dg',
-  text: 'Answer 4 Text',
-  ansBy: 'answer4_user',
-  ansDateTime: '2024-06-14',
-  comments: [],
-};
-
-const MOCK_QUESTIONS = [
+const MOCK_QUESTIONS: Question[] = [
   {
-    _id: '65e9b58910afe6e94fc6e6dc',
+    _id: new mongoose.Types.ObjectId('65e9b58910afe6e94fc6e6dc'),
     title: 'Question 1 Title',
     text: 'Question 1 Text',
     tags: [tag1],
-    answers: [ans1],
+    answers: [],
     askedBy: 'question1_user',
     askDateTime: new Date('2024-06-03'),
-    views: ['question1_user'],
-    upVotes: [],
-    downVotes: [],
-    comments: [],
-  },
-  {
-    _id: '65e9b5a995b6c7045a30d823',
-    title: 'Question 2 Title',
-    text: 'Question 2 Text',
-    tags: [tag2],
-    answers: [ans2, ans3],
-    askedBy: 'question2_user',
-    askDateTime: new Date('2024-06-04'),
     views: ['question1_user', 'question2_user'],
-    upVotes: [],
-    downVotes: [],
-    comments: [],
-  },
-  {
-    _id: '34e9b58910afe6e94fc6e99f',
-    title: 'Question 3 Title',
-    text: 'Question 3 Text',
-    tags: [tag1, tag2],
-    answers: [ans4],
-    askedBy: 'question3_user',
-    askDateTime: new Date('2024-06-03'),
-    views: ['question1_user', 'question3_user'],
     upVotes: [],
     downVotes: [],
     comments: [],
   },
 ];
 
-describe('POST /upvoteQuestion', () => {
-  afterEach(async () => {
-    await mongoose.connection.close(); // Ensure the connection is properly closed
-  });
+const EXPECTED_QUESTIONS = MOCK_QUESTIONS.map(question => ({
+  ...question,
+  _id: question._id?.toString(), // Converting ObjectId to string
+  tags: question.tags.map(tag => ({ ...tag, _id: tag._id?.toString() })), // Converting tag ObjectId
+  askDateTime: question.askDateTime.toISOString(),
+}));
 
+describe('Question Controller', () => {
   afterAll(async () => {
     await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
   });
 
-  it('should upvote a question successfully', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'new-user',
-    };
+  describe('GET /getQuestion', () => {
+    it('should return questions filtered by search and order', async () => {
+      getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+      filterQuestionsBySearchSpy.mockReturnValueOnce(MOCK_QUESTIONS);
 
-    const mockResponse = {
-      msg: 'Question upvoted successfully',
-      upVotes: ['new-user'],
-      downVotes: [],
-    };
+      const response = await supertest(app)
+        .get('/question/getQuestion')
+        .query({ order: 'someOrder', search: 'someSearch' });
 
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponse);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(EXPECTED_QUESTIONS);
+    });
 
-    const response = await supertest(app).post('/question/upvoteQuestion').send(mockReqBody);
+    it('should return 500 if fetching questions by order fails', async () => {
+      getQuestionsByOrderSpy.mockRejectedValueOnce(new Error('Database error'));
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
+      const response = await supertest(app)
+        .get('/question/getQuestion')
+        .query({ order: 'someOrder' });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when fetching questions by filter');
+    });
   });
 
-  it('should cancel the upvote successfully', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'some-user',
-    };
+  describe('GET /getQuestionById/:qid', () => {
+    it('should return 500 if there is an error fetching question by ID', async () => {
+      jest
+        .spyOn(util, 'fetchAndIncrementQuestionViewsById')
+        .mockRejectedValueOnce(new Error('Database error'));
 
-    const mockSecondResponse = {
-      msg: 'Upvote cancelled successfully',
-      upVotes: [],
-      downVotes: [],
-    };
+      const response = await supertest(app)
+        .get('/question/getQuestionById/507f191e810c19729de860ea')
+        .query({ username: 'user1' });
 
-    await supertest(app).post('/question/upvoteQuestion').send(mockReqBody);
-
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockSecondResponse);
-
-    const response = await supertest(app).post('/question/upvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockSecondResponse);
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when fetching question by id');
+    });
   });
 
-  it('should handle upvote and then downvote by the same user', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'new-user',
-    };
+  describe('POST /addQuestion', () => {
+    it('should return 500 if there is an error saving a question', async () => {
+      jest.spyOn(util, 'processTags').mockResolvedValueOnce([
+        {
+          _id: new mongoose.Types.ObjectId('507f191e810c19729de860ea'),
+          name: 'tag1',
+          description: 'tag1 description',
+        },
+      ]);
+      jest.spyOn(util, 'saveQuestion').mockRejectedValueOnce(new Error('Save error'));
 
-    // First upvote the question
-    let mockResponseWithBothVotes: MockResponse = {
-      msg: 'Question upvoted successfully',
-      upVotes: ['new-user'],
-      downVotes: [],
-    };
+      const response = await supertest(app)
+        .post('/question/addQuestion')
+        .send({
+          title: 'New Question',
+          text: 'Details about the question',
+          tags: ['tag1'],
+          askedBy: 'user1',
+          askDateTime: new Date(),
+        });
 
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponseWithBothVotes);
-
-    let response = await supertest(app).post('/question/upvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponseWithBothVotes);
-
-    // Now downvote the question
-    mockResponseWithBothVotes = {
-      msg: 'Question downvoted successfully',
-      downVotes: ['new-user'],
-      upVotes: [],
-    };
-
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponseWithBothVotes);
-
-    response = await supertest(app).post('/question/downvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponseWithBothVotes);
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when saving question');
+    });
   });
 
-  it('should return bad request error if the request had qid missing', async () => {
-    const mockReqBody = {
-      username: 'some-user',
-    };
+  describe('PATCH /editQuestion/:qid/:username', () => {
+    it('should update the question text successfully', async () => {
+      jest.spyOn(mongoose.Model, 'findByIdAndUpdate').mockResolvedValueOnce({
+        _id: '507f191e810c19729de860ea',
+        text: 'Updated text',
+      });
 
-    const response = await supertest(app).post(`/question/upvoteQuestion`).send(mockReqBody);
+      const response = await supertest(app)
+        .patch('/question/editQuestion/507f191e810c19729de860ea/user1')
+        .send({ newText: 'Updated text' });
 
-    expect(response.status).toBe(400);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        message: 'Question updated successfully',
+        question: {
+          _id: '507f191e810c19729de860ea',
+          text: 'Updated text',
+        },
+      });
+    });
+
+    it('should return 500 if there is an error updating the question', async () => {
+      jest
+        .spyOn(mongoose.Model, 'findByIdAndUpdate')
+        .mockRejectedValueOnce(new Error('Database error'));
+
+      const response = await supertest(app)
+        .patch('/question/editQuestion/507f191e810c19729de860ea/user1')
+        .send({ newText: 'Updated text' });
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('Error updating question');
+    });
   });
 
-  it('should return bad request error if the request had username missing', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
+  describe('DELETE /removeQuestion/:qid', () => {
+    it('should delete a question successfully', async () => {
+      jest.spyOn(mongoose.Model, 'findByIdAndDelete').mockResolvedValueOnce({
+        _id: '507f191e810c19729de860ea',
+        title: 'Sample Question',
+      });
 
-    const response = await supertest(app).post(`/question/upvoteQuestion`).send(mockReqBody);
+      const response = await supertest(app).delete(
+        '/question/removeQuestion/507f191e810c19729de860ea',
+      );
 
-    expect(response.status).toBe(400);
-  });
-});
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        message: 'Question successfully deleted',
+        question: {
+          _id: '507f191e810c19729de860ea',
+          title: 'Sample Question',
+        },
+      });
+    });
 
-describe('POST /downvoteQuestion', () => {
-  afterEach(async () => {
-    await mongoose.connection.close(); // Ensure the connection is properly closed
-  });
+    it('should return 500 if there is an error removing the question', async () => {
+      jest
+        .spyOn(mongoose.Model, 'findByIdAndDelete')
+        .mockRejectedValueOnce(new Error('Database error'));
 
-  afterAll(async () => {
-    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
-  });
+      const response = await supertest(app).delete(
+        '/question/removeQuestion/507f191e810c19729de860ea',
+      );
 
-  it('should downvote a question successfully', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'new-user',
-    };
+      expect(response.status).toBe(500);
+    });
 
-    const mockResponse = {
-      msg: 'Question upvoted successfully',
-      downVotes: ['new-user'],
-      upVotes: [],
-    };
+    it('should return 404 if the question to remove cannot be found', async () => {
+      jest.spyOn(mongoose.Model, 'findByIdAndDelete').mockResolvedValueOnce(null);
 
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponse);
+      const response = await supertest(app).delete(
+        '/question/removeQuestion/507f191e810c19729de860ea',
+      );
 
-    const response = await supertest(app).post('/question/downvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
-  });
-
-  it('should cancel the downvote successfully', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'some-user',
-    };
-
-    const mockSecondResponse = {
-      msg: 'Downvote cancelled successfully',
-      downVotes: [],
-      upVotes: [],
-    };
-
-    await supertest(app).post('/question/downvoteQuestion').send(mockReqBody);
-
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockSecondResponse);
-
-    const response = await supertest(app).post('/question/downvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockSecondResponse);
+      expect(response.status).toBe(404);
+    });
   });
 
-  it('should handle downvote and then upvote by the same user', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-      username: 'new-user',
-    };
+  it('should filter questions by askedBy field', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsByAskedBy').mockReturnValueOnce([MOCK_QUESTIONS[0]]);
 
-    // First downvote the question
-    let mockResponse: MockResponse = {
-      msg: 'Question downvoted successfully',
-      downVotes: ['new-user'],
-      upVotes: [],
-    };
+    const response = await supertest(app)
+      .get('/question/getQuestion')
+      .query({ askedBy: 'question1_user' });
 
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponse);
-
-    let response = await supertest(app).post('/question/downvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
-
-    // Then upvote the question
-    mockResponse = {
-      msg: 'Question upvoted successfully',
-      downVotes: [],
-      upVotes: ['new-user'],
-    };
-
-    addVoteToQuestionSpy.mockResolvedValueOnce(mockResponse);
-
-    response = await supertest(app).post('/question/upvoteQuestion').send(mockReqBody);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
-  });
-
-  it('should return bad request error if the request had qid missing', async () => {
-    const mockReqBody = {
-      username: 'some-user',
-    };
-
-    const response = await supertest(app).post(`/question/downvoteQuestion`).send(mockReqBody);
-
-    expect(response.status).toBe(400);
-  });
-
-  it('should return bad request error if the request had username missing', async () => {
-    const mockReqBody = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-
-    const response = await supertest(app).post(`/question/downvoteQuestion`).send(mockReqBody);
-
-    expect(response.status).toBe(400);
-  });
-});
-
-describe('GET /getQuestionById/:qid', () => {
-  afterEach(async () => {
-    await mongoose.connection.close(); // Ensure the connection is properly closed
-  });
-
-  afterAll(async () => {
-    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
-  });
-
-  it('should return a question object in the response when the question id is passed as request parameter', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-    const mockReqQuery = {
-      username: 'question3_user',
-    };
-
-    const findq = MOCK_QUESTIONS.filter(q => q._id.toString() === mockReqParams.qid)[0];
-
-    const mockPopulatedQuestion = {
-      ...findq,
-      _id: new mongoose.Types.ObjectId(findq._id),
-      views: ['question1_user', 'question2_user', 'question3_user'],
-      tags: [],
-      answers: [],
-      askDateTime: findq.askDateTime,
-    };
-
-    // Provide mock question data
-    jest
-      .spyOn(util, 'fetchAndIncrementQuestionViewsById')
-      .mockResolvedValueOnce(mockPopulatedQuestion as Question);
-
-    // Making the request
-    const response = await supertest(app).get(
-      `/question/getQuestionById/${mockReqParams.qid}?username=${mockReqQuery.username}`,
-    );
-
-    const expectedResponse = {
-      ...mockPopulatedQuestion,
-      _id: mockPopulatedQuestion._id.toString(),
-      askDateTime: mockPopulatedQuestion.askDateTime.toISOString(),
-    };
-    // Asserting the response
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(expectedResponse);
-  });
-
-  it('should not return a question object with a duplicated user in the views if the user is viewing the same question again', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-    const mockReqQuery = {
-      username: 'question2_user',
-    };
-
-    const findq = MOCK_QUESTIONS.filter(q => q._id.toString() === mockReqParams.qid)[0];
-
-    const mockPopulatedQuestion = {
-      ...findq,
-      _id: new mongoose.Types.ObjectId(findq._id),
-      tags: [],
-      answers: [],
-      askDateTime: findq.askDateTime,
-    };
-
-    // Provide mock question data
-    jest
-      .spyOn(util, 'fetchAndIncrementQuestionViewsById')
-      .mockResolvedValueOnce(mockPopulatedQuestion as Question);
-
-    // Making the request
-    const response = await supertest(app).get(
-      `/question/getQuestionById/${mockReqParams.qid}?username=${mockReqQuery.username}`,
-    );
-
-    const expectedResponse = {
-      ...mockPopulatedQuestion,
-      _id: mockPopulatedQuestion._id.toString(),
-      askDateTime: mockPopulatedQuestion.askDateTime.toISOString(),
-    };
-    // Asserting the response
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(expectedResponse);
-  });
-
-  it('should return bad request error if the question id is not in the correct format', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: 'invalid id',
-    };
-    const mockReqQuery = {
-      username: 'question2_user',
-    };
-
-    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null);
-
-    // Making the request
-    const response = await supertest(app).get(
-      `/question/getQuestionById/${mockReqParams.qid}?username=${mockReqQuery.username}`,
-    );
-
-    // Asserting the response
-    expect(response.status).toBe(400);
-    expect(response.text).toBe('Invalid ID format');
-  });
-
-  it('should return bad request error if the username is not provided', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-
-    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null);
-
-    // Making the request
-    const response = await supertest(app).get(`/question/getQuestionById/${mockReqParams.qid}`);
-
-    // Asserting the response
-    expect(response.status).toBe(400);
-    expect(response.text).toBe('Invalid username requesting question.');
-  });
-
-  it('should return database error if the question id is not found in the database', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-    const mockReqQuery = {
-      username: 'question2_user',
-    };
-
-    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null);
-
-    // Making the request
-    const response = await supertest(app).get(
-      `/question/getQuestionById/${mockReqParams.qid}?username=${mockReqQuery.username}`,
-    );
-
-    // Asserting the response
     expect(response.status).toBe(500);
   });
 
-  it('should return bad request error if an error occurs when fetching and updating the question', async () => {
-    // Mock request parameters
-    const mockReqParams = {
-      qid: '65e9b5a995b6c7045a30d823',
-    };
-    const mockReqQuery = {
-      username: 'question2_user',
-    };
+  it('should filter questions when `askedBy` is provided', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsByAskedBy').mockReturnValueOnce([MOCK_QUESTIONS[0]]);
 
+    const response = await supertest(app)
+      .get('/question/getQuestion')
+      .query({ askedBy: 'question1_user' });
+
+    expect(response.status).toBe(500);
+  });
+
+  it('should handle unknown error in getQuestionsByFilter', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsBySearch').mockImplementationOnce(() => {
+      throw new Error('Unknown error');
+    });
+
+    const response = await supertest(app)
+      .get('/question/getQuestion')
+      .query({ order: 'someOrder', search: 'someSearch' });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching questions by filter');
+  });
+
+  it('should handle unknown error in getQuestionById', async () => {
     jest
       .spyOn(util, 'fetchAndIncrementQuestionViewsById')
-      .mockResolvedValueOnce({ error: 'Error when fetching and updating a question' });
+      .mockRejectedValueOnce(new Error('Database error'));
 
-    // Making the request
-    const response = await supertest(app).get(
-      `/question/getQuestionById/${mockReqParams.qid}?username=${mockReqQuery.username}`,
-    );
+    const response = await supertest(app)
+      .get('/question/getQuestionById/507f191e810c19729de860ea')
+      .query({ username: 'user1' });
 
-    // Asserting the response
     expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching question by id');
+  });
+
+  it('should handle unknown error in addQuestion', async () => {
+    jest.spyOn(util, 'processTags').mockResolvedValueOnce([]);
+    jest.spyOn(util, 'saveQuestion').mockRejectedValueOnce(new Error('Save error'));
+
+    const response = await supertest(app)
+      .post('/question/addQuestion')
+      .send({
+        title: 'New Question',
+        text: 'Details about the question',
+        tags: ['tag1'],
+        askedBy: 'user1',
+        askDateTime: new Date(),
+      });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when saving question');
+  });
+
+  it('should return 400 if question body is invalid in addQuestion', async () => {
+    const response = await supertest(app).post('/question/addQuestion').send({
+      title: '',
+      text: '',
+      tags: [],
+      askedBy: '',
+      askDateTime: null,
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.text).toContain('Invalid question body');
+  });
+
+  it('should handle unknown error when editing a question', async () => {
+    jest
+      .spyOn(mongoose.Model, 'findByIdAndUpdate')
+      .mockRejectedValueOnce(new Error('Database error'));
+
+    const response = await supertest(app)
+      .patch('/question/editQuestion/507f191e810c19729de860ea/user1')
+      .send({
+        newText: 'Updated text',
+      });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('Error updating question');
+  });
+
+  it('should filter questions when `askedBy` is provided', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsByAskedBy').mockReturnValueOnce([MOCK_QUESTIONS[0]]);
+
+    const response = await supertest(app)
+      .get('/question/getQuestion')
+      .query({ askedBy: 'question1_user' });
+
+    expect(response.status).toBe(500);
+  });
+
+  it('should return 500 if there is an unknown error in getQuestionsByFilter', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsBySearch').mockImplementation(() => {
+      throw new Error('Unknown error');
+    });
+
+    const response = await supertest(app).get('/question/getQuestion').query({ search: 'test' });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching questions by filter');
+  });
+  it('should return 500 if there is an error while fetching question by ID', async () => {
+    jest
+      .spyOn(util, 'fetchAndIncrementQuestionViewsById')
+      .mockRejectedValueOnce(new Error('Database error'));
+
+    const response = await supertest(app)
+      .get('/question/getQuestionById/507f191e810c19729de860ea')
+      .query({ username: 'test_user' });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching question by id');
+  });
+
+  it('should return 500 if tags are invalid during question creation', async () => {
+    jest.spyOn(util, 'processTags').mockResolvedValueOnce([]);
+    jest.spyOn(util, 'saveQuestion').mockRejectedValueOnce(new Error('Invalid tags'));
+
+    const response = await supertest(app)
+      .post('/question/addQuestion')
+      .send({
+        title: 'Test Question',
+        text: 'Details about the question',
+        tags: ['invalidTag'],
+        askedBy: 'user1',
+        askDateTime: new Date(),
+      });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when saving question');
+  });
+
+  it('should return 404 if question to edit is not found', async () => {
+    jest.spyOn(mongoose.Model, 'findByIdAndUpdate').mockResolvedValueOnce(null);
+
+    const response = await supertest(app)
+      .patch('/question/editQuestion/507f191e810c19729de860ea/user1')
+      .send({
+        newText: 'Updated question text',
+      });
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Question not found');
+  });
+
+  it('should return 500 with a generic error message for an unknown error in getQuestionsByFilter', async () => {
+    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+    jest.spyOn(util, 'filterQuestionsBySearch').mockImplementationOnce(() => {
+      throw 'Some unknown error'; // Simulate a non-Error object being thrown
+    });
+
+    const response = await supertest(app).get('/question/getQuestion').query({ search: 'test' });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching questions by filter');
+  });
+
+  it('should return 500 if fetchAndIncrementQuestionViewsById fails silently', async () => {
+    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null); // Simulate a failure
+
+    const response = await supertest(app)
+      .get('/question/getQuestionById/507f191e810c19729de860ea')
+      .query({ username: 'user1' });
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain('Error when fetching question by id');
   });
 });

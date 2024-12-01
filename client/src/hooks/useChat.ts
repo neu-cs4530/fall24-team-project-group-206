@@ -55,7 +55,7 @@ const useChat = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSend(e.target.value);
     setSearchTerm(e.target.value);
-    setDropdownOpen(true); // Open the dropdown when typing
+    setDropdownOpen(true);
   };
 
   /**
@@ -65,7 +65,7 @@ const useChat = () => {
   const handleUserClick = (username: string) => {
     setSend(username);
     setSearchTerm(username);
-    setDropdownOpen(false); // Close the dropdown after selection
+    setDropdownOpen(false);
   };
 
   /**
@@ -118,7 +118,7 @@ const useChat = () => {
           sendTo,
           timestamp: new Date(),
         });
-        setCurrentMessage(''); // Clear the input after sending
+        setCurrentMessage('');
       }
     } catch (error) {
       console.error('Error saving message or user does not exist:', error);

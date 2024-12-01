@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import express, { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import {
@@ -40,7 +39,6 @@ const questionController = (socket: FakeSOSocket) => {
     const { askedBy } = req.query;
     try {
       let qlist: Question[] = await getQuestionsByOrder(order);
-      // console.log(qlist);
       // Filter by askedBy if provided
       if (askedBy) {
         qlist = filterQuestionsByAskedBy(qlist, askedBy);
@@ -248,7 +246,6 @@ const questionController = (socket: FakeSOSocket) => {
 
       res.status(200).json({ message: 'Question updated successfully', question });
     } catch (error) {
-      console.error('Error updating question:', error);
       res.status(500).json({ error: 'Error updating question' });
     }
   };
@@ -261,18 +258,15 @@ const questionController = (socket: FakeSOSocket) => {
    *
    */
   const removeQuestion = async (req: FindQuestionByIdRequest, res: Response): Promise<void> => {
+    const { qid } = req.params;
     try {
-      const { qid } = req.params;
-      if (!qid) {
-        res.status(400).json({ error: 'Question ID is required' });
-      }
       const deletedQuestion = await QuestionModel.findByIdAndDelete(qid);
       if (!deletedQuestion) {
         res.status(404).json({ error: 'Question not found' });
+        return;
       }
       res.status(200).json({ message: 'Question successfully deleted', question: deletedQuestion });
     } catch (error) {
-      console.error('Error removing question:', error);
       res.status(500).json({ error: 'Error removing question' });
     }
   };
