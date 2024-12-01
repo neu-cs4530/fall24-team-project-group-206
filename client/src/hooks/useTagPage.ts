@@ -8,7 +8,7 @@ import { TagData } from '../types';
  *
  * @returns tlist - An array of tag data retrieved from the server
  * @returns clickTag - Function to navigate to the home page with the selected tag as a URL
- *   parameter.
+ * parameter.
  */
 const useTagPage = () => {
   const navigate = useNavigate();

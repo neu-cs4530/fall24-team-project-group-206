@@ -8,8 +8,8 @@ import useUserContext from '../../../hooks/useUserContext';
  * Interface representing the props for the Comment Section component.
  *
  * - comments - list of the comment components
- * - handleAddComment - a function that handles adding a new comment, taking a Comment object as an
- *   argument
+ * - handleAddComment - a function that handles adding a new comment, taking a Comment object
+ * as an argument
  */
 interface CommentSectionProps {
   comments: Comment[];

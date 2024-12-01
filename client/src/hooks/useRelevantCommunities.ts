@@ -8,7 +8,7 @@ import { getRelevantCommunities } from '../services/communityService';
  *
  * @returns relevantCommunities - The current list of relevant communities.
  * @returns setRelevantCommunities - Setter to manually update the relevant communities state if
- *   needed.
+ * needed.
  * @returns loading - The current loading state.
  * @returns error - The current error message.
  */
