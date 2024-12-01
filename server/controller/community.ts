@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
-import { Community, FakeSOSocket, Question } from '../types';
+import { FakeSOSocket, Question } from '../types';
 import TagModel from '../models/tags';
 import QuestionModel from '../models/questions';
 import { sortQuestionsByNewest } from '../models/application';
@@ -26,32 +26,7 @@ const communityController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Finds a Community by Name.
-   * @param name The Request object with the community name.
-   * @returns The HTTP response object used to send back the filtered list of questions.
-   *
-   * @returns A Promise that resolves to Community or null if not found.
-   */
-  // const getCommunityByName = async (name: string): Promise<Community | null> => {
-  //   try {
-  //     const community = await CommunityModel.findOne({ name }).populate('questions');
-  //     if (!community) {
-  //       return null;
-  //     }
-  //     if (!community.questions || community.questions.length === 0) {
-  //       console.log('No questions available for this community.');
-  //       return { ...community.toObject(), questions: [] };
-  //     }
-  //     // Return the community with populated question data
-  //     return { ...community.toObject(), questions: community.questions };
-  //   } catch (error) {
-  //     console.error('Error fetching community by name:', error);
-  //     throw error;
-  //   }
-  // };
-
-  /**
-   * Gets the questionss of a Commubnity.
+   * Gets the questions of a Community.
    *
    * @param req The Request object that contains the Community.
    * @param res The HTTP response object used to send back the filtered list of questions.
@@ -69,7 +44,7 @@ const communityController = (socket: FakeSOSocket) => {
           { path: 'answers', model: 'Answer' },
         ],
       });
-      // console.log(communityData);
+
       if (!communityData) {
         res.status(404).json({ error: 'Community not found' });
         return;

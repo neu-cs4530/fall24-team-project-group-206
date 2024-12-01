@@ -26,7 +26,6 @@
 //   questions: [],
 // };
 
-// const popDocSpy = jest.spyOn(util, 'populateDocument');
 // describe('POST /getCommunityNames', () => {
 //   afterEach(async () => {
 //     await mongoose.connection.close(); // Ensure the connection is properly closed
@@ -40,8 +39,6 @@
 
 //     // Making the request
 //     const response = await supertest(app).post('/community/getCommunityNames');
-//     console.log(response.status);
-//     console.log(response.body);
 
 //     // Asserting the response
 //     expect(response.status).toBe(200);

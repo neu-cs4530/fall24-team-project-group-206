@@ -42,10 +42,6 @@ const userController = (socket: FakeSOSocket) => {
     try {
       const { username, tags } = req.body;
 
-      if (!username) {
-        res.status(400).json({ error: 'Username is required' });
-      }
-
       const updatedUser = await UserModel.findOneAndUpdate(
         { username },
         { $set: { tags } },
@@ -54,6 +50,7 @@ const userController = (socket: FakeSOSocket) => {
 
       if (!updatedUser) {
         res.status(404).json({ error: 'User not found' });
+        return;
       }
 
       res.status(200).json(updatedUser);
@@ -72,19 +69,13 @@ const userController = (socket: FakeSOSocket) => {
   const updateUserCommunity = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username, community } = req.body;
-
-      if (!username) {
-        res.status(400).json({ error: 'Username required' });
-      }
-
       const user = await UserModel.findOneAndUpdate({ username }, { community }, { new: true });
 
       if (!user) {
         res.status(404).json({ error: 'User not found' });
+        return;
       }
-      // socket.emit('communityUpdate', {
-      //   community,
-      // });
+
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ error: 'Error updating community' });
@@ -135,9 +126,9 @@ const userController = (socket: FakeSOSocket) => {
     try {
       const users = await UserModel.find();
 
-      if (!users) {
-        return res.status(404).json({ message: 'No users not found' });
-      }
+      // if (!users) {
+      //   return res.status(404).json({ message: 'No users found' });
+      // }
 
       return res.status(200).json(users);
     } catch (error) {

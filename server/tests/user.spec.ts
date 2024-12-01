@@ -1,11 +1,8 @@
-import mongoose from 'mongoose';
 import supertest from 'supertest';
 import express from 'express';
 import userController from '../controller/user';
 import UserModel from '../models/users';
 import { FakeSOSocket } from '../types';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const mockingoose = require('mockingoose');
 
 // Mock the UserModel
 jest.mock('../models/users');
@@ -24,13 +21,6 @@ app.use('/users', userController(mockSocket));
 describe('User Controller', () => {
   beforeEach(() => {
     jest.clearAllMocks(); // Reset mocks before each test
-  });
-  afterEach(async () => {
-    await mongoose.connection.close(); // Ensure the connection is properly closed
-  });
-
-  afterAll(async () => {
-    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
   });
 
   describe('POST /users/add', () => {
@@ -76,18 +66,8 @@ describe('User Controller', () => {
       expect(response.body).toEqual(updatedUser);
     });
 
-    /* it('should return 400 if no user is passed in', async () => {
-      // (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
-
-      const response = await supertest(app)
-        .put('/users/updateTags')
-        .send({ tags: ['tag1'] });
-
-      expect(response.status).toBe(400);
-    }); */
-
-    /* it('should return 404 if user is not found', async () => {
-      mockingoose(UserModel).toReturn(null, 'findOneAndUpdate');
+    it('should return 404 if user is not found', async () => {
+      (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
 
       const response = await supertest(app)
         .put('/users/updateTags')
@@ -95,7 +75,7 @@ describe('User Controller', () => {
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe('User not found');
-    }); */
+    });
 
     it('should return 500 if there is an error updating tags', async () => {
       (UserModel.findOneAndUpdate as jest.Mock).mockRejectedValue(new Error('Database error'));
@@ -109,6 +89,115 @@ describe('User Controller', () => {
     });
   });
 
+  describe('PUT /users/updateCommunity', () => {
+    it('should update the community for a user successfully', async () => {
+      const mockUser = { username: 'testuser', community: 'NewCommunity' };
+
+      (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(mockUser);
+
+      const response = await supertest(app)
+        .put('/users/updateCommunity')
+        .send({ username: 'testuser', community: 'NewCommunity' });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUser);
+    });
+
+    it('should return 404 if user is not found', async () => {
+      (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
+
+      const response = await supertest(app)
+        .put('/users/updateCommunity')
+        .send({ username: 'nonexistent', community: 'NewCommunity' });
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('User not found');
+    });
+
+    it('should return 500 if there is an error updating the community', async () => {
+      (UserModel.findOneAndUpdate as jest.Mock).mockRejectedValue(new Error('Database error'));
+
+      const response = await supertest(app)
+        .put('/users/updateCommunity')
+        .send({ username: 'testuser', community: 'NewCommunity' });
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('Error updating community');
+    });
+  });
+
+  describe('GET /users/getUser', () => {
+    it('should retrieve a user successfully', async () => {
+      const mockUser = {
+        username: 'testuser',
+        firstName: 'Test',
+        lastName: 'User',
+        tags: ['tag1', 'tag2'],
+        community: 'Community1',
+        status: 'member',
+      };
+
+      (UserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
+
+      const response = await supertest(app).get('/users/getUser').query({ username: 'testuser' });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUser);
+    });
+
+    it('should return 400 if username is missing', async () => {
+      const response = await supertest(app).get('/users/getUser');
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Username is required');
+    });
+
+    it('should return 404 if user is not found', async () => {
+      (UserModel.findOne as jest.Mock).mockResolvedValue(null);
+
+      const response = await supertest(app)
+        .get('/users/getUser')
+        .query({ username: 'unknownUser' });
+
+      expect(response.status).toBe(404);
+      expect(response.body.error).toBe('User not found');
+    });
+
+    it('should return 500 if there is an error fetching user data', async () => {
+      (UserModel.findOne as jest.Mock).mockRejectedValue(new Error('Database error'));
+
+      const response = await supertest(app).get('/users/getUser').query({ username: 'testuser' });
+
+      expect(response.status).toBe(500);
+      expect(response.body.error).toBe('Error fetching user data');
+    });
+  });
+
+  describe('GET /users/getListOfAllUsers', () => {
+    it('should return a list of all users successfully', async () => {
+      const mockUsers = [
+        { username: 'testuser1', firstName: 'Test', lastName: 'User1' },
+        { username: 'testuser2', firstName: 'Test', lastName: 'User2' },
+      ];
+
+      (UserModel.find as jest.Mock).mockResolvedValue(mockUsers);
+
+      const response = await supertest(app).get('/users/getListOfAllUsers');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUsers);
+    });
+
+    it('should return 500 if there is an error fetching users', async () => {
+      (UserModel.find as jest.Mock).mockRejectedValue(new Error('Database error'));
+
+      const response = await supertest(app).get('/users/getListOfAllUsers');
+
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe('Error fetching user data');
+    });
+  });
+
   describe('PUT /users/increaseUserStatus', () => {
     it('should promote user to moderator successfully', async () => {
       const mockUser = { username: 'testuser', status: 'moderator' };
@@ -118,6 +207,7 @@ describe('User Controller', () => {
       const response = await supertest(app)
         .put('/users/increaseUserStatus')
         .send({ username: 'testuser' });
+
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
     });
@@ -125,7 +215,9 @@ describe('User Controller', () => {
     it('should return 404 if user is not found', async () => {
       (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
 
-      const response = await supertest(app).put('/users/increaseUserStatus').send({});
+      const response = await supertest(app)
+        .put('/users/increaseUserStatus')
+        .send({ username: 'nonexistentUser' });
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('No users not found');
@@ -140,72 +232,6 @@ describe('User Controller', () => {
 
       expect(response.status).toBe(500);
       expect(response.body.message).toBe('Error fetching user data');
-    });
-  });
-  describe('PUT /updateUserCommunity', () => {
-    afterEach(() => {
-      jest.clearAllMocks(); // Clear mocks after each test
-    });
-
-    it('should update user community and return 200', async () => {
-      const mockUser = {
-        _id: new mongoose.Types.ObjectId('507f191e810c19729de860ea'),
-        username: 'testuser',
-        community: 'Old Community',
-      };
-
-      const updatedUser = {
-        _id: new mongoose.Types.ObjectId('507f191e810c19729de860ea'),
-        username: 'testuser',
-        community: 'New Community',
-      };
-
-      // Mock UserModel.findOneAndUpdate to return the updated user
-      mockingoose(UserModel).toReturn(updatedUser, 'findOneAndUpdate');
-
-      // Make the request
-      const response = await supertest(app)
-        .put('/user/updateCommunity') // Ensure this matches your route
-        .send({ username: 'testuser', community: 'New Community' });
-
-      // Assertions
-      expect(response.status).toBe(200);
-      expect(response.body.username).toBe('testuser');
-      expect(response.body.community).toBe('New Community');
-    });
-
-    it('should return 400 if username is missing', async () => {
-      const response = await supertest(app)
-        .put('/updateCommunity')
-        .send({ community: 'New Community' });
-
-      expect(response.status).toBe(400);
-      expect(response.body.error).toBe('Username required');
-    });
-
-    it('should return 404 if user is not found', async () => {
-      // Mock UserModel.findOneAndUpdate to return null
-      mockingoose(UserModel).toReturn(null, 'findOneAndUpdate');
-
-      const response = await supertest(app)
-        .put('/updateCommunity')
-        .send({ username: 'nonexistentuser', community: 'New Community' });
-
-      expect(response.status).toBe(404);
-    });
-
-    it('should return 500 on server error', async () => {
-      // Mock UserModel.findOneAndUpdate to throw an error
-      mockingoose(UserModel).toReturn(new Error('Database error'), 'findOneAndUpdate');
-
-      const response = await supertest(app)
-        .put('/updateCommunity')
-        .send({ username: 'testuser', community: 'New Community' });
-
-      //  const response = await supertest(app).get('/question/getQuestion').query(mockReqQuery);
-
-      expect(response.status).toBe(500);
-      expect(response.body.error).toBe('Error updating community');
     });
   });
 });
