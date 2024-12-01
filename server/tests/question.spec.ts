@@ -347,20 +347,24 @@ describe('Question Controller', () => {
     expect(response.body.error).toBe('Question not found');
   });
 
-  it('should return 500 with a generic error message for an unknown error in getQuestionsByFilter', async () => {
-    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
-    jest.spyOn(util, 'filterQuestionsBySearch').mockImplementationOnce(() => {
-      throw 'Some unknown error'; // Simulate a non-Error object being thrown
-    });
+  it(
+    'should return 500 with a generic error message for an unknown error in ' +
+      'getQuestionsByFilter',
+    async () => {
+      getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+      jest.spyOn(util, 'filterQuestionsBySearch').mockImplementationOnce(() => {
+        throw 'Some unknown error'; // Simulate a non-Error object being thrown
+      });
 
-    const response = await supertest(app).get('/question/getQuestion').query({ search: 'test' });
+      const response = await supertest(app).get('/question/getQuestion').query({ search: 'test' });
 
-    expect(response.status).toBe(500);
-    expect(response.text).toContain('Error when fetching questions by filter');
-  });
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when fetching questions by filter');
+    },
+  );
 
   it('should return 500 if fetchAndIncrementQuestionViewsById fails silently', async () => {
-    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null); // Simulate a failure
+    jest.spyOn(util, 'fetchAndIncrementQuestionViewsById').mockResolvedValueOnce(null);
 
     const response = await supertest(app)
       .get('/question/getQuestionById/507f191e810c19729de860ea')

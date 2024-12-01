@@ -85,7 +85,9 @@ const QUESTIONS: Question[] = [
   {
     _id: new ObjectId('65e9b58910afe6e94fc6e6dc'),
     title: 'Quick question about storage on android',
-    text: 'I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains',
+    text:
+      'I would like to know the best way to go about storing an array on an android phone' +
+      ' so that even when the app/activity ended the data remains',
     tags: [tag3, tag2],
     answers: [ans1, ans2],
     askedBy: 'q_by1',
@@ -98,7 +100,10 @@ const QUESTIONS: Question[] = [
   {
     _id: new ObjectId('65e9b5a995b6c7045a30d823'),
     title: 'Object storage for a web application',
-    text: 'I am currently working on a website where, roughly 40 million documents and images should be served to its users. I need suggestions on which method is the most suitable for storing content with subject to these requirements.',
+    text:
+      'I am currently working on a website where, roughly 40 million documents and images ' +
+      'should be served to its users. I need suggestions on which method is the most suitable for' +
+      ' storing content with subject to these requirements.',
     tags: [tag1, tag2],
     answers: [ans1, ans2, ans3],
     askedBy: 'q_by2',
@@ -347,50 +352,58 @@ describe('application module', () => {
     });
 
     describe('fetchAndIncrementQuestionViewsById', () => {
-      test('fetchAndIncrementQuestionViewsById should return question and add the user to the list of views if new', async () => {
-        const question = QUESTIONS.filter(
-          q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
-        )[0];
-        mockingoose(QuestionModel).toReturn(
-          { ...question, views: ['question1_user', ...question.views] },
-          'findOneAndUpdate',
-        );
-        QuestionModel.schema.path('answers', Object);
+      test(
+        'fetchAndIncrementQuestionViewsById should return question and add the user to the ' +
+          'list of views if new',
+        async () => {
+          const question = QUESTIONS.filter(
+            q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
+          )[0];
+          mockingoose(QuestionModel).toReturn(
+            { ...question, views: ['question1_user', ...question.views] },
+            'findOneAndUpdate',
+          );
+          QuestionModel.schema.path('answers', Object);
 
-        const result = (await fetchAndIncrementQuestionViewsById(
-          '65e9b5a995b6c7045a30d823',
-          'question1_user',
-        )) as Question;
+          const result = (await fetchAndIncrementQuestionViewsById(
+            '65e9b5a995b6c7045a30d823',
+            'question1_user',
+          )) as Question;
 
-        expect(result.views.length).toEqual(2);
-        expect(result.views).toEqual(['question1_user', 'question2_user']);
-        expect(result._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
-        expect(result.title).toEqual(question.title);
-        expect(result.text).toEqual(question.text);
-        expect(result.answers).toEqual(question.answers);
-        expect(result.askDateTime).toEqual(question.askDateTime);
-      });
+          expect(result.views.length).toEqual(2);
+          expect(result.views).toEqual(['question1_user', 'question2_user']);
+          expect(result._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
+          expect(result.title).toEqual(question.title);
+          expect(result.text).toEqual(question.text);
+          expect(result.answers).toEqual(question.answers);
+          expect(result.askDateTime).toEqual(question.askDateTime);
+        },
+      );
 
-      test('fetchAndIncrementQuestionViewsById should return question and not add the user to the list of views if already viewed by them', async () => {
-        const question = QUESTIONS.filter(
-          q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
-        )[0];
-        mockingoose(QuestionModel).toReturn(question, 'findOneAndUpdate');
-        QuestionModel.schema.path('answers', Object);
+      test(
+        'fetchAndIncrementQuestionViewsById should return question and not add the user to ' +
+          'the list of views if already viewed by them',
+        async () => {
+          const question = QUESTIONS.filter(
+            q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
+          )[0];
+          mockingoose(QuestionModel).toReturn(question, 'findOneAndUpdate');
+          QuestionModel.schema.path('answers', Object);
 
-        const result = (await fetchAndIncrementQuestionViewsById(
-          '65e9b5a995b6c7045a30d823',
-          'question2_user',
-        )) as Question;
+          const result = (await fetchAndIncrementQuestionViewsById(
+            '65e9b5a995b6c7045a30d823',
+            'question2_user',
+          )) as Question;
 
-        expect(result.views.length).toEqual(1);
-        expect(result.views).toEqual(['question2_user']);
-        expect(result._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
-        expect(result.title).toEqual(question.title);
-        expect(result.text).toEqual(question.text);
-        expect(result.answers).toEqual(question.answers);
-        expect(result.askDateTime).toEqual(question.askDateTime);
-      });
+          expect(result.views.length).toEqual(1);
+          expect(result.views).toEqual(['question2_user']);
+          expect(result._id?.toString()).toEqual('65e9b5a995b6c7045a30d823');
+          expect(result.title).toEqual(question.title);
+          expect(result.text).toEqual(question.text);
+          expect(result.answers).toEqual(question.answers);
+          expect(result.askDateTime).toEqual(question.askDateTime);
+        },
+      );
 
       test('fetchAndIncrementQuestionViewsById should return null if id does not exist', async () => {
         mockingoose(QuestionModel).toReturn(null, 'findOneAndUpdate');
@@ -403,18 +416,22 @@ describe('application module', () => {
         expect(result).toBeNull();
       });
 
-      test('fetchAndIncrementQuestionViewsById should return an object with error if findOneAndUpdate throws an error', async () => {
-        mockingoose(QuestionModel).toReturn(new Error('error'), 'findOneAndUpdate');
+      test(
+        'fetchAndIncrementQuestionViewsById should return an object with error if ' +
+          'findOneAndUpdate throws an error',
+        async () => {
+          mockingoose(QuestionModel).toReturn(new Error('error'), 'findOneAndUpdate');
 
-        const result = (await fetchAndIncrementQuestionViewsById(
-          '65e9b716ff0e892116b2de01',
-          'question2_user',
-        )) as {
-          error: string;
-        };
+          const result = (await fetchAndIncrementQuestionViewsById(
+            '65e9b716ff0e892116b2de01',
+            'question2_user',
+          )) as {
+            error: string;
+          };
 
-        expect(result.error).toEqual('Error when fetching and updating a question');
-      });
+          expect(result.error).toEqual('Error when fetching and updating a question');
+        },
+      );
     });
 
     describe('saveQuestion', () => {

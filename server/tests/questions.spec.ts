@@ -22,7 +22,7 @@ const ans1: Answer = {
   _id: new mongoose.Types.ObjectId('65e9b58910afe6e94fc6e6dc'),
   text: 'Answer 1 Text',
   ansBy: 'answer1_user',
-  ansDateTime: new Date('2024-06-09'), // The mock date is string type but in the actual implementation it is a Date type
+  ansDateTime: new Date('2024-06-09'), // The mock date is string but in the actual is a Date type
   comments: [],
 };
 
@@ -113,32 +113,40 @@ describe('GET /getQuestion', () => {
     await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
   });
 
-  it('should return the result of filterQuestionsBySearch as response even if request parameters of order and search are absent', async () => {
-    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
-    filterQuestionsBySearchSpy.mockReturnValueOnce(MOCK_QUESTIONS);
-    // Making the request
-    const response = await supertest(app).get('/question/getQuestion');
+  it(
+    'should return the result of filterQuestionsBySearch as response even if request parameters' +
+      ' of order and search are absent',
+    async () => {
+      getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+      filterQuestionsBySearchSpy.mockReturnValueOnce(MOCK_QUESTIONS);
+      // Making the request
+      const response = await supertest(app).get('/question/getQuestion');
 
-    // Asserting the response
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(EXPECTED_QUESTIONS);
-  });
+      // Asserting the response
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(EXPECTED_QUESTIONS);
+    },
+  );
 
-  it('should return the result of filterQuestionsBySearch as response for an order and search criteria in the request parameters', async () => {
-    // Mock request query parameters
-    const mockReqQuery = {
-      order: 'dummyOrder',
-      search: 'dummySearch',
-    };
-    getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
-    filterQuestionsBySearchSpy.mockReturnValueOnce(MOCK_QUESTIONS);
-    // Making the request
-    const response = await supertest(app).get('/question/getQuestion').query(mockReqQuery);
+  it(
+    'should return the result of filterQuestionsBySearch as response for an order and search' +
+      ' criteria in the request parameters',
+    async () => {
+      // Mock request query parameters
+      const mockReqQuery = {
+        order: 'dummyOrder',
+        search: 'dummySearch',
+      };
+      getQuestionsByOrderSpy.mockResolvedValueOnce(MOCK_QUESTIONS);
+      filterQuestionsBySearchSpy.mockReturnValueOnce(MOCK_QUESTIONS);
+      // Making the request
+      const response = await supertest(app).get('/question/getQuestion').query(mockReqQuery);
 
-    // Asserting the response
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(EXPECTED_QUESTIONS);
-  });
+      // Asserting the response
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(EXPECTED_QUESTIONS);
+    },
+  );
 
   it('should return error if getQuestionsByOrder throws an error', async () => {
     // Mock request query parameters
