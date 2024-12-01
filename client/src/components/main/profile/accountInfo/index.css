@@ -86,3 +86,25 @@
 .go-back-button:active {
   background-color: #466694;
 }
+
+.moderator-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+  background-color: #4A7DAA; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0;
+  transition: background-color 0.3s ease;
+}
+
+.moderator-button:hover {
+  background-color: #3A5F85;
+}
