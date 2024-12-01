@@ -10,6 +10,7 @@ import CommunityModel from '../models/communities';
 const mockingoose = require('mockingoose');
 
 const findSpy = jest.spyOn(CommunityModel, 'find');
+const findOneSpy = jest.spyOn(CommunityModel, 'findOne');
 
 const tag1: Tag = {
   _id: new mongoose.Types.ObjectId('507f191e810c19729de860ea'),
@@ -58,6 +59,19 @@ const EXPECTED_QUESTIONS = MOCK_QUESTIONS.map(question => ({
   askDateTime: question.askDateTime.toISOString(),
 }));
 
+const mockCommunity1 = {
+  name: 'exampleCommunity1',
+  tags: ['exampleTag1', 'exampleTag2'],
+  users: ['exampleUser1', 'exampleUser2'],
+  questions: [EXPECTED_QUESTIONS[0]],
+};
+const mockCommunity2 = {
+  name: 'exampleCommunity2',
+  tags: ['exampleTag3'],
+  users: ['exampleUser3', 'exampleUser4'],
+  questions: [EXPECTED_QUESTIONS[1]],
+};
+
 describe('GET /getCommunityNames', () => {
   afterEach(async () => {
     await mongoose.connection.close(); // Ensure the connection is properly closed
@@ -68,23 +82,11 @@ describe('GET /getCommunityNames', () => {
     await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
   });
   it('should return all community names', async () => {
-    const mockCommunity1 = {
-      name: 'exampleCommunity1',
-      tags: ['exampleTag1', 'exampleTag2'],
-      users: ['exampleUser1', 'exampleUser2'],
-      questions: [EXPECTED_QUESTIONS[0]],
-    };
-    const mockCommunity2 = {
-      name: 'exampleCommunity2',
-      tags: ['exampleTag3'],
-      users: ['exampleUser3', 'exampleUser4'],
-      questions: [EXPECTED_QUESTIONS[1]],
-    };
-
     findSpy.mockResolvedValueOnce([mockCommunity1, mockCommunity2]);
 
     const response = await supertest(app).get('/community/getCommunityNames');
 
+    expect(response.status).toBe(200);
     expect(response.body).toEqual([mockCommunity1, mockCommunity2]);
   });
   it('should return error 500 if getCommunityNames throws an error', async () => {
@@ -101,24 +103,93 @@ describe('GET /getCommunityNames', () => {
     expect(response.status).toBe(404);
   });
 });
-// describe('GET /getCommunityQuestions', () => {
-//   afterEach(async () => {
-//     await mongoose.connection.close();
-//     findSpy.mockClear();
-//   });
-//   afterAll(async () => {
-//     await mongoose.disconnect();
-//   });
-//   it('should return all questions for a community', async () => {
-//     const mockCommunity1 = {
-//       name: 'exampleCommunity1',
-//       tags: ['exampleTag1', 'exampleTag2'],
-//       users: ['exampleUser1', 'exampleUser2'],
-//       questions: [EXPECTED_QUESTIONS[0]],
-//     };
-//     findSpy.mockResolvedValueOnce([mockCommunity1]);
-//     const response = await supertest(app).get('/community/getCommunityQuestions/exampleCommunity1');
-//     console.log(response.body);
-//     expect(response.body).toEqual(mockCommunity1.questions);
-//   });
-// });
+
+describe('GET /getCommunityMembers', () => {
+  afterEach(async () => {
+    await mongoose.connection.close();
+    findOneSpy.mockClear();
+  });
+
+  afterAll(async () => {
+    await mongoose.disconnect();
+  });
+  it('should return a community by its name', async () => {
+    findOneSpy.mockResolvedValueOnce({
+      name: mockCommunity1.name,
+      users: ['exampleUser1', 'exampleUser2'],
+    });
+    const response = await supertest(app).get(
+      `/community/getCommunityMembers/${mockCommunity1.name}`,
+    );
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(['exampleUser1', 'exampleUser2']);
+  });
+  it('should return a 500 community by its name', async () => {
+    jest
+      .spyOn(CommunityModel, 'findOne')
+      .mockRejectedValueOnce(new Error('Failed to retreive communities'));
+    const response = await supertest(app).get(
+      `/community/getCommunityMembers/${mockCommunity1.name}`,
+    );
+    expect(response.status).toBe(500);
+  });
+  it('should return 404 if community not found', async () => {
+    mockingoose(Communities).toReturn(null, 'findOne');
+    const response = await supertest(app).get(
+      `/community/getCommunityMembers/${mockCommunity1.name}`,
+    );
+    expect(response.status).toBe(404);
+  });
+});
+
+describe('GET /getRelevantCommunities', () => {
+  afterEach(async () => {
+    await mongoose.connection.close();
+    findSpy.mockClear();
+  });
+
+  afterAll(async () => {
+    await mongoose.disconnect();
+  });
+  it('should return 400 if community not found', async () => {
+    mockingoose(Communities).toReturn(null, 'find');
+    const response = await supertest(app).get(`/community/getRelevantCommunities`);
+    expect(response.status).toBe(400);
+  });
+});
+
+describe('PATCH /addUserToCommunity', () => {
+  afterEach(async () => {
+    await mongoose.connection.close();
+    findSpy.mockClear();
+  });
+
+  afterAll(async () => {
+    await mongoose.disconnect();
+  });
+
+  it('should return 404 if community not found', async () => {
+    mockingoose(Communities).toReturn(null, 'find');
+    const response = await supertest(app).post('/community/getCommunityNames');
+    expect(response.status).toBe(404);
+  });
+});
+
+describe('GET /updateCommunityQuestions', () => {
+  afterEach(async () => {
+    await mongoose.connection.close(); // Ensure the connection is properly closed
+    findOneSpy.mockClear();
+  });
+
+  afterAll(async () => {
+    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
+  });
+
+  it('should return 404 if community not found', async () => {
+    mockingoose(Communities).toReturn(null, 'findOne');
+    const response = await supertest(app).get(
+      `/community/updateCommunityQuestions/${mockCommunity1.name}`,
+    );
+    expect(response.status).toBe(404);
+  });
+});

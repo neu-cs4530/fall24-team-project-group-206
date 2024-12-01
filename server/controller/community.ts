@@ -227,7 +227,6 @@ const communityController = (socket: FakeSOSocket) => {
         res.status(404).json({ message: 'Community not found' });
         return;
       }
-      console.log(`Retrieved users for community ${community}: ${communityData.users}`);
       res.status(200).json(communityData.users);
     } catch (error) {
       console.error('Error retrieving users for the community:', error);
@@ -236,7 +235,6 @@ const communityController = (socket: FakeSOSocket) => {
   };
 
   router.get('/getCommunityNames', getCommunityNames);
-  // router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.get('/getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
