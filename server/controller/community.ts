@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import express, { Request, Response, Router } from 'express';
 import CommunityModel from '../models/communities';
 import { FakeSOSocket, Question } from '../types';
@@ -73,10 +72,8 @@ const communityController = (socket: FakeSOSocket) => {
 
     try {
       if (!community) {
-        console.log(`No community selected. Removing user ${username} from all communities.`);
         const communitiesAffectedByRemoval = await CommunityModel.find({ users: username });
         await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
-        console.log(`${username} removed from all communities.`);
 
         communitiesAffectedByRemoval.forEach(comm => {
           socket.emit('communityUpdate', {
@@ -87,7 +84,6 @@ const communityController = (socket: FakeSOSocket) => {
         res.status(200).json({ message: 'User removed from all communities successfully' });
         return;
       }
-      console.log(`Removing user ${username} from all communities`);
       const communitiesAffected = await CommunityModel.find({ users: username });
       await CommunityModel.updateMany({ users: username }, { $pull: { users: username } });
 
@@ -98,7 +94,6 @@ const communityController = (socket: FakeSOSocket) => {
         });
       });
 
-      console.log(`Adding user ${username} to the new community`);
       const newCommunity = await CommunityModel.findOneAndUpdate(
         { name: community },
         { $addToSet: { users: username } },
@@ -112,7 +107,6 @@ const communityController = (socket: FakeSOSocket) => {
         name: newCommunity.name,
         users: newCommunity.users,
       });
-      console.log(`Added user: ${username} to new community: ${newCommunity}`);
       res.status(200).json('successfully added to the community users list');
     } catch (error) {
       res.status(500).json({ error: 'Failed to add user to community' });
@@ -188,9 +182,7 @@ const communityController = (socket: FakeSOSocket) => {
         ],
       });
 
-      // console.log(populatedCommunity);
       if (populatedCommunity) {
-        console.log(populatedCommunity.questions);
         socket.emit('communityQuestionUpdate', {
           name: communityName,
           questions: populatedCommunity.questions as Question[],
@@ -217,16 +209,13 @@ const communityController = (socket: FakeSOSocket) => {
    */
   const getCommunityMembers = async (req: Request, res: Response): Promise<void> => {
     const { community } = req.params;
-    console.log(`Received request to get members of community: ${community}`);
 
     try {
       const communityData = await CommunityModel.findOne({ name: community });
       if (!communityData) {
-        console.log(`Community not found: ${community}`);
         res.status(404).json({ message: 'Community not found' });
         return;
       }
-      console.log(`Retrieved users for community ${community}: ${communityData.users}`);
       res.status(200).json(communityData.users);
     } catch (error) {
       res.status(500).json({ error: 'Error retrieving questions for the community' });
