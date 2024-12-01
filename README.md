@@ -27,7 +27,7 @@ run populate_db.ts.
 The schemas for the database are documented in the directory `server/models/schema`.
 A class diagram for the schema definition is shown below:
 
-![Class Diagram](class-diagram.png)
+![Class Diagram](updatedclassdiagram.png)
 
 ### Final Project
 Our program, CodeQuest, is a software question site. The baseline functionality including asking 
