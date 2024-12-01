@@ -24,7 +24,8 @@ const useVoteStatus = ({ question }: { question: Question }) => {
     /**
      * Function to get the current vote value for the user.
      *
-     * @returns The current vote value for the user in the question, 1 for upvote, -1 for downvote, 0 for no vote.
+     * @returns The current vote value for the user in the question, 1 for upvote, -1 for downvote,
+     *  0 for no vote.
      */
     const getVoteValue = () => {
       if (user.username && question?.upVotes?.includes(user.username)) {

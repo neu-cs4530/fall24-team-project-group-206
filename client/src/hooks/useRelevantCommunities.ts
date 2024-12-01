@@ -7,7 +7,8 @@ import { getRelevantCommunities } from '../services/communityService';
  * @param tags - The list of tags to fetch relevant communities for.
  *
  * @returns relevantCommunities - The current list of relevant communities.
- * @returns setRelevantCommunities - Setter to manually update the relevant communities state if needed.
+ * @returns setRelevantCommunities - Setter to manually update the relevant communities state if
+ *   needed.
  * @returns loading - The current loading state.
  * @returns error - The current error message.
  */

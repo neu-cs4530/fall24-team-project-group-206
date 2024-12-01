@@ -10,7 +10,8 @@ import { getQuestionById } from '../services/questionService';
  *
  * @returns questionID - The current question ID retrieved from the URL parameters.
  * @returns question - The current question object with its answers, comments, and votes.
- * @returns handleNewComment - Function to handle the submission of a new comment to a question or answer.
+ * @returns handleNewComment - Function to handle the submission of a new comment to a question or
+ *   answer.
  * @returns handleNewAnswer - Function to navigate to the "New Answer" page
  */
 const useAnswerPage = () => {

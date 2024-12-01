@@ -19,7 +19,8 @@ interface QuestionProps {
 }
 
 /**
- * Question component renders the details of a question including its title, tags, author, answers, and views.
+ * Question component renders the details of a question including its title, tags, author, answers,
+ * and views.
  * Clicking on the component triggers the handleAnswer function,
  * and clicking on a tag triggers the clickTag function.
  *

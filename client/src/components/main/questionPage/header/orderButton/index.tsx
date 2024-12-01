@@ -19,7 +19,8 @@ interface OrderButtonProps {
  * It will update the order of questions based on the input message.
  *
  * @param orderType - The label for the button and the value passed to setQuestionOrder function.
- * @param setQuestionOrder - Callback function to set the order of questions based on the input message.
+ * @param setQuestionOrder - Callback function to set the order of questions based on the input
+ *   message.
  */
 const OrderButton = ({ orderType, setQuestionOrder }: OrderButtonProps) => (
   <button
