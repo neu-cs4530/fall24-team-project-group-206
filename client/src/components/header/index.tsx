@@ -36,9 +36,7 @@ const Header = () => {
       <NavLink
         to='/profile/account'
         id='menu_tag'
-        className={
-          ({ isActive }) => `icon-here ${isActive ? 'selected' : ''}` // Apply styles based on active state
-        }>
+        className={({ isActive }) => `icon-here ${isActive ? 'selected' : ''}`}>
         <FaUser size={35} />
       </NavLink>
     </div>

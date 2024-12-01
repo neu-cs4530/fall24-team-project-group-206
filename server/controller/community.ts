@@ -115,7 +115,6 @@ const communityController = (socket: FakeSOSocket) => {
       console.log(`Added user: ${username} to new community: ${newCommunity}`);
       res.status(200).json('successfully added to the community users list');
     } catch (error) {
-      console.error('Error when adding user to community:', error);
       res.status(500).json({ error: 'Failed to add user to community' });
     }
   };
@@ -230,7 +229,6 @@ const communityController = (socket: FakeSOSocket) => {
       console.log(`Retrieved users for community ${community}: ${communityData.users}`);
       res.status(200).json(communityData.users);
     } catch (error) {
-      console.error('Error retrieving users for the community:', error);
       res.status(500).json({ error: 'Error retrieving questions for the community' });
     }
   };

@@ -37,7 +37,7 @@ const VoteComponent = ({ question }: VoteComponentProps) => {
         }
       }
     } catch (error) {
-      // Handle error
+      console.error('Error voting on question');
     }
   };
 
