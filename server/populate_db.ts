@@ -47,14 +47,55 @@ import {
   C11_TEXT,
   C12_TEXT,
   FRONT_END_TAGS,
-  // BACK_END_TAGS,
-  // ML_TAGS,
-  // AI_TAGS,
   CLOUD_TAGS,
   T7_NAME,
   T7_DESC,
   T8_NAME,
   T8_DESC,
+  T9_NAME,
+  T9_DESC,
+  Q5_DESC,
+  Q5_TXT,
+  BACK_END_TAGS,
+  MOBILE_APP_TAGS,
+  T10_NAME,
+  T10_DESC,
+  T11_NAME,
+  T11_DESC,
+  Q6_DESC,
+  Q6_TXT,
+  Q7_DESC,
+  Q7_TXT,
+  AI_TAGS,
+  T12_NAME,
+  T12_DESC,
+  Q8_DESC,
+  Q8_TXT,
+  CYBER_TAGS,
+  T13_NAME,
+  T13_DESC,
+  Q9_DESC,
+  Q9_TXT,
+  TESTING_TAGS,
+  T14_NAME,
+  T14_DESC,
+  Q10_DESC,
+  Q10_TXT,
+  DATA_ENGINEERING_TAGS,
+  Q11_DESC,
+  Q11_TXT,
+  Q12_DESC,
+  Q12_TXT,
+  T15_NAME,
+  T15_DESC,
+  Q13_DESC,
+  Q13_TXT,
+  DESIGN_TAGS,
+  T16_NAME,
+  T16_DESC,
+  Q14_DESC,
+  Q14_TXT,
+  DS_TAGS,
 } from './data/posts_strings';
 import CommentModel from './models/comments';
 
@@ -244,6 +285,14 @@ const populate = async () => {
     const t6 = await tagCreate(T6_NAME, T6_DESC);
     const t7 = await tagCreate(T7_NAME, T7_DESC);
     const t8 = await tagCreate(T8_NAME, T8_DESC);
+    const t9 = await tagCreate(T9_NAME, T9_DESC);
+    const t10 = await tagCreate(T10_NAME, T10_DESC);
+    const t11 = await tagCreate(T11_NAME, T11_DESC);
+    const t12 = await tagCreate(T12_NAME, T12_DESC);
+    const t13 = await tagCreate(T13_NAME, T13_DESC);
+    const t14 = await tagCreate(T14_NAME, T14_DESC);
+    const t15 = await tagCreate(T15_NAME, T15_DESC);
+    const t16 = await tagCreate(T16_NAME, T16_DESC);
 
 
     const c1 = await commentCreate(C1_TEXT, 'sana', new Date('2023-12-12T03:30:00'));
@@ -308,21 +357,149 @@ const populate = async () => {
       [],
       [c12],
     );
+    await questionCreate(
+      Q5_DESC,
+      Q5_TXT,
+      [t9],
+      [],
+      'tigerCDE',
+      new Date('2023-04-10T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q6_DESC,
+      Q6_TXT,
+      [t10],
+      [],
+      'elphie09',
+      new Date('2023-04-10T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q7_DESC,
+      Q7_TXT,
+      [t11],
+      [],
+      'glinda12',
+      new Date('2023-04-24T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q8_DESC,
+      Q8_TXT,
+      [t12],
+      [],
+      'wizzardOZ',
+      new Date('2023-05-12T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q9_DESC,
+      Q9_TXT,
+      [t13],
+      [],
+      'phiYero103',
+      new Date('2023-05-12T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q10_DESC,
+      Q10_TXT,
+      [t14],
+      [],
+      'snowFlake00',
+      new Date('2023-07-03T14:28:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q11_DESC,
+      Q11_TXT,
+      [t8],
+      [],
+      'christmasLuvr',
+      new Date('2023-02-03T14:12:01'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q12_DESC,
+      Q12_TXT,
+      [t6, t7],
+      [],
+      'teddyBear22',
+      new Date('2023-03-09T14:28:03'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q13_DESC,
+      Q13_TXT,
+      [t15],
+      [],
+      'penguin34',
+      new Date('2023-09-15T14:28:03'),
+      [],
+      [],
+    );
+    await questionCreate(
+      Q14_DESC,
+      Q14_TXT,
+      [t16],
+      [],
+      'iguanaXYZ',
+      new Date('2023-10-25T14:12:03'),
+      [],
+      [],
+    );
 
+
+
+    // FRONT-END: react, website, css
     const frontEndQuestions = await getQuestionsByTags([t1, t6, t7]);
-    // const backEndQuestions = await getQuestionsByTags(BACK_END_TAGS);
-    // const machineLearningQuestions = await getQuestionsByTags(ML_TAGS);
-    // const aiQuestions = await getQuestionsByTags(AI_TAGS);
+
+    // BACK-END: mongodb
+    const backEndQuestions = await getQuestionsByTags([t9]);
+
+    // AI: machine-learning, natural-language-processing
+    const aiQuestions = await getQuestionsByTags([t10, t11]);
+
+    // MOBILE APP DEVELOPMENT: android-studio, shared-preferences, javascript
+    const mobileAppQuestions = await getQuestionsByTags([t2, t3, t4]);
+
+    // CYBERSECURITY: encryption
+    const cyberQuestions = await getQuestionsByTags([t12]);
+
+    // TESTING: unit-tests
+    const testingQuestions = await getQuestionsByTags([t13]);
+
+    // DATA ENGINEERING: data-pipeline
+    const dataEngineeringQuestions = await getQuestionsByTags([t14]);
+
+    // DESIGN: figma
+    const designQuestions = await getQuestionsByTags([t15]);
+
+    // DS: data-visualization
+    const dsQuestions = await getQuestionsByTags([t16]);
+
+    // CLOUD COMPUTING: aws, storage
     const cloudQuestions = await getQuestionsByTags([t5, t8]);
 
-    const community1 = await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
-    // await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
-    // await communityCreate('machine learning', ML_TAGS, [], machineLearningQuestions);
-    // await communityCreate('ai', AI_TAGS, [], aiQuestions);
-    const community2 = await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
-
-    // await userCreate('user1', 'John', 'Doe', [t1, t2], community1, 'low');
-
+    await communityCreate('front-end-development', FRONT_END_TAGS, [], frontEndQuestions);
+    await communityCreate('back-end-development', BACK_END_TAGS, [], backEndQuestions);
+    await communityCreate('artificial intelligence', AI_TAGS, [], aiQuestions);
+    await communityCreate('mobile-app-development', MOBILE_APP_TAGS, [], mobileAppQuestions);
+    await communityCreate('cybersecurity', CYBER_TAGS, [], cyberQuestions);
+    await communityCreate('software testing', TESTING_TAGS, [], testingQuestions);
+    await communityCreate('data engineering', DATA_ENGINEERING_TAGS, [], dataEngineeringQuestions);
+    await communityCreate('ui-ux design', DESIGN_TAGS, [], designQuestions);
+    await communityCreate('data science', DS_TAGS, [], dsQuestions);
+    await communityCreate('cloud computing', CLOUD_TAGS, [], cloudQuestions);
 
     console.log('Database populated');
   } catch (err) {

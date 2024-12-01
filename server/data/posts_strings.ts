@@ -15,6 +15,45 @@ export const Q4_DESC = 'Quick question about storage on android';
 export const Q4_TXT =
   'I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains';
 
+export const Q5_DESC = 'Question about Mongodb';
+export const Q5_TXT = 'What is the best way to store large amounts of data in a MongoDB database?';
+
+export const Q6_DESC = 'Question about training a Machine Learning model';
+export const Q6_TXT =
+  'I am trying to train a machine learning logsitic regression model, however I am getting a log loss error while training the model. What might be causing this?';
+
+export const Q7_DESC = 'Question about NLP';
+export const Q7_TXT =
+  'Im currently working on a project that uses natural language processing. I am looking for suggestions on the best libraries and tools to use for this.';
+
+export const Q8_DESC = 'Question about encryption';
+export const Q8_TXT =
+  'I am looking to encrypt some data in my application. What is the best way to go about this?';
+
+export const Q9_DESC = 'Writing unit tests';
+export const Q9_TXT =
+  'How do I write unit tests for my application? I am looking for suggestions on the best practices for writing them.';
+
+export const Q10_DESC = 'Data pipeline architecture and optimization';
+export const Q10_TXT =
+  'I am looking to build a data pipeline for my application. What is the best way to go about this to optimize the pipeline for high performance?';
+
+export const Q11_DESC = 'Question about AWS';
+export const Q11_TXT =
+  'I am looking to deploy my application on AWS. What are the best practices for deploying an application on AWS?';
+
+export const Q12_DESC = 'Question about CSS for styling webpage';
+export const Q12_TXT =
+  'How can I center a div both vertically and horizontally using Flexbox in CSS?';
+
+export const Q13_DESC = 'Reusable components in Figma';
+export const Q13_TXT =
+  'Am I able to create a reusable component in Figma and share it across multiple projects/files?';
+
+export const Q14_DESC = 'Data visualization libraries';
+export const Q14_TXT =
+  'What are the best data visualization libraries available for creating interactive charts and graphs?';
+
 export const A1_TXT =
   "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.";
 export const A2_TXT =
@@ -58,6 +97,39 @@ export const T7_DESC =
 export const T8_NAME = 'aws';
 export const T8_DESC =
   'Amazon Web Services (AWS) is a comprehensive, evolving cloud computing platform provided by Amazon. It offers a mix of infrastructure as a service (IaaS), platform as a service (PaaS), and packaged software as a service (SaaS) offerings.';
+
+export const T9_NAME = 'mongodb';
+export const T9_DESC =
+  'MongoDB is a cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas.';
+
+export const T10_NAME = 'machine-learning';
+export const T10_DESC =
+  'Machine learning is an application of artificial intelligence that provides systems the ability to automatically learn and improve from experience without being explicitly programmed.';
+
+export const T11_NAME = 'natural-language-processing';
+export const T11_DESC =
+  'Natural language processing is a subfield of artificial intelligence that focuses on the interaction between computers and humans using natural language.';
+
+export const T12_NAME = 'encryption';
+export const T12_DESC =
+  'Encryption is the process of converting information into a code to prevent unauthorized access.';
+
+export const T13_NAME = 'unit-testing';
+export const T13_DESC =
+  'Unit testing is a software testing method where units of source code are tested to determine whether they are fit for use.';
+
+export const T14_NAME = 'data-pipeline';
+export const T14_DESC =
+  'A data pipeline is a series of data processing steps that are used to move data from one system to another.';
+
+export const T15_NAME = 'figma';
+export const T15_DESC =
+  'Figma is a cloud-based design tool used for creating user interfaces, prototypes, and collaborative design projects. It allows real-time collaboration, enabling multiple team members to work together on designs from anywhere.';
+
+export const T16_NAME = 'data-visualization';
+export const T16_DESC =
+  'Data visualization is the graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools provide an accessible way to see and understand trends, outliers, and patterns in data.';
+
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =
@@ -83,7 +155,12 @@ export const C11_TEXT =
 export const C12_TEXT =
   "I feel like there's so much more to Android Studio that I'm just scratching the surface of. Thanks for sharing your experience!";
 export const FRONT_END_TAGS = [T1_NAME, T6_NAME, T7_NAME];
-// export const BACK_END_TAGS = ['mongodb', 'node.js'];
-// export const ML_TAGS = ['neural-networks', 'deep-learning'];
-// export const AI_TAGS = ['neural-networks', 'reinforcement-learning', 'pytorch', 'nlp'];
+export const BACK_END_TAGS = [T9_NAME];
+export const MOBILE_APP_TAGS = [T3_NAME, T4_NAME];
+export const AI_TAGS = [T10_NAME, T11_NAME];
+export const CYBER_TAGS = [T12_NAME];
+export const TESTING_TAGS = [T13_NAME];
+export const DATA_ENGINEERING_TAGS = [T14_NAME];
+export const DESIGN_TAGS = [T15_NAME];
+export const DS_TAGS = [T16_NAME];
 export const CLOUD_TAGS = [T8_NAME, T5_NAME]; // ADD AZURE, GCP
