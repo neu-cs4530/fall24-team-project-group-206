@@ -38,7 +38,8 @@ export interface User {
  * - text - The content of the answer
  * - ansBy - The username of the user who wrote the answer
  * - ansDateTime - The date and time when the answer was created
- * - comments - Object IDs of comments that have been added to the answer by users, or comments themselves if populated
+ * - comments - Object IDs of comments that have been added to the answer by users, or comments 
+ *   themselves if populated
  */
 export interface Answer {
   _id?: ObjectId;
@@ -84,11 +85,13 @@ export interface Tag {
  * - tags - An array of tags associated with the question.
  * - askedBy - The username of the user who asked the question.
  * - askDateTime - he date and time when the question was asked.
- * - answers - Object IDs of answers that have been added to the question by users, or answers themselves if populated.
+ * - answers - Object IDs of answers that have been added to the question by users, or answers 
+ *   themselves if populated.
  * - views - An array of usernames that have viewed the question.
  * - upVotes - An array of usernames that have upvoted the question.
  * - downVotes - An array of usernames that have downvoted the question.
- * - comments - Object IDs of comments that have been added to the question by users, or comments themselves if populated.
+ * - comments - Object IDs of comments that have been added to the question by users, or comments 
+ *   themselves if populated.
  */
 export interface Question {
   _id?: ObjectId;
@@ -173,7 +176,8 @@ export interface Comment {
 }
 
 /**
- * Interface extending the request body when adding a comment to a question or an answer, which contains:
+ * Interface extending the request body when adding a comment to a question or an answer, which 
+ * contains:
  * - id - The unique identifier of the question or answer being commented on.
  * - type - The type of the comment, either 'question' or 'answer'.
  * - comment - The comment being added.

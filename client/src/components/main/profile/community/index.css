@@ -29,11 +29,11 @@
 
 .community-pills-container {
   display: flex;
-  flex-wrap: wrap; /* Ensures pills wrap if they overflow */
-  gap: 10px; /* Adds space between pills */
-  justify-content: center; /* Centers the pills in the container */
-  align-items: center; /* Aligns pills vertically */
-  margin: 20px 0; /* Adds spacing around the container */
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 }
 
 .community-pill {

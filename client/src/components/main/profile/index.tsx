@@ -31,7 +31,6 @@ const ProfilePage = () => {
       <div className='home-container'>
         <SideBarHome />
         <div className='profile-content'>
-          {/* <ProfileHeader className='title-text' titleText={titleText} /> */}
           <Outlet />
         </div>
       </div>

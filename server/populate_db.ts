@@ -256,22 +256,6 @@ async function communityCreate(name: string, tags: string[], users: string[], qu
 }
 
 /**
- * FIX THIS COMMENT
- */
-// async function userCreate(username: string, firstName: string, lastName: string, tags: Tag[], community: Community, status: string): Promise<User> {
-//   if (firstName === '' || lastName === '' || tags.length === 0 || status === '') throw new Error('Invalid Community Format');
-//   const user: User = {
-//     username: username,
-//     firstName: firstName,
-//     lastName: lastName,
-//     tags: tags,
-//     community: community,
-//     status: status,
-//   };
-//   return await UserModel.create(user);
-// }
-
-/**
  * Populates the database with predefined data.
  * Logs the status of the operation to the console.
  */

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Comment, Answer, Question, VoteData, NewQuestionData } from '../types';
@@ -10,7 +11,8 @@ import { getQuestionById } from '../services/questionService';
  *
  * @returns questionID - The current question ID retrieved from the URL parameters.
  * @returns question - The current question object with its answers, comments, and votes.
- * @returns handleNewComment - Function to handle the submission of a new comment to a question or answer.
+ * @returns handleNewComment - Function to handle the submission of a new comment to a question
+ * or answer.
  * @returns handleNewAnswer - Function to navigate to the "New Answer" page
  */
 const useAnswerPage = () => {
@@ -56,7 +58,6 @@ const useAnswerPage = () => {
 
       await addComment(targetId, targetType, comment);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Error adding comment:', error);
     }
   };
@@ -70,12 +71,10 @@ const useAnswerPage = () => {
         const res = await getQuestionById(questionID, user.username);
         setQuestion(res || null);
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Error fetching question:', error);
       }
     };
 
-    // eslint-disable-next-line no-console
     fetchData().catch(e => console.log(e));
   }, [questionID, user.username]);
 

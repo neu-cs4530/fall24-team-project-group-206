@@ -101,7 +101,9 @@ const AccountInfo = () => {
             <p className='username-info'>{userData.status}</p>
           </div>
           {qualifyModerator && userData.status !== 'moderator' && (
-            <button onClick={updateUserStatus}>become a moderator</button>
+            <button className='moderator-button' onClick={updateUserStatus}>
+              become a moderator
+            </button>
           )}
         </div>
       </div>
