@@ -4,7 +4,7 @@ import SideBarNav from '../main/sideBarNav';
 import Header from '../header';
 
 /**
- * Main component represents the layout of the main page, including a sidebar and the main content area.
+ * Main component represents the layout of the main page, including a sidebar and main content area.
  */
 const Layout = () => (
   <>

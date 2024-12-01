@@ -4,7 +4,8 @@ import { Comment } from '../types';
 const COMMENT_API_URL = `${process.env.REACT_APP_SERVER_URL}/comment`;
 
 /**
- * Interface extending the request body when adding a comment to a question or an answer, which contains:
+ * Interface extending the request body when adding a comment to a question or an answer, which
+ * contains:
  * - id - The unique identifier of the question or answer being commented on.
  * - type - The type of the comment, either 'question' or 'answer'.
  * - comment - The comment being added.

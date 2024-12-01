@@ -23,7 +23,7 @@ const useCommunityNames = () => {
       try {
         const res = await getCommunityNames();
         if (Array.isArray(res)) {
-          setCommunityNames(res.map(community => community.name)); // Assuming `name` is a property of the community object.
+          setCommunityNames(res.map(community => community.name));
         } else {
           setCommunityNames([]);
         }
@@ -35,7 +35,7 @@ const useCommunityNames = () => {
     };
 
     fetchCommunityNames();
-  }, []); // Run the fetch only once on mount
+  }, []);
 
   return { communityNames, loading, error };
 };

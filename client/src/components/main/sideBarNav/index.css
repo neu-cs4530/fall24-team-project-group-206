@@ -30,7 +30,7 @@
 }
 
 .menu_selected {
-  color: #895159; /* Ensure text color remains black */
+  color: #895159;
   text-decoration: underline 895159 2px;
 }
 
