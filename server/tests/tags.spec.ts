@@ -77,7 +77,7 @@ describe('GET /getTagNames', () => {
 
     expect(response.status).toBe(500);
   });
-  it('should return error 200 if getTagCountMap throws an error', async () => {
+  it('should return error 500 if getTagCountMap throws an error', async () => {
     getTagCountMapSpy.mockRejectedValueOnce(new Error('Error fetching tags'));
 
     const response = await supertest(app).get('/tag/getTagNames');

@@ -223,7 +223,6 @@ const communityController = (socket: FakeSOSocket) => {
   };
 
   router.get('/getCommunityNames', getCommunityNames);
-  // router.get('/getCommunityByName/:name', getCommunityByName);
   router.get('/getCommunityQuestions/:community', getCommunityQuestions);
   router.get('/getCommunityMembers/:community', getCommunityMembers);
   router.get('/getRelevantCommunities', getRelevantCommunities);
