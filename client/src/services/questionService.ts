@@ -107,8 +107,10 @@ const editQuestion = async (qid: string, newText: string, username: string) => {
  * @param qid - The ID of the question to remove.
  * @returns The removed question.
  */
-const removeQuestion = async (qid: string) => {
-  const res = await api.delete(`${QUESTION_API_URL}/removeQuestion/${qid}`);
+const removeQuestion = async (qid: string, community: string) => {
+  const res = await api.delete(`${QUESTION_API_URL}/removeQuestion/${qid}`, {
+    data: { community },
+  });
   if (res.status !== 200) {
     throw new Error('Error while removing the question');
   }

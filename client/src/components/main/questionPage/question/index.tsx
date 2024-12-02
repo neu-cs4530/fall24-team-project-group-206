@@ -50,7 +50,7 @@ const QuestionView = ({ q, inCommunity }: QuestionProps) => {
   const deleteQuestion = async (question: Question) => {
     try {
       if (question._id) {
-        await removeQuestion(question._id);
+        await removeQuestion(question._id, user.community);
       }
     } catch (error) {
       // eslint-disable-next-line no-console

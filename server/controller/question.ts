@@ -20,6 +20,7 @@ import {
   saveQuestion,
 } from '../models/application';
 import QuestionModel from '../models/questions';
+import CommunityModel from '../models/communities';
 
 const questionController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -259,12 +260,36 @@ const questionController = (socket: FakeSOSocket) => {
    */
   const removeQuestion = async (req: FindQuestionByIdRequest, res: Response): Promise<void> => {
     const { qid } = req.params;
+    const { community } = req.body;
+
     try {
       const deletedQuestion = await QuestionModel.findByIdAndDelete(qid);
       if (!deletedQuestion) {
-        res.status(404).json({ error: 'Question not found' });
+        res.status(400).json({ error: 'Question not found' });
         return;
       }
+
+      await CommunityModel.findOneAndUpdate(
+        { name: community },
+        { $pull: { questions: deletedQuestion._id } },
+        { new: true, runValidators: true },
+      );
+
+      const populatedCommunity = await CommunityModel.findOne({ name: community }).populate({
+        path: 'questions',
+        populate: [
+          { path: 'tags', model: 'Tag' },
+          { path: 'answers', model: 'Answer' },
+        ],
+      });
+
+      if (populatedCommunity) {
+        socket.emit('communityQuestionUpdate', {
+          name: community,
+          questions: populatedCommunity.questions as Question[],
+        });
+      }
+
       res.status(200).json({ message: 'Question successfully deleted', question: deletedQuestion });
     } catch (error) {
       res.status(500).json({ error: 'Error removing question' });

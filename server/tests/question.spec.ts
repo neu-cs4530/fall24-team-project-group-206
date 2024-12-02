@@ -31,14 +31,14 @@ const MOCK_QUESTIONS: Question[] = [
 
 const EXPECTED_QUESTIONS = MOCK_QUESTIONS.map(question => ({
   ...question,
-  _id: question._id?.toString(), // Converting ObjectId to string
-  tags: question.tags.map(tag => ({ ...tag, _id: tag._id?.toString() })), // Converting tag ObjectId
+  _id: question._id?.toString(),
+  tags: question.tags.map(tag => ({ ...tag, _id: tag._id?.toString() })),
   askDateTime: question.askDateTime.toISOString(),
 }));
 
 describe('Question Controller', () => {
   afterAll(async () => {
-    await mongoose.disconnect(); // Ensure mongoose is disconnected after all tests
+    await mongoose.disconnect();
   });
 
   describe('GET /getQuestion', () => {
@@ -145,19 +145,19 @@ describe('Question Controller', () => {
   describe('DELETE /removeQuestion/:qid', () => {
     it('should delete a question successfully', async () => {
       jest.spyOn(mongoose.Model, 'findByIdAndDelete').mockResolvedValueOnce({
-        _id: '507f191e810c19729de860ea',
+        _id: '65e9b58910afe6e94fc6e6dc',
         title: 'Sample Question',
       });
 
-      const response = await supertest(app).delete(
-        '/question/removeQuestion/507f191e810c19729de860ea',
-      );
+      const response = await supertest(app)
+        .delete('/question/removeQuestion/65e9b58910afe6e94fc6e6dc')
+        .send({ community: 'community1' });
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
         message: 'Question successfully deleted',
         question: {
-          _id: '507f191e810c19729de860ea',
+          _id: '65e9b58910afe6e94fc6e6dc',
           title: 'Sample Question',
         },
       });
@@ -175,14 +175,14 @@ describe('Question Controller', () => {
       expect(response.status).toBe(500);
     });
 
-    it('should return 404 if the question to remove cannot be found', async () => {
+    it('should return 400 if the question to remove cannot be found', async () => {
       jest.spyOn(mongoose.Model, 'findByIdAndDelete').mockResolvedValueOnce(null);
 
       const response = await supertest(app).delete(
         '/question/removeQuestion/507f191e810c19729de860ea',
       );
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(400);
     });
   });
 

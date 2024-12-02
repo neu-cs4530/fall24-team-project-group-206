@@ -36,9 +36,6 @@ const CommunityQuestions = () => {
      */
     const handleCommunityQuestionUpdate = (community: { name: string; questions: Question[] }) => {
       if (community.name === user.community) {
-        console.log(community.name);
-        console.log(community.questions);
-        console.log(`Received question update for community: ${community.name}`);
         setQuestions(community.questions);
       }
     };
