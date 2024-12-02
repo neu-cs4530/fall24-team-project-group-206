@@ -183,7 +183,7 @@ describe('Community Controller', () => {
       expect(response.body.message).toBe('Community not found');
     });
 
-    it('should return 500 if an error occurs while removing the user from all communities', async () => {
+    it('should return 500 if error occurs while removing user from all communities', async () => {
       (CommunityModel.find as jest.Mock).mockResolvedValue(mockCommunities);
       (CommunityModel.updateMany as jest.Mock).mockRejectedValue(new Error('Database error'));
 
@@ -195,7 +195,7 @@ describe('Community Controller', () => {
       expect(response.body.error).toBe('Failed to add user to community');
     });
 
-    it('should return 500 if an error occurs while adding the user to the new community', async () => {
+    it('should return 500 if an error occurs while adding user to the new community', async () => {
       (CommunityModel.find as jest.Mock).mockResolvedValue(mockCommunities);
       (CommunityModel.updateMany as jest.Mock).mockResolvedValue({});
       (CommunityModel.findOneAndUpdate as jest.Mock).mockRejectedValue(new Error('Database error'));
@@ -342,7 +342,7 @@ describe('Community Controller', () => {
       jest.clearAllMocks();
     });
 
-    it('should updated questions and return updatedCommunity when populatedCommunity exists', async () => {
+    it('should updated questions and return updatedCommunity', async () => {
       (QuestionModel.findById as jest.Mock).mockResolvedValue(mockQuestion);
       (CommunityModel.findOneAndUpdate as jest.Mock).mockResolvedValue(mockCommunity);
       (CommunityModel.findOne as jest.Mock).mockResolvedValue({
